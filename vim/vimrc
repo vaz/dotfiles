@@ -1,0 +1,86 @@
+" skip if started as evim
+if v:progname =~? "evim"
+  finish
+endif
+
+set nocompatible
+
+set backspace=indent,eol,start
+set writebackup	        " keep a backup file
+set history=50
+set ruler
+set showcmd		          " display incomplete commands
+set incsearch	        	" do incremental searching
+set ignorecase          " ignore case when searching in all lower-case
+set smartcase           " but not when searching with some caps
+set scrolloff=3         " keep n lines ahead or behind always showing
+set wildmode=longest,list " tab autocomplete like bash
+set foldmethod=marker   " folding code
+set shortmess+=I        " skip splash screen on empty files
+set expandtab
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+set virtualedit=all
+
+" Keymappings
+
+" use Q for formatting
+map Q gq
+
+" ESC will clear highlighting from last search
+" nmap <silent> <Esc><Esc> <Esc><Esc>:nohl<CR>
+
+" Make Y work like y$ (instead of like yy), because D is like d$
+map Y y$
+
+" Make up and down keys useful for wrapped lines.
+map <UP> gk
+map <DOWN> gj
+
+" Command for opening a url on a mac:
+command -bar -nargs=1 OpenURL :!open <args>
+
+if &t_Co > 2 
+  colorscheme vaz
+  syntax on
+  set hlsearch
+endif
+
+" Only do this part when compiled with support for autocommands.
+if has("autocmd")
+  " Enable file type detection.
+  filetype plugin indent on
+
+  " make sure grep shows filename even if searching for single file
+  " this is for LaTeX-Suite.
+  set grepprg=grep\ -nH\ $*
+
+  " Make sure new empty .tex files load vim-latex
+  let g:tex_flavor='latex'
+
+  " Put these in an autocmd group, so that we can delete them easily.
+  augroup vimrcEx
+  au!
+
+  " For all text files set 'textwidth' to 78 characters.
+  au FileType text setlocal textwidth=78
+
+  " Leave insert mode when idling
+  " au CursorHoldI * stopinsert   " nope this is pretty annoying.
+
+  " when editing a file, always jump to the last known cursor position.
+  " Don't do it when the position is invalid or when inside an event handler
+  " (happens when dropping a file on gvim).
+  au BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal g`\"" |
+    \ endif
+
+  " auto-detect git commit message files for syntax highlighting
+  au BufNewFile,BufRead COMMIT_EDITMSG set filetype=gitcommit
+
+  augroup END
+else
+  set autoindent
+endif 

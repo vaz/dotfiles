@@ -1,0 +1,108 @@
+class String; def escape; self.gsub('`', "'").gsub('"', '\"') end end
+
+module Autotest::Growl
+  POPUP_TYPES = {
+    :ok     => { :image => '~/.rails_ok.png',   :priority => -1 },
+    :fail   => { :image => '~/.rails_fail.png', :priority =>  1 },
+    :error  => { :image => '~/.rails_fail.png', :priority =>  2 }
+  } 
+  
+  POPUP_LIMIT = 3
+  SHOW_TRACE = false
+  STICKY_CAUSES = false
+
+  def self.growl(title, msg, type, stick=false)
+    system <<-end
+      growlnotify -n autotest --image #{POPUP_TYPES[type][:image]} \
+          -p #{POPUP_TYPES[type][:priority]} -m "#{msg.escape}" \
+          "#{title.escape}" #{'-s' if stick}
+    end
+  end
+
+  class FailCause
+    attr_accessor :num, :fail_type, :test_method, :test_class, :test_line,
+        :ex_class, :ex_msg, :stack_trace
+    
+    # parses the output from a failure/error into an object
+    def initialize(lines)
+      # backquotes will mess up sh, last element is empty so pop it
+      lines.map!(&:chomp).map!(&:strip).pop
+      
+      # First line
+      unused, @num, @fail_type =
+          lines.shift.match(/^ *(\d+).*(Error|Fail)/).to_a
+      @num, @fail_type = @num.to_i, @fail_type.downcase.to_sym
+
+      # second line
+      unused, @test_method, @test_class =
+          lines.shift.match(/^ *([^(]*)\(([^(]*)\)/).to_a
+
+      # third line is exception and msg if it's an Error
+      if @fail_type == :error
+        unused, @ex_class, @ex_msg =
+            lines.shift.match(/^ *([^:]*(?: ::[^:]+)*): +(.*)$/).to_a
+        @ex_msg.chomp!
+      else
+        # msg is at the end if it's a Failure
+        @ex_class, @ex_msg = nil, lines.pop
+      end
+
+      # the rest is stack trace
+      @stack_trace = lines
+
+      # get rid of [ and ] from stacktrace, the failure message leaves them in.
+      @stack_trace.first.slice!(/^\[/)
+      @stack_trace.last.chomp!("]:")
+      
+      unused, @test_line = @stack_trace.first.match(/^ *[^:]*:(\d+):.*$/).to_a
+      @test_line = @test_line.to_i
+    end
+    
+    def to_growl
+      title = "[#@num] #@fail_type #{'('+@ex_class+')' if @ex_class}"
+      msg = %("#@ex_msg" #{"\n\n"+@stack_trace.join("\n") if SHOW_TRACE})
+      Autotest::Growl.growl title, msg, @fail_type, STICKY_CAUSES
+    end
+  end
+
+  Autotest.add_hook :ran_command do |at|
+    results = at.results.last.chomp
+    
+    begin
+      # A syntax error will raise here.
+      tests, assertions, failures, errors = /(\d+) tests, (\d+) assertions, (\d+) failures, (\d+) errors/.match(results).captures
+      
+      if (num_causes = failures.to_i + errors.to_i) != 0
+        causes = []
+        popups = (num_causes > POPUP_LIMIT ? POPUP_LIMIT : num_causes)
+
+        # parse out each "Failure" or "Error" block
+        until popups.zero?
+          lines, line = at.results, ''
+          line = lines.shift until line.nil? ||
+                                   line =~ /^ *\d+\) (Failure|Error):$/
+          cause_lines = [line]
+          
+          until cause_lines.last.nil? || cause_lines.last == "\n"
+            cause_lines << lines.shift
+          end
+
+          popups -= 1
+
+          causes << FailCause.new(cause_lines)
+          raise 'SQL error' if causes.last.ex_class =~ /StatementInvalid/ ||
+                               causes.last.ex_class =~ /SQL/
+        end
+        growl "Tests failed", "#{results}", (errors.to_i > 0 ? :error : :fail)
+        causes.each(&:to_growl)
+      else
+        growl "Tests passed", "#{results}", :ok
+      end
+    rescue
+      # syntax error or some other bad thing.
+      growl "Tests crashed!", "You've got a syntax or SQL error!\n\n", :error
+    end
+  end
+
+end
+

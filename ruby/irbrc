@@ -1,0 +1,171 @@
+# vaz .irbrc 09
+#   ruby 1.8.7 (2008-08-11 patchlevel 72) [i686-darwin8.11.1]
+#   irb 0.9.5(05/04/13)
+
+require 'rubygems'
+require 'wirble'
+require 'ostruct'
+require 'color'
+require 'open-uri'
+require 'map_by_method'
+require 'what_methods'
+
+# Examples:
+# (so I remember what these libs even do)
+
+# ri Object#id                            # show ri documentation
+
+# /ab(c|d)/.show_match("abcdacdb")        # => "<<abc>>dacdb"
+
+# mate '/path/to/some/file'               # edit in textmate
+
+# Dog.mock_methods({ :bark => proc { puts 'arf' } }) do
+#   Dog.new.bark
+# end                                     # => arf
+# Dog.new.bark                            # => NoMethodError
+
+# h = { :cat => "gatorade" }              # => {:cat=>"gatorade"}
+# h/:cat                                  # => "gatorade"
+# Wait what is the good of that?
+
+begin # irb config and wirble
+  ARGV << %w( --readline --prompt xmp )
+
+  Wirble.init
+  Wirble.colorize
+
+  IRB.conf[:AUTO_INDENT] = true
+
+  IRB.conf[:PROMPT][:XMP][:RETURN] = "                                \# => %s\n"
+  IRB.conf[:PROMPT][:XMP][:PROMPT_I] = "> "
+  IRB.conf[:PROMPT][:XMP][:PROMPT_N] = "  "
+  IRB.conf[:PROMPT][:XMP][:PROMPT_S] = "  "
+  IRB.conf[:PROMPT][:XMP][:PROMPT_C] = "  "
+  IRB.conf[:PROMPT_MODE] = :XMP
+end
+
+begin # Inline colorized ri (override wirble's)
+  RIARGS = ['-f', 'ansi']
+  require 'rdoc/ri/ri_driver'
+  class MyStupidRiDriver < RiDriver
+    def self.ri(*topics)
+      topics.map! { |topic| topic.to_s }
+      begin
+        MyStupidRiDriver.new(*topics).process_args
+      rescue => e
+        puts "Error processing ri request: #{e}"
+      end
+    end
+
+    def initialize(*topics)
+      @options = RI::Options.instance
+      args = RIARGS.dup + topics
+      @options.parse(args)
+      paths = RI::Paths::PATH
+      @ri_reader = RI::RiReader.new(RI::RiCache.new(paths))
+      @display   = @options.displayer
+    end
+  end
+
+  def Kernel.ri(*args)
+    less { MyStupidRiDriver.ri(*args) }
+  end
+
+  class Module
+    def ri(*args)
+      topics = args.map { |arg| arg = "#{self}##{arg}" }
+      less { MyStupidRiDriver.ri(*topics) }
+    end
+  end
+end
+
+begin # Copious output helper
+  def less
+    spool_output('less')
+  end
+
+  def most
+    spool_output('most')
+  end
+
+  def spool_output(spool_cmd)
+    require 'stringio'
+    $stdout, sout = StringIO.new, $stdout
+    yield
+    $stdout, str_io = sout, $stdout
+     IO.popen(spool_cmd, 'w') do |f|
+       f.write str_io.string
+       f.flush
+       f.close_write
+     end
+  end
+end
+
+begin
+  # Simple regular expression helper
+  # show_regexp - stolen from the pickaxe
+  def show_regexp(a, re)
+     if a =~ re
+        "#{$`}<<#{$&}>>#{$'}"
+     else
+        "no match"
+     end
+  end
+
+  # Convenience method on Regexp so you can do
+  # /an/.show_match("banana")
+  class Regexp
+     def show_match(a)
+         show_regexp(a, self)
+     end
+  end
+end
+
+begin # editor helpers
+  # Textmate helper
+  def mate *args
+    flattened_args = args.map {|arg| "\"#{arg.to_s}\""}.join ' '
+    `mate #{flattened_args}`
+    nil
+  end
+
+  # Vi helper
+  def vim *args
+    flattened_args = args.map { |arg| "\"#{arg.to_s}\""}.join ' '
+    `vim #{flattened_args}`
+    nil
+  end  
+end
+
+begin # hack standard objects
+  # add the mocker!
+  class Object
+    def mock_methods(mock_methods)
+      original = self
+      klass = Class.new(self) do
+        instance_eval do
+          mock_methods.each do |method, proc|
+            define_method("mocked_#{method}", &proc)
+            alias_method method, "mocked_#{method}"
+          end
+        end
+      end
+      
+      begin
+        Object.send(:remove_const, self.name.to_s)
+        Object.const_set(self.name.intern, klass)
+        yield
+      ensure
+        Object.send(:remove_const, self.name.to_s)
+        Object.const_set(self.name.intern, original)
+      end
+    end
+  end
+
+  class Hash
+    def /(key)
+      self[key]
+    end
+  end
+end
+

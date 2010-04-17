@@ -1,0 +1,42 @@
+function showasm {
+  opts=""
+  (( $# )) && if [ "$1" = "-o" ]; then
+    shift
+    test -n $# && opts="$1"
+    shift
+  fi
+
+  : ${1?'Usage: showasm [-o gcc-options] <file|string>'}
+
+  cmd="gcc -x c -S -o - $opts " 
+
+  if [ -f "$1" ]; then
+    $cmd $1
+  else
+    echo "$@" | $cmd -
+  fi
+
+}     
+
+if [ "`uname`" = "Darwin" ]; then
+  function showAllFiles {
+    old=`defaults read com.apple.finder AppleShowAllFiles`
+    if [ "$old" = "TRUE" ]; then
+      new="FALSE"
+    else
+      new="TRUE"
+    fi
+
+    defaults write com.apple.finder AppleShowAllFiles $new
+    echo -n "com.apple.finder AppleShowAllFiles = "
+    echo $new
+    killall Finder
+  }
+else
+  # doesn't work with stupid bsd echo.
+  function listcolours {
+    for ((i=0; i<=7; i++)); do
+      echo -e "\e[0;3${i}m0;3$i \e[1;3${i}m1;3$i \e[0;4${i}m0;4$i \e[0m"
+    done
+  }
+fi

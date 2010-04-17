@@ -1,0 +1,24 @@
+# Vaz's bash aliases
+
+if [ "`uname`" = "Darwin" ]; then
+    alias ls='ls -Gp'
+    alias wget='curl -O'
+else
+    alias ls='ls --color=auto -p'
+fi
+
+# ls
+alias ll='ls -lh'
+alias la='ls -A'
+alias l='ls -lha'
+
+# mud habits
+alias grr='echo Grrrrr.'
+alias yawn='echo You must be tired.'
+alias yay='echo Yayyyy!'
+alias fuck='echo FUCK.'
+alias sigh='echo You sigh.'
+alias hmm='echo Hmmm.'
+alias lol='echo Hahaha.'
+alias haha='echo Hahaha.'
+

@@ -1,0 +1,7 @@
+[ui]
+username = Vaz <allen.mat@gmail.com>
+
+[extensions]
+rebase =
+mq =
+bookmarks =
