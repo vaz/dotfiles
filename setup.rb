@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+require 'fileutils'
+
 if `which git` and $? != 0
   puts "You probably want to install git."
 end
@@ -44,7 +46,11 @@ dotfiles.each do |dir, files|
     if File.exists? dst
       if destructive or File.symlink? dst
         puts "delete:  #{dst}"
-        File.delete dst
+        if File.directory? dst
+          FileUtils.rm_rf dst
+        else
+          File.delete dst
+        end
       else
         puts "backup:  #{dst} to #{dst}.bak"
         File.rename(dst, "#{dst}.bak")
