@@ -26,7 +26,24 @@ export EDITOR='vim'
 ###############################################################################
 ## prompt
 
-export PS1='\[\e[0;37m\]\u@\h \w$(__git_ps1 "(%s)")\[\e[0m\] $ '
+function __prompt_char {
+  git branch >/dev/null 2>/dev/null && echo '± ' && return
+  hg root >/dev/null 2>/dev/null && echo '☿' && return
+  echo '$ '
+}
+
+function __git_status {
+  local st="$(git status 2>/dev/null)"
+  echo $st | grep 'Changes to be committed:' >/dev/null 2>/dev/null &&
+      echo '!' && return
+  echo $st | grep "Changed but not updated:" >/dev/null 2>/dev/null &&
+      echo '*' && return
+  echo $st | grep "Untracked files:" >/dev/null 2>/dev/null &&
+      echo '?' && return
+  echo ''
+}
+
+export PS1='\n\[\e[1;35m\]\u\[\e[0m\]\[\e[0;35m\]@\h\[\e[0m\] \[\e[1;32m\]\w\[\e[0m\]$(__git_ps1 " on \[\e[1;35m\]%s\[\e[1;32m\]$(__git_status)")\[\e[0m\]\n$(__prompt_char)'
 
 
 ###############################################################################
