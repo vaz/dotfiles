@@ -32,11 +32,11 @@ if [ "`uname`" = "Darwin" ]; then
     echo $new
     killall Finder
   }
-else
-  # doesn't work with stupid bsd echo.
-  function listcolours {
-    for ((i=0; i<=7; i++)); do
-      echo -e "\e[0;3${i}m0;3$i \e[1;3${i}m1;3$i \e[0;4${i}m0;4$i \e[0m"
-    done
-  }
 fi
+
+# doesn't work with stupid bsd echo.
+function listcolours {
+  for ((i=0; i<=7; i++)); do
+    echo -e "\033[0;3${i}m0;3$i \033[1;3${i}m1;3$i \033[0;4${i}m0;4$i \033[0m"
+  done
+}
