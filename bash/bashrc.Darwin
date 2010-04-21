@@ -8,6 +8,7 @@
 ###############################################################################
 ## shell options
 
+set -o vi                       # vi mode!
 set -o notify                   # notify immediately when jobs complete
 shopt -s cdspell			          # fix typo'd args to cd
 shopt -s checkwinsize	          # check window size after each cmd
@@ -40,7 +41,7 @@ function __git_prompt {
   echo $st | grep "Changed but not updated:" >/dev/null 2>/dev/null && status='*'
   echo $st | grep 'Changes to be committed:' >/dev/null 2>/dev/null && status='!'
 
-  __git_ps1 "\[\e[0m\] on \[\e[1;35m\]%s\[\e[1;32m\]${status}"
+  __git_ps1 "\e[0m on \e[1;35m%s\e[1;32m${status}"
 }
 
 
