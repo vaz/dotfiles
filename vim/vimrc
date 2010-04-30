@@ -41,6 +41,10 @@ map <DOWN> gj
 " Command for opening a url on a mac:
 command -bar -nargs=1 OpenURL :!open <args>
 
+if &term == 'xterm-256color'
+  set t_Co=256
+endif
+
 if &t_Co > 2 
   colorscheme vaz
   syntax on
