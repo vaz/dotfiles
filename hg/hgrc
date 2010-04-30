@@ -5,4 +5,4 @@ username = Vaz <allen.mat@gmail.com>
 rebase =
 mq =
 bookmarks =
-prompt = ~/src/hg/hg-prompt/prompt.py
+prompt = ~/.dotfiles/hg/hg-prompt/prompt.py
