@@ -1,3 +1,5 @@
+# vim:set filetype=ruby:
+
 class String; def escape; self.gsub('`', "'").gsub('"', '\"') end end
 
 module Autotest::Growl

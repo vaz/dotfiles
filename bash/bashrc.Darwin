@@ -49,7 +49,7 @@ function __hg_prompt {
   echo -e $(hg prompt "\
 {\033[0m on \033[1;35m{branch}}\
 {\033[0m at \033[1;34m{bookmark}}\
-{\033[1;32m{status}}{update}{
+{\033[1;32m{status}}{\033[1;32m{update}}{
 \033[0mpatches: {patches|\
 pre_applied(\033[1;33m)|post_applied(\033[0m)|\
 pre_unapplied(\033[1;30m)|post_unapplied(\033[0m)}}" 2>/dev/null)
