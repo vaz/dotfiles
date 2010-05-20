@@ -43,7 +43,7 @@ dotfiles = {
 
 dotfiles.each do |dir, files|
   files.each do |src, dst|
-    if File.exists? dst
+    if File.exists? dst or File.symlink? dst
       if destructive or File.symlink? dst
         puts "delete:  #{dst}"
         if File.directory? dst
