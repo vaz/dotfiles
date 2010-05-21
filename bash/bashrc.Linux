@@ -32,18 +32,30 @@ function __prompt_char {
   echo '$ '
 }
 
-function __git_status {
+function __git_prompt {
   local st="$(git status 2>/dev/null)"
-  echo $st | grep 'Changes to be committed:' >/dev/null 2>/dev/null &&
-      echo '!' && return
-  echo $st | grep "Changed but not updated:" >/dev/null 2>/dev/null &&
-      echo '*' && return
-  echo $st | grep "Untracked files:" >/dev/null 2>/dev/null &&
-      echo '?' && return
-  echo ''
+  local char=''
+
+  echo $st | grep "Untracked files:"         >/dev/null 2>/dev/null && chr='?'
+  echo $st | grep "Changed but not updated:" >/dev/null 2>/dev/null && chr='*'
+  echo $st | grep 'Changes to be committed:' >/dev/null 2>/dev/null && chr='!'
+
+  __git_ps1 "\e[0m on \e[1;35m%s\e[1;32m${chr}"
 }
 
-export PS1='\n\[\e[1;35m\]\u\[\e[0m\]\[\e[0;35m\]@\h\[\e[0m\] \[\e[1;32m\]\w\[\e[0m\]$(__git_ps1 " on \[\e[1;35m\]%s\[\e[1;32m\]$(__git_status)")\[\e[0m\]\n$(__prompt_char)'
+
+function __hg_prompt {
+  echo -e $(hg prompt "\
+{\033[0m on \033[1;35m{branch}}\
+{\033[0m at \033[1;34m{bookmark}}\
+{\033[1;32m{status}}{\033[1;32m{update}}{
+\033[0mpatches: {patches|\
+pre_applied(\033[1;33m)|post_applied(\033[0m)|\
+pre_unapplied(\033[1;30m)|post_unapplied(\033[0m)}}" 2>/dev/null)
+}
+
+export PS1='\n\[\e[1;35m\]\u\[\e[0m\]\[\e[0;35m\]@\h\[\e[0m\] \
+\[\e[1;32m\]\w$(__git_prompt)$(__hg_prompt)\[\e[0m\]\n$(__prompt_char)'
 
 
 ###############################################################################

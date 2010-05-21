@@ -41,7 +41,7 @@ function __git_prompt {
   echo $st | grep "Changed but not updated:" >/dev/null 2>/dev/null && chr='*'
   echo $st | grep 'Changes to be committed:' >/dev/null 2>/dev/null && chr='!'
 
-  __git_ps1 "\e[0m on \e[1;35m%s\e[1;32m${status}"
+  __git_ps1 "\e[0m on \e[1;35m%s\e[1;32m${chr}"
 }
 
 
