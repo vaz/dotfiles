@@ -63,8 +63,8 @@ export PS1='\n\[\e[1;35m\]\u\[\e[0m\]\[\e[0;35m\]@\h\[\e[0m\] \
 # macports etc
 PATH=/opt/local/bin:/opt/local/sbin:$PATH
 
-# private bin
-PATH=$HOME/bin:$PATH
+# private bin and /usr/local before /usr
+PATH=$HOME/bin:/usr/local/bin:$PATH
 
 export PATH
 
