@@ -3,8 +3,6 @@
 ##
 ###############################################################################
 
-[ -z "$PS1" ] && return
-
 ###############################################################################
 ## shell options
 
@@ -77,3 +75,4 @@ export PATH
 [ -f ~/.bash_defs ]         && . ~/.bash_defs	      	# function defs
 [ -f ~/.bash_aliases ]      && . ~/.bash_aliases	    # alias definitions
 [ -f /opt/local/etc/bash_completion ] && . /opt/local/etc/bash_completion
+
