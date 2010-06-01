@@ -1,8 +1,29 @@
 [ui]
 username = Vaz <allen.mat@gmail.com>
+merge = vimdiff
 
 [extensions]
 rebase =
 mq =
 bookmarks =
+color =
+pager =
+graphlog =
 prompt = ~/.dotfiles/hg/hg-prompt/prompt.py
+
+[merge-tools]
+vimdiff.executable = vim
+vimdiff.args = -d $base $local $output $other +close +close
+
+[color]
+status.modified = magenta bold
+status.added = green bold
+status.removed = red bold
+status.deleted = cyan bold
+status.unknown = blue bold
+status.ignored = black bold
+
+[pager]
+pager = LESS="FSRX" less
+ignore = version, help, update, serve, record
+
