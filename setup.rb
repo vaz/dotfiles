@@ -2,13 +2,8 @@
 
 require 'fileutils'
 
-if `which git` and $? != 0
-  puts "You probably want to install git."
-end
-
-if `which hg` and $? != 0
-  puts "You probably want to install hg."
-end
+puts "You probably want to install git." if `which git` and $? != 0
+puts "You probably want to install hg." if `which hg` and $? != 0
 
 if ARGV[0] == '-f'
   puts "Not creating backups!"
@@ -34,6 +29,9 @@ dotfiles = {
   'ruby' => {
     "autotest"        => "#{HOME}/.autotest",
     "irbrc"           => "#{HOME}/.irbrc"
+  },
+  'screen' => {
+    "screenrc"        => "#{HOME}/.screenrc"
   },
   'vim' => {
     "vimrc"           => "#{HOME}/.vimrc",

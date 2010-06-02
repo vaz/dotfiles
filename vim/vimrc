@@ -41,7 +41,7 @@ map <DOWN> gj
 " Command for opening a url on a mac:
 command -bar -nargs=1 OpenURL :!open <args>
 
-if &term == 'xterm-256color'
+if &term =~ "256color"
   set t_Co=256
 endif
 
@@ -50,6 +50,11 @@ if &t_Co > 2
   syntax on
   set hlsearch
 endif
+
+" error bells are annoying
+set noerrorbells
+set visualbell
+set t_vb=
 
 " Only do this part when compiled with support for autocommands.
 if has("autocmd")
