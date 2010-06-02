@@ -12,6 +12,10 @@ alias ll='ls -lh'
 alias la='ls -A'
 alias l='ls -lha'
 
+# screen
+alias screen='screen -U'
+alias sr='screen -r'
+
 # mud habits
 alias grr='echo Grrrrr.'
 alias yawn='echo You must be tired.'

@@ -14,4 +14,5 @@ autodetach on
 # turn off splash screen
 startup_message off
 
+defutf8 on
 
