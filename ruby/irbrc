@@ -7,6 +7,7 @@ require 'color'
 require 'open-uri'
 require 'map_by_method'
 require 'what_methods'
+require 'interactive_editor'
 
 # Examples:
 # (so I remember what these libs even do)
