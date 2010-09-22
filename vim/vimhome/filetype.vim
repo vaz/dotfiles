@@ -338,6 +338,7 @@ au BufNewFile,BufRead *.tlh			setf cpp
 
 " Cascading Style Sheets
 au BufNewFile,BufRead *.css			setf css
+au BufNewFile,BufRead *.less    setf css
 
 " Century Term Command Scripts (*.cmd too)
 au BufNewFile,BufRead *.con			setf cterm
