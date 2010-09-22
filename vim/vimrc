@@ -3,27 +3,40 @@ if v:progname =~? "evim"
   finish
 endif
 
+" :: Settings ::
 set nocompatible
-
 set backspace=indent,eol,start
-set writebackup	        " keep a backup file
-set history=50
+set writebackup         " keep a backup file
+set history=500
 set ruler
-set showcmd		          " display incomplete commands
-set incsearch	        	" do incremental searching
+set showcmd             " display incomplete commands
+set incsearch           " do incremental searching
 set ignorecase          " ignore case when searching in all lower-case
 set smartcase           " but not when searching with some caps
 set scrolloff=3         " keep n lines ahead or behind always showing
 set wildmode=longest,list " tab autocomplete like bash
-set foldmethod=marker   " folding code
+set foldmethod=marker   " folding code manually (no text inserted)
 set shortmess+=I        " skip splash screen on empty files
 set expandtab
-set tabstop=2
+set tabstop=8           " How many spaces does a tab show up as
+set list                " show control characters, line endings etc.
 set softtabstop=2
 set shiftwidth=2
 set virtualedit=all
+set hidden              " buffers can be hidden while modified
+set noerrorbells        " error bells are annoying
+set visualbell
+set t_vb=
+set listchars=tab:>·,eol:$ " show \t for tabs and $ for line endings
+set autochdir           " working dir is always dir of current window's contents
+set viminfo='20,<50,s10,h,% " remember marks, searches, registers, buffer list
+runtime macros/matchit.vim " % matches more than just brackets:
 
-" Keymappings
+
+" :: Keymappings and commands ::
+
+" Better mapleader
+let mapleader=","
 
 " use Q for formatting
 map Q gq
@@ -34,15 +47,30 @@ nmap <silent> /<Esc> :nohl<CR>
 " Make Y work like y$ (instead of like yy), because D is like d$
 map Y y$
 
+" toggle showing control chars
+
 " Make up and down keys useful for wrapped lines.
 map <UP> gk
 map <DOWN> gj
 
 " Pressing return lists open buffers and starts :b command to edit one
-nmap <CR> :ls<CR>:b 
+nnoremap <CR> :ls<CR>:b 
+
+" Swap ' and ` because ` is better
+nnoremap ' `
+nnoremap ` '
+
+" scroll viewport faster
+nnoremap <C-e> 5<C-e>
+nnoremap <C-y> 5<C-y>
+
+" toggle showing control characters
+nmap <silent> <leader>s :set list!<CR>
 
 " Command for opening a url on a mac:
 command -bar -nargs=1 OpenURL :!open <args>
+
+" Syntax and colours
 
 if &term =~ "256color"
   set t_Co=256
@@ -54,12 +82,8 @@ if &t_Co > 2
   set hlsearch
 endif
 
-" error bells are annoying
-set noerrorbells
-set visualbell
-set t_vb=
+" Autocommands
 
-" Only do this part when compiled with support for autocommands.
 if has("autocmd")
   " Enable file type detection.
   filetype plugin indent on
