@@ -58,9 +58,10 @@ nnoremap <CR> :ls<CR>:b
 
 " map ` to ' because ' is closer and ` is useless
 nnoremap ' `
+nnoremap ` '
 
 " map ` to open CommandT
-nnoremap ` :CommandT<CR>
+nnoremap <leader><space> :CommandT<CR>
 
 " scroll viewport faster
 nnoremap <C-e> 5<C-e>
