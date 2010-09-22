@@ -84,6 +84,12 @@ nnoremap <leader>0 <C-w>=
 nnoremap <leader>_ <C-w>_
 nnoremap <leader><Bar> <C-w><Bar>
 
+" easier switching buffers
+nnoremap <leader>, :bp<CR>
+nnoremap <leader>. :bn<CR>
+nnoremap <leader>d :bd<CR>
+
+
 " Command for opening a url on a mac:
 command -bar -nargs=1 OpenURL :!open <args>
 
