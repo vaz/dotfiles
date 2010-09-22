@@ -70,10 +70,19 @@ nnoremap <C-y> 5<C-y>
 nmap <silent> <leader>l :set list!<CR>
 
 " Conque term mappings
-nmap <leader>s :ConqueTermSplit bash<CR>
-nmap <leader>S :ConqueTermSplit 
-nmap <leader>v :ConqueTermVSplit bash<CR>
-nmap <leader>V :ConqueTermVSplit 
+nmap <leader>cc :ConqueTerm bash<CR>
+nmap <leader>cC :ConqueTerm 
+nmap <leader>cs :ConqueTermSplit bash<CR>
+nmap <leader>cS :ConqueTermSplit 
+nmap <leader>cv :ConqueTermVSplit bash<CR>
+nmap <leader>cV :ConqueTermVSplit 
+
+" easier resizing of windows
+nnoremap <leader>= <C-w>+
+nnoremap <leader>- <C-w>-
+nnoremap <leader>0 <C-w>=
+nnoremap <leader>_ <C-w>_
+nnoremap <leader><Bar> <C-w><Bar>
 
 " Command for opening a url on a mac:
 command -bar -nargs=1 OpenURL :!open <args>
@@ -84,7 +93,8 @@ let g:ConqueTerm_TERM   = 'xterm-256color'
 let g:ConqueTerm_ReadUnfocused = 1 " keep updating when not in buffer
 let g:ConqueTerm_CWInsert = 1 " Can <C-w> out of a terminal buffer
 
-" Syntax and colours
+
+" :: Syntax and colours ::
 
 if &term =~ "256color"
   set t_Co=256
@@ -97,7 +107,7 @@ if &t_Co > 2
 endif
 
 
-" Autocommands
+" :: Autocommands ::
 
 if has("autocmd")
   " Enable file type detection.
@@ -139,4 +149,4 @@ if has("autocmd")
   augroup END
 else
   set autoindent
-endif 
+endif
