@@ -19,7 +19,6 @@ export HISTCONTROL=ignoreboth		# no dups in history
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 export EDITOR='vim'
-
 export LSCOLORS='ExfxcxdxCxegedabagacad'
 
 ###############################################################################
