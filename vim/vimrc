@@ -67,10 +67,22 @@ nnoremap <C-e> 5<C-e>
 nnoremap <C-y> 5<C-y>
 
 " toggle showing control characters
-nmap <silent> <leader>s :set list!<CR>
+nmap <silent> <leader>l :set list!<CR>
+
+" Conque term mappings
+nmap <leader>s :ConqueTermSplit bash<CR>
+nmap <leader>S :ConqueTermSplit 
+nmap <leader>v :ConqueTermVSplit bash<CR>
+nmap <leader>V :ConqueTermVSplit 
 
 " Command for opening a url on a mac:
 command -bar -nargs=1 OpenURL :!open <args>
+
+" Conque settings
+let g:ConqueTerm_EscKey = '<Esc>'
+let g:ConqueTerm_TERM   = 'xterm-256color'
+let g:ConqueTerm_ReadUnfocused = 1 " keep updating when not in buffer
+let g:ConqueTerm_CWInsert = 1 " Can <C-w> out of a terminal buffer
 
 " Syntax and colours
 
@@ -83,6 +95,7 @@ if &t_Co > 2
   syntax on
   set hlsearch
 endif
+
 
 " Autocommands
 
@@ -117,6 +130,11 @@ if has("autocmd")
 
   " auto-detect git commit message files for syntax highlighting
   au BufNewFile,BufRead COMMIT_EDITMSG set filetype=gitcommit
+
+  " Don't show control chars in conque term
+  au FileType conque_term
+    \ set nolist |
+    \ map <C-x> <F5>
 
   augroup END
 else
