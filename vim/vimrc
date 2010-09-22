@@ -28,8 +28,8 @@ set virtualedit=all
 " use Q for formatting
 map Q gq
 
-" ESC will clear highlighting from last search
-" nmap <silent> <Esc><Esc> <Esc><Esc>:nohl<CR>
+" clear highlighting from last search
+nmap <silent> /<Esc> :nohl<CR>
 
 " Make Y work like y$ (instead of like yy), because D is like d$
 map Y y$
@@ -37,6 +37,9 @@ map Y y$
 " Make up and down keys useful for wrapped lines.
 map <UP> gk
 map <DOWN> gj
+
+" Pressing return lists open buffers and starts :b command to edit one
+nmap <CR> :ls<CR>:b 
 
 " Command for opening a url on a mac:
 command -bar -nargs=1 OpenURL :!open <args>
