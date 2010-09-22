@@ -56,9 +56,11 @@ map <DOWN> gj
 " Pressing return lists open buffers and starts :b command to edit one
 nnoremap <CR> :ls<CR>:b 
 
-" Swap ' and ` because ` is better
+" map ` to ' because ' is closer and ` is useless
 nnoremap ' `
-nnoremap ` '
+
+" map ` to open CommandT
+nnoremap ` :CommandT<CR>
 
 " scroll viewport faster
 nnoremap <C-e> 5<C-e>
