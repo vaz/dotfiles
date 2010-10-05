@@ -28,7 +28,7 @@ set noerrorbells        " error bells are annoying
 set visualbell
 set t_vb=
 set listchars=tab:>·,eol:$ " show \t for tabs and $ for line endings
-set autochdir           " working dir is always dir of current window's contents
+" set autochdir           " cwd is always dir of current window's contents
 set viminfo='20,<50,s10,h,% " remember marks, searches, registers, buffer list
 runtime macros/matchit.vim " % matches more than just brackets:
 
@@ -91,16 +91,27 @@ nnoremap <leader>. :bn<CR>
 nnoremap <leader>d :bd<CR>
 
 " NERDtree mappings
-nnoremap <leader>t :NERDTreeToggle<CR>
+nnoremap <silent> <leader>t :NERDTreeToggle<CR>
 
 " Command for opening a url on a mac:
-command -bar -nargs=1 OpenURL :!open <args>
+command! -bar -nargs=1 OpenURL :!open <args>
 
 " Conque settings
 let g:ConqueTerm_EscKey = '<Esc>'
 let g:ConqueTerm_TERM   = 'xterm-256color'
 let g:ConqueTerm_ReadUnfocused = 1 " keep updating when not in buffer
 let g:ConqueTerm_CWInsert = 1 " Can <C-w> out of a terminal buffer
+
+" shift-tab inserts a real tab
+inoremap <S-Tab> <C-V><Tab>
+
+" Switch from 2 space tabs to 4 space tabs (soft tabs)
+nnoremap <leader>2 <Esc>:set expandtab softtabstop=2 shiftwidth=2<CR>
+nnoremap <leader>4 <Esc>:set expandtab softtabstop=4 shiftwidth=4<CR>
+
+" vimrc editing mappings
+nnoremap <leader>v <Esc>:e ~/.vimrc<CR>
+nnoremap <leader>V <Esc>:so ~/.vimrc<CR>
 
 
 " :: Syntax and colours ::
@@ -154,6 +165,8 @@ if has("autocmd")
   au FileType conque_term
     \ set nolist |
     \ map <C-x> <F5>
+
+  au FileType make setlocal noexpandtab
 
   augroup END
 else

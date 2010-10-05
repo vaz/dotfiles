@@ -11,7 +11,7 @@ endif
 let colors_name = "vaz"
 
 hi Normal       cterm=NONE  ctermfg=229 ctermbg=NONE  " #ffffaf #00005f
-hi NonText                  ctermfg=65                " 5f875f
+hi NonText                  ctermfg=234                " dark grey
 
 hi Cursor       cterm=NONE  ctermfg=16  ctermbg=229   " #000000 #ffffaf
 hi CursorLine                           ctermbg=23    "         #005f5f
