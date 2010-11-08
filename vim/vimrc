@@ -114,6 +114,9 @@ nnoremap <leader>4 <Esc>:set expandtab softtabstop=4 shiftwidth=4<CR>
 nnoremap <leader>v <Esc>:e ~/.vimrc<CR>
 nnoremap <leader>V <Esc>:so ~/.vimrc<CR>
 
+" pep8
+nnoremap <leader>p <Esc>:call Pep8()<CR>
+
 " :: Syntax and colours ::
 
 if &term =~ "256color"
