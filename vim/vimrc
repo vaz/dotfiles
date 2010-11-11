@@ -17,17 +17,17 @@ set scrolloff=3         " keep n lines ahead or behind always showing
 set wildmode=longest,list " tab autocomplete like bash
 set foldmethod=marker   " folding code manually (no text inserted)
 set shortmess+=I        " skip splash screen on empty files
-set expandtab
+set expandtab           " expand tabs into spaces
 set tabstop=8           " How many spaces does a tab show up as
 set list                " show control characters, line endings etc.
 set softtabstop=2
 set shiftwidth=2
-set virtualedit=all
+set virtualedit=all     " can move cursor even where there's no characters
 set hidden              " buffers can be hidden while modified
 set noerrorbells        " error bells are annoying
-set visualbell
-set t_vb=
-set listchars=tab:>·,eol:$ " show \t for tabs and $ for line endings
+set visualbell          " error bells are annoying
+set t_vb=               " error bells are annoying
+set listchars=tab:>·,eol:$ " show >··· for tabs and $ for line endings
 " set autochdir           " cwd is always dir of current window's contents
 set viminfo='20,<50,s10,h,% " remember marks, searches, registers, buffer list
 runtime macros/matchit.vim " % matches more than just brackets:
@@ -40,15 +40,13 @@ let mapleader=","
 let g:mapleader=","
 
 " use Q for formatting
-map Q gq
+nmap Q gq
 
 " clear highlighting from last search
-nmap <silent> /<Esc> :nohl<CR>
+nnoremap <silent> /<Esc> :nohl<CR>
 
 " Make Y work like y$ (instead of like yy), because D is like d$
 map Y y$
-
-" toggle showing control chars
 
 " Make up and down keys useful for wrapped lines.
 map <UP> gk
@@ -57,11 +55,11 @@ map <DOWN> gj
 " Pressing return lists open buffers and starts :b command to edit one
 nnoremap <CR> :ls<CR>:b 
 
-" map ` to ' because ' is closer and ` is useless
-nnoremap ' `
-nnoremap ` '
+" swap ` with ' because ' is closer and ` is useless
+nmap ' `
+nmap ` '
 
-" map ` to open CommandT
+" mapping to open CommandT
 nnoremap <leader><space> :CommandT<CR>
 
 " scroll viewport faster
@@ -69,15 +67,15 @@ nnoremap <C-e> 5<C-e>
 nnoremap <C-y> 5<C-y>
 
 " toggle showing control characters
-nmap <silent> <leader>l :set list!<CR>
+nnoremap <silent> <leader>l :set list!<CR>
 
 " Conque term mappings
-nmap <leader>cc :ConqueTerm bash<CR>
-nmap <leader>cC :ConqueTerm 
-nmap <leader>cs :ConqueTermSplit bash<CR>
-nmap <leader>cS :ConqueTermSplit 
-nmap <leader>cv :ConqueTermVSplit bash<CR>
-nmap <leader>cV :ConqueTermVSplit 
+nnoremap <leader>cc :ConqueTerm bash<CR>
+nnoremap <leader>cC :ConqueTerm 
+nnoremap <leader>cs :ConqueTermSplit bash<CR>
+nnoremap <leader>cS :ConqueTermSplit 
+nnoremap <leader>cv :ConqueTermVSplit bash<CR>
+nnoremap <leader>cV :ConqueTermVSplit 
 
 " easier resizing of windows
 nnoremap <leader>= <C-w>+
