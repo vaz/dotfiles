@@ -87,9 +87,9 @@ nnoremap <leader>_ <C-w>_
 nnoremap <leader><Bar> <C-w><Bar>
 
 " easier switching buffers
-nnoremap <leader>, :bp<CR>
-nnoremap <leader>. :bn<CR>
-nnoremap <leader>d :bd<CR>
+nnoremap <silent> <leader>, :bp<CR>
+nnoremap <silent> <leader>. :bn<CR>
+nnoremap <silent> <leader>d :bd<CR>
 
 " NERDtree mappings
 nnoremap <silent> <leader>t :NERDTreeToggle<CR>
