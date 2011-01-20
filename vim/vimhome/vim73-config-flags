@@ -1,0 +1,4 @@
+./configure --prefix=/usr/local --enable-rubyinterp --enable-pythoninterp --enable-multibyte --with-features=huge --disable-gui
+
+
+

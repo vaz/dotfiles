@@ -56,8 +56,8 @@ map <DOWN> gj
 nnoremap <CR> :ls<CR>:b 
 
 " swap ` with ' because ' is closer and ` is useless
-nmap ' `
-nmap ` '
+nnoremap ' `
+nnoremap ` '
 
 " mapping to open CommandT
 nnoremap <leader><space> :CommandT<CR>
@@ -107,6 +107,9 @@ inoremap <S-Tab> <C-V><Tab>
 " Switch from 2 space tabs to 4 space tabs (soft tabs)
 nnoremap <leader>2 <Esc>:set expandtab softtabstop=2 shiftwidth=2<CR>
 nnoremap <leader>4 <Esc>:set expandtab softtabstop=4 shiftwidth=4<CR>
+
+" save a file you edited without the needed permissions
+nnoremap <leader>W <Esc>:w !sudo tee > /dev/null %
 
 " vimrc editing mappings
 nnoremap <leader>v <Esc>:e ~/.vimrc<CR>
