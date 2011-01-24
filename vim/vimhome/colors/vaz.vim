@@ -14,7 +14,8 @@ hi Normal       cterm=NONE  ctermfg=229 ctermbg=NONE  " #ffffaf #00005f
 hi NonText                  ctermfg=234                " dark grey
 
 hi Cursor       cterm=NONE  ctermfg=16  ctermbg=229   " #000000 #ffffaf
-hi CursorLine                           ctermbg=23    "         #005f5f
+hi CursorLine   cterm=NONE              ctermbg=233
+hi LineNr                   ctermfg=235
 
 hi Directory                ctermfg=27                " #005fff
 
@@ -36,7 +37,6 @@ hi VertSplit                ctermfg=173 ctermbg=16    " #d7875f #000000
 hi ModeMsg      cterm=BOLD  ctermfg=120               " #87ff87
 hi MoreMsg      cterm=BOLD  ctermfg=120               " #87ff87
 hi Question     cterm=BOLD  ctermfg=120               " #87ff87
-hi LineNr   cterm=UNDERLINE ctermfg=86                " #5fffd7
 
 hi MatchParen   cterm=BOLD  ctermfg=16  ctermbg=49    " #000000 #00ffaf
 hi IncSearch    cterm=NONE  ctermfg=15  ctermbg=24    " #ffffff #005f87
@@ -71,6 +71,7 @@ hi Typedef                  ctermfg=210               " #ff8787
 
 hi Special                  ctermfg=85                " #5fffaf
 hi SpecialChar              ctermfg=159               " #afffff
+hi SpecialKey               ctermfg=234
 hi Tag                      ctermfg=49                " #00ffaf
 
 hi Underlined  cterm=UNDERLINE  ctermfg=11            " #ffff00

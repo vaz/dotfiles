@@ -29,6 +29,8 @@ set visualbell          " error bells are annoying
 set t_vb=               " error bells are annoying
 set listchars=tab:>·,eol:$ " show >··· for tabs and $ for line endings
 " set autochdir           " cwd is always dir of current window's contents
+set rnu                 " relative line numbers
+setlocal cursorline     " cursor line highlighting
 set viminfo='20,<50,s10,h,% " remember marks, searches, registers, buffer list
 runtime macros/matchit.vim " % matches more than just brackets:
 
@@ -150,6 +152,10 @@ if has("autocmd")
 
   " For all text files set 'textwidth' to 78 characters.
   au FileType text setlocal textwidth=78
+
+  " set cursorline for current window only
+  au WinEnter * setlocal cursorline
+  au WinLeave * setlocal nocursorline
 
   " Leave insert mode when idling
   " au CursorHoldI * stopinsert   " nope this is pretty annoying.
