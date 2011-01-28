@@ -72,12 +72,12 @@ nnoremap <C-y> 5<C-y>
 nnoremap <silent> <leader>l :set list!<CR>
 
 " Conque term mappings
-nnoremap <leader>cc :ConqueTerm bash<CR>
-nnoremap <leader>cC :ConqueTerm 
-nnoremap <leader>cs :ConqueTermSplit bash<CR>
-nnoremap <leader>cS :ConqueTermSplit 
-nnoremap <leader>cv :ConqueTermVSplit bash<CR>
-nnoremap <leader>cV :ConqueTermVSplit 
+nnoremap <leader>Cc :ConqueTerm bash<CR>
+nnoremap <leader>CC :ConqueTerm 
+nnoremap <leader>Cs :ConqueTermSplit bash<CR>
+nnoremap <leader>CS :ConqueTermSplit 
+nnoremap <leader>Cv :ConqueTermVSplit bash<CR>
+nnoremap <leader>CV :ConqueTermVSplit 
 
 " easier resizing of windows
 nnoremap <leader>= <C-w>+
@@ -173,7 +173,8 @@ if has("autocmd")
 
   " Don't show control chars in conque term
   au FileType conque_term
-    \ set nolist |
+    \ setlocal nolist |
+    \ setlocal nornu | 
     \ map <C-x> <F5>
 
   au FileType make setlocal noexpandtab

@@ -3,6 +3,7 @@ username = Vaz <allen.mat@gmail.com>
 merge = vimdiff
 
 [extensions]
+fetch =
 rebase =
 mq =
 bookmarks =
