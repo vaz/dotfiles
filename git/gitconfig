@@ -1,22 +1,26 @@
 [user]
-	name = Vaz
-	email = allen.mat@gmail.com
+  name = Vaz
+  email = allen.mat@gmail.com
 [core]
-	editor = vim
+  editor = vim
 [push]
   default = current
 [merge]
-	tool = vimdiff
+  tool = vimdiff
 [alias]
-	co = checkout
-	st = status
-	ci = commit
-	br = branch
-	unstage = reset HEAD --
+  co = checkout
+  st = status
+  ci = commit
+  br = branch
+  unstage = reset HEAD --
   l = log --pretty=oneline --abbrev-commit
-  lg = log --pretty=oneline --abbrev-commit --graph
+  gl = log --pretty=oneline --abbrev-commit --graph
+  glog = log --graph
   fetchdiff = log -p HEAD..FETCH_HEAD --abbrev-commit
-	last = show HEAD --abbrev-commit
+  in = whatchanged ..origin
+  out = whatchanged origin..
+  last = show HEAD --abbrev-commit
   todo = grep -n TODO
+  xxx = grep -n XXX
 [color]
   ui = auto
