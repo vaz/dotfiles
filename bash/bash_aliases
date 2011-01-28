@@ -26,3 +26,4 @@ alias hmm='echo Hmmm.'
 alias lol='echo Hahaha.'
 alias haha='echo Hahaha.'
 
+alias ng='sudo /etc/init.d/nginx'
