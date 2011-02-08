@@ -20,6 +20,9 @@ dotfiles = {
     "bash_defs"       => "#{HOME}/.bash_defs",
     "profile"         => "#{HOME}/.profile"
   },
+  'bin' => {
+    "ack"             => "#{HOME}/bin/ack"
+  },
   'git'  => {
     "gitconfig"       => "#{HOME}/.gitconfig"
   },
@@ -54,6 +57,9 @@ dotfiles.each do |dir, files|
         File.rename(dst, "#{dst}.bak")
       end
     end
+
+    dst_dir = File.dirname(dst)
+    FileUtils.mkdir_p(dst_dir)
 
     src = "#{DOTFILES}/#{dir}/#{src}"
     File.symlink src, dst
