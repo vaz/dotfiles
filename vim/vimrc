@@ -28,6 +28,7 @@ set noerrorbells        " error bells are annoying
 set visualbell          " error bells are annoying
 set t_vb=               " error bells are annoying
 set listchars=tab:>·,eol:$ " show >··· for tabs and $ for line endings
+set clipboard+=unnamed  " make the unnamed register equal os clipboard
 " set autochdir           " cwd is always dir of current window's contents
 if version >= 703
   set rnu                 " relative line numbers
@@ -63,15 +64,33 @@ nnoremap <CR> :ls<CR>:b
 nnoremap ' `
 nnoremap ` '
 
-" mapping to open CommandT
-nnoremap <leader><space> :CommandT<CR>
-
 " scroll viewport faster
 nnoremap <C-e> 5<C-e>
 nnoremap <C-y> 5<C-y>
 
 " toggle showing control characters
 nnoremap <silent> <leader>l :set list!<CR>
+
+" toggle showing relative line numbers
+" I should make an autocmd so it only shows it in local buffer
+" and maybe adjusts vertical splits
+nnoremap <silent> <leader>r :set rnu!<CR>
+
+" easier switching buffers
+nnoremap <silent> H :bp<CR>
+nnoremap <silent> L :bn<CR>
+nnoremap <silent> <leader>, <C-^>
+nnoremap <silent> <leader>d :bd<CR>
+
+" shift-tab inserts a real tab
+inoremap <S-Tab> <C-V><Tab>
+
+" Switch from 2 space tabs to 4 space tabs (soft tabs)
+nnoremap <leader>2 <Esc>:set expandtab softtabstop=2 shiftwidth=2<CR>
+nnoremap <leader>4 <Esc>:set expandtab softtabstop=4 shiftwidth=4<CR>
+
+" mapping to open CommandT
+nnoremap <leader><space> :CommandT<CR>
 
 " Conque term mappings
 nnoremap <leader>Cc :ConqueTerm bash<CR>
@@ -81,17 +100,11 @@ nnoremap <leader>CS :ConqueTermSplit
 nnoremap <leader>Cv :ConqueTermVSplit bash<CR>
 nnoremap <leader>CV :ConqueTermVSplit 
 
-" easier resizing of windows
-nnoremap <leader>= <C-w>+
-nnoremap <leader>- <C-w>-
-nnoremap <leader>0 <C-w>=
-nnoremap <leader>_ <C-w>_
-nnoremap <leader><Bar> <C-w><Bar>
-
-" easier switching buffers
-nnoremap <silent> <leader>, :bp<CR>
-nnoremap <silent> <leader>. :bn<CR>
-nnoremap <silent> <leader>d :bd<CR>
+" Conque settings
+let g:ConqueTerm_EscKey = '<Esc>'
+let g:ConqueTerm_TERM   = 'xterm-256color'
+let g:ConqueTerm_ReadUnfocused = 1 " keep updating when not in buffer
+let g:ConqueTerm_CWInsert = 1 " Can <C-w> out of a terminal buffer
 
 " NERDtree mappings
 nnoremap <silent> <leader>t :NERDTreeToggle<CR>
@@ -99,18 +112,8 @@ nnoremap <silent> <leader>t :NERDTreeToggle<CR>
 " Command for opening a url on a mac:
 command! -bar -nargs=1 OpenURL :!open <args>
 
-" Conque settings
-let g:ConqueTerm_EscKey = '<Esc>'
-let g:ConqueTerm_TERM   = 'xterm-256color'
-let g:ConqueTerm_ReadUnfocused = 1 " keep updating when not in buffer
-let g:ConqueTerm_CWInsert = 1 " Can <C-w> out of a terminal buffer
-
-" shift-tab inserts a real tab
-inoremap <S-Tab> <C-V><Tab>
-
-" Switch from 2 space tabs to 4 space tabs (soft tabs)
-nnoremap <leader>2 <Esc>:set expandtab softtabstop=2 shiftwidth=2<CR>
-nnoremap <leader>4 <Esc>:set expandtab softtabstop=4 shiftwidth=4<CR>
+" Zen Coding
+let g:user_zen_expandabbr_key = '<c-e>'
 
 " save a file you edited without the needed permissions
 nnoremap <leader>W <Esc>:w !sudo tee > /dev/null %
