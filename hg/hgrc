@@ -29,4 +29,4 @@ pager = LESS="FSRX" less
 ignore = version, help, update, serve, record
 
 [trusted]
-groups = www-data
+groups = www-data root
