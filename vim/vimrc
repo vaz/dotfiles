@@ -69,7 +69,10 @@ nnoremap <C-e> 5<C-e>
 nnoremap <C-y> 5<C-y>
 
 " toggle showing control characters
-nnoremap <silent> <leader>l :set list!<CR>
+nnoremap <silent> <leader>s :set list!<CR>
+
+" local cd to current file's dir
+nnoremap <silent> <leader>l :lcd %:p:h<CR>
 
 " toggle showing relative line numbers
 " I should make an autocmd so it only shows it in local buffer
