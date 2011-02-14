@@ -29,9 +29,8 @@ set visualbell          " error bells are annoying
 set t_vb=               " error bells are annoying
 set listchars=tab:>·,eol:$ " show >··· for tabs and $ for line endings
 set clipboard+=unnamed  " make the unnamed register equal os clipboard
-" set autochdir           " cwd is always dir of current window's contents
 if version >= 703
-  set rnu                 " relative line numbers
+  set rnu               " relative line numbers
 endif
 setlocal cursorline     " cursor line highlighting
 set viminfo='20,<50,s10,h,% " remember marks, searches, registers, buffer list
@@ -48,69 +47,73 @@ let g:mapleader=","
 nmap Q gq
 
 " clear highlighting from last search
-nnoremap <silent> /<Esc> :nohl<CR>
+nnoremap <silent> /<esc> :nohl<cr>
 
 " Make Y work like y$ (instead of like yy), because D is like d$
 map Y y$
 
 " Make up and down keys useful for wrapped lines.
-map <UP> gk
-map <DOWN> gj
+map <up> gk
+map <down> gj
 
-" Pressing return lists open buffers and starts :b command to edit one
-nnoremap <CR> :ls<CR>:b 
+" pressing return in normal mode opens a line below
+nnoremap <cr> mOo<esc>`O
+" pressing shift-return in normal opens a line above
+" doesn't seem to work?
+nnoremap <s-cr> O<esc> 
 
 " swap ` with ' because ' is closer and ` is useless
 nnoremap ' `
 nnoremap ` '
 
 " scroll viewport faster
-nnoremap <C-e> 5<C-e>
-nnoremap <C-y> 5<C-y>
+nnoremap <c-e> 5<c-e>
+nnoremap <c-y> 5<c-y>
 
 " toggle showing control characters
-nnoremap <silent> <leader>s :set list!<CR>
+nnoremap <silent> <leader>s :set list!<cr>
 
 " local cd to current file's dir
-nnoremap <silent> <leader>l :lcd %:p:h<CR>
+nnoremap <silent> <leader>l :lcd %:p:h<cr>
 
 " toggle showing relative line numbers
 " I should make an autocmd so it only shows it in local buffer
 " and maybe adjusts vertical splits
-nnoremap <silent> <leader>r :set rnu!<CR>
+nnoremap <silent> <leader>r :set rnu!<cr>
 
 " easier switching buffers
-nnoremap <silent> H :bp<CR>
-nnoremap <silent> L :bn<CR>
-nnoremap <silent> <leader>, <C-^>
-nnoremap <silent> <leader>d :bd<CR>
+nnoremap <silent> H :bp<cr>
+nnoremap <silent> L :bn<cr>
+nnoremap <silent> <leader>, <c-^>
+nnoremap <silent> <leader>d :bd<cr>
+nnoremap <silent> <leader>. :ls<cr>:b 
 
 " shift-tab inserts a real tab
-inoremap <S-Tab> <C-V><Tab>
+inoremap <s-tab> <c-v><tab>
 
 " Switch from 2 space tabs to 4 space tabs (soft tabs)
-nnoremap <leader>2 <Esc>:set expandtab softtabstop=2 shiftwidth=2<CR>
-nnoremap <leader>4 <Esc>:set expandtab softtabstop=4 shiftwidth=4<CR>
+nnoremap <leader>2 <esc>:set expandtab softtabstop=2 shiftwidth=2<cr>
+nnoremap <leader>4 <esc>:set expandtab softtabstop=4 shiftwidth=4<cr>
 
 " mapping to open CommandT
-nnoremap <leader><space> :CommandT<CR>
+nnoremap <leader><space> :CommandT<cr>
 
 " Conque term mappings
-nnoremap <leader>Cc :ConqueTerm bash<CR>
+nnoremap <leader>Cc :ConqueTerm bash<cr>
 nnoremap <leader>CC :ConqueTerm 
-nnoremap <leader>Cs :ConqueTermSplit bash<CR>
+nnoremap <leader>Cs :ConqueTermSplit bash<cr>
 nnoremap <leader>CS :ConqueTermSplit 
-nnoremap <leader>Cv :ConqueTermVSplit bash<CR>
+nnoremap <leader>Cv :ConqueTermVSplit bash<cr>
 nnoremap <leader>CV :ConqueTermVSplit 
 
 " Conque settings
-let g:ConqueTerm_EscKey = '<Esc>'
+let g:ConqueTerm_EscKey = '<esc>'
 let g:ConqueTerm_TERM   = 'xterm-256color'
 let g:ConqueTerm_ReadUnfocused = 1 " keep updating when not in buffer
 let g:ConqueTerm_CWInsert = 1 " Can <C-w> out of a terminal buffer
 
 " NERDtree mappings
-nnoremap <silent> <leader>t :NERDTreeToggle<CR>
+nnoremap <silent> <leader>t :NERDTreeToggle<cr>
 
 " Command for opening a url on a mac:
 command! -bar -nargs=1 OpenURL :!open <args>
@@ -119,14 +122,14 @@ command! -bar -nargs=1 OpenURL :!open <args>
 let g:user_zen_expandabbr_key = '<c-e>'
 
 " save a file you edited without the needed permissions
-nnoremap <leader>W <Esc>:w !sudo tee > /dev/null %
+nnoremap <leader>W <esc>:w !sudo tee > /dev/null %
 
 " vimrc editing mappings
-nnoremap <leader>v <Esc>:e ~/.vimrc<CR>
-nnoremap <leader>V <Esc>:so ~/.vimrc<CR>
+nnoremap <leader>v <esc>:e ~/.vimrc<cr>
+nnoremap <leader>V <esc>:so ~/.vimrc<cr>
 
 " pep8
-nnoremap <leader>p <Esc>:call Pep8()<CR>
+nnoremap <leader>p <esc>:call Pep8()<cr>
 
 " :: Syntax and colours ::
 
@@ -185,6 +188,7 @@ if has("autocmd")
     \ setlocal nornu | 
     \ map <C-x> <F5>
 
+  " don't expand tabs to spaces in makefiles
   au FileType make setlocal noexpandtab
 
   " reload vimrc when we save it
