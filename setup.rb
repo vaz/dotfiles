@@ -4,6 +4,7 @@ require 'fileutils'
 
 puts "You probably want to install git." if `which git` and $? != 0
 puts "You probably want to install hg." if `which hg` and $? != 0
+puts "You probably want to install bash-completion" if `which __git_ps1` and $? != 0
 
 if ARGV[0] == '-f'
   puts "Not creating backups!"
