@@ -16,6 +16,9 @@ alias l='ls -lha'
 alias screen='screen -U'
 alias sr='screen -r'
 
+# stuff
+alias diditwork='test $? -eq 0 && echo yeah || echo nope'
+
 # mud habits
 alias grr='echo Grrrrr.'
 alias yawn='echo You must be tired.'
