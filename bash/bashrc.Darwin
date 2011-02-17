@@ -81,6 +81,6 @@ export PATH
 ###############################################################################
 ## automatic screen
 
-if [ -n "$SSH_CLIENT" -and `expr "$TERM" : screen` -eq 0 ]; then
+if [ -n "$SSH_CLIENT" -a `expr "$TERM" : screen` -eq 0 ]; then
   screen -S vaz -rd || screen -S vaz
 fi
