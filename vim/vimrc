@@ -29,9 +29,7 @@ set visualbell          " error bells are annoying
 set t_vb=               " error bells are annoying
 set listchars=tab:>·,eol:$ " show >··· for tabs and $ for line endings
 set clipboard+=unnamed  " make the unnamed register equal os clipboard
-if version >= 703
-  set rnu               " relative line numbers
-endif
+set mouse=a             " mainly just so I can resize split windows easier
 setlocal cursorline     " cursor line highlighting
 set viminfo='20,<50,s10,h,% " remember marks, searches, registers, buffer list
 runtime macros/matchit.vim " % matches more than just brackets:
@@ -165,8 +163,17 @@ if has("autocmd")
   au FileType text setlocal textwidth=78
 
   " set cursorline for current window only
-  au WinEnter * setlocal cursorline
-  au WinLeave * setlocal nocursorline
+  au WinEnter,BufEnter * setlocal cursorline
+  au WinLeave,BufLeave * setlocal nocursorline
+
+  " set relative line numbers only in current window
+  if version >= 703
+    au BufRead,WinEnter,BufEnter * setlocal rnu | :vertical resize +2
+    au BufLeave,WinLeave * setlocal nornu | :vertical resize -2
+  else
+    au BufRead,BufEnter,WinEnter * setlocal nu
+    au BufLeave,WinLeave * setlocal nonu
+  endif
 
   " Leave insert mode when idling
   " au CursorHoldI * stopinsert   " nope this is pretty annoying.
