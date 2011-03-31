@@ -126,6 +126,14 @@ nnoremap <leader>W <esc>:w !sudo tee > /dev/null %
 nnoremap <leader>v <esc>:e ~/.vimrc<cr>
 nnoremap <leader>V <esc>:so ~/.vimrc<cr>
 
+" vim-indent-guides
+let g:indent_guides_auto_colors = 0
+let g:indent_guides_enable_on_vim_startup = 1
+
+" supertab
+let g:SuperTabDefaultCompletionType = "context"
+let g:SuperTabContextDefaultCompletionType = "<c-n>"
+
 " pep8
 nnoremap <leader>p <esc>:call Pep8()<cr>
 
@@ -168,8 +176,12 @@ if has("autocmd")
 
   " set relative line numbers only in current window
   if version >= 703
-    au BufRead,WinEnter,BufEnter * setlocal rnu | :vertical resize +2
-    au BufLeave,WinLeave * setlocal nornu | :vertical resize -2
+    au BufRead,WinEnter,BufEnter *
+      \ setlocal rnu |
+      " \ exec 'vertical resize +'.string(strlen(line('$'))+1)
+    au BufLeave,WinLeave *
+      \ setlocal nornu |
+      " \ exec 'vertical resize -'.string(strlen(line('$'))+1)
   else
     au BufRead,BufEnter,WinEnter * setlocal nu
     au BufLeave,WinLeave * setlocal nonu

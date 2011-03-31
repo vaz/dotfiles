@@ -79,6 +79,10 @@ hi Underlined  cterm=UNDERLINE  ctermfg=11            " #ffff00
 hi Error       cterm=BOLD   ctermfg=15  ctermbg=124   " #ffffff #af0000 
 hi Todo        cterm=BOLD   ctermfg=216 ctermbg=53    " #ffaf87 #5f005f
 
+" vim-indent-guides
+hi IndentGuidesOdd                      ctermbg=232
+hi IndentGuidesEven                     ctermbg=233
+
 " vim: set et :
 
 
