@@ -37,6 +37,9 @@ runtime macros/matchit.vim " % matches more than just brackets:
 
 " :: Keymappings and commands ::
 
+" better ESC
+inoremap kj <esc>
+
 " Better mapleader
 let mapleader=","
 let g:mapleader=","
@@ -111,7 +114,7 @@ let g:ConqueTerm_ReadUnfocused = 1 " keep updating when not in buffer
 let g:ConqueTerm_CWInsert = 1 " Can <C-w> out of a terminal buffer
 
 " NERDtree mappings
-nnoremap <silent> <leader>t :NERDTreeToggle<cr>
+nnoremap <silent> <leader><tab> :NERDTreeToggle<cr>
 
 " Command for opening a url on a mac:
 command! -bar -nargs=1 OpenURL :!open <args>
@@ -120,7 +123,7 @@ command! -bar -nargs=1 OpenURL :!open <args>
 let g:user_zen_expandabbr_key = '<c-e>'
 
 " save a file you edited without the needed permissions
-nnoremap <leader>W <esc>:w !sudo tee > /dev/null %
+" nnoremap <leader>W <esc>:w !sudo tee > /dev/null %
 
 " vimrc editing mappings
 nnoremap <leader>v <esc>:e ~/.vimrc<cr>

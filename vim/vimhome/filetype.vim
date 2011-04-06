@@ -1424,7 +1424,7 @@ au BufNewFile,BufRead *.rst			setf rst
 au BufNewFile,BufRead *.rtf			setf rtf
 
 " Ruby
-au BufNewFile,BufRead *.rb,*.rbw,*.gem,*.gemspec,.irbrc,*.ru	setf ruby
+au BufNewFile,BufRead *.rb,*.rbw,*.gem,*.gemspec,.irbrc,*.ru,Gemfile	setf ruby
 
 " Rantfile is like Ruby
 au BufNewFile,BufRead [rR]antfile,*.rant	setf ruby
