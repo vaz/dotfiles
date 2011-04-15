@@ -57,6 +57,10 @@ map Y y$
 map <up> gk
 map <down> gj
 
+" move to start or end of line in insert mode
+imap <c-a> <c-o>^
+imap <c-e> <c-o>$
+
 " pressing return in normal mode opens a line below
 nnoremap <cr> mOo<esc>`O
 " pressing shift-return in normal opens a line above
@@ -85,7 +89,7 @@ nnoremap <silent> <leader>r :set rnu!<cr>
 " easier switching buffers
 nnoremap <silent> H :bp<cr>
 nnoremap <silent> L :bn<cr>
-nnoremap <silent> <leader>, <c-^>
+" nnoremap <silent> <leader>, <c-^>
 nnoremap <silent> <leader>d :bd<cr>
 nnoremap <silent> <leader>. :ls<cr>:b 
 
@@ -147,10 +151,11 @@ if &term =~ "256color"
 endif
 
 if &t_Co > 2 
-  colorscheme vaz
   syntax on
+  colorscheme vaz
   set hlsearch
 endif
+
 
 
 " :: Autocommands ::
