@@ -39,11 +39,15 @@
 'indent_guides_start_level'	indent_guides.txt	/*'indent_guides_start_level'*
 'loaded_nerd_comments'	NERD_commenter.txt	/*'loaded_nerd_comments'*
 'loaded_nerd_tree'	NERD_tree.txt	/*'loaded_nerd_tree'*
+:Ack	ack.txt	/*:Ack*
+:AckAdd	ack.txt	/*:AckAdd*
 :CommandT	command-t.txt	/*:CommandT*
 :CommandTFlush	command-t.txt	/*:CommandTFlush*
 :IndentGuidesDisable	indent_guides.txt	/*:IndentGuidesDisable*
 :IndentGuidesEnable	indent_guides.txt	/*:IndentGuidesEnable*
 :IndentGuidesToggle	indent_guides.txt	/*:IndentGuidesToggle*
+:LAck	ack.txt	/*:LAck*
+:LAckAdd	ack.txt	/*:LAckAdd*
 :NERDTree	NERD_tree.txt	/*:NERDTree*
 :NERDTreeClose	NERD_tree.txt	/*:NERDTreeClose*
 :NERDTreeFromBookmark	NERD_tree.txt	/*:NERDTreeFromBookmark*
@@ -469,6 +473,9 @@ Tshortcuts	latex-suite.txt	/*Tshortcuts*
 \vline	latexhelp.txt	/*\\vline*
 \vspace	latexhelp.txt	/*\\vspace*
 \width	latexhelp.txt	/*\\width*
+ack	ack.txt	/*ack*
+ack-author	ack.txt	/*ack-author*
+ack.txt	ack.txt	/*ack.txt*
 adding-bib-options	latex-suite.txt	/*adding-bib-options*
 alph	latexhelp.txt	/*alph*
 altkey-mappings	latex-suite.txt	/*altkey-mappings*
@@ -624,6 +631,14 @@ g:rails_statusline	rails.txt	/*g:rails_statusline*
 g:rails_syntax	rails.txt	/*g:rails_syntax*
 g:rails_tabstop	rails.txt	/*g:rails_tabstop*
 g:rails_url	rails.txt	/*g:rails_url*
+gitv	gitv.txt	/*gitv*
+gitv-author	gitv.txt	/*gitv-author*
+gitv-changelog	gitv.txt	/*gitv-changelog*
+gitv-config-options	gitv.txt	/*gitv-config-options*
+gitv-installation	gitv.txt	/*gitv-installation*
+gitv-introduction	gitv.txt	/*gitv-introduction*
+gitv-misc	gitv.txt	/*gitv-misc*
+gitv-usage	gitv.txt	/*gitv-usage*
 greek-letter-mappings	latex-suite.txt	/*greek-letter-mappings*
 headings	latexhelp.txt	/*headings*
 hyph-	latexhelp.txt	/*hyph-*
@@ -1364,6 +1379,7 @@ vo-color	vo_readme.txt	/*vo-color*
 vo-command	vo_readme.txt	/*vo-command*
 vo-debian	vo_readme.txt	/*vo-debian*
 vo-executable-lines	vo_readme.txt	/*vo-executable-lines*
+vo-history	vo_readme.txt	/*vo-history*
 vo-hoisting	vo_readme.txt	/*vo-hoisting*
 vo-install	vo_readme.txt	/*vo-install*
 vo-license	vo_readme.txt	/*vo-license*
@@ -1382,6 +1398,7 @@ vo-testing	vo_readme.txt	/*vo-testing*
 vo-troubleshooting	vo_readme.txt	/*vo-troubleshooting*
 vo-updating	vo_readme.txt	/*vo-updating*
 vo-version	vo_readme.txt	/*vo-version*
+vo_cheatsheet.txt	vo_cheatsheet.txt	/*vo_cheatsheet.txt*
 vo_readme.txt	vo_readme.txt	/*vo_readme.txt*
 vs	surround.txt	/*vs*
 why-IMAP	latex-suite.txt	/*why-IMAP*

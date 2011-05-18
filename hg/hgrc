@@ -12,6 +12,9 @@ pager =
 graphlog =
 prompt = ~/.dotfiles/hg/hg-prompt/prompt.py
 
+[bookmarks]
+track.current = True
+
 [merge-tools]
 vimdiff.executable = vim
 vimdiff.args = -d $base $local $output $other +close +close

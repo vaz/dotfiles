@@ -33,6 +33,7 @@ set mouse=a             " mainly just so I can resize split windows easier
 setlocal cursorline     " cursor line highlighting
 set viminfo='20,<50,s10,h,% " remember marks, searches, registers, buffer list
 runtime macros/matchit.vim " % matches more than just brackets:
+set completeopt=menuone,longest,preview
 
 
 " :: Keymappings and commands ::
@@ -56,6 +57,11 @@ map Y y$
 " Make up and down keys useful for wrapped lines.
 map <up> gk
 map <down> gj
+
+nnoremap <c-h> <c-w>h
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-l> <c-w>l
 
 " move to start or end of line in insert mode
 imap <c-a> <c-o>^
@@ -89,7 +95,7 @@ nnoremap <silent> <leader>r :set rnu!<cr>
 " easier switching buffers
 nnoremap <silent> H :bp<cr>
 nnoremap <silent> L :bn<cr>
-" nnoremap <silent> <leader>, <c-^>
+nnoremap <silent> <tab> <c-^>
 nnoremap <silent> <leader>d :bd<cr>
 nnoremap <silent> <leader>. :ls<cr>:b 
 
@@ -141,8 +147,12 @@ let g:indent_guides_enable_on_vim_startup = 1
 let g:SuperTabDefaultCompletionType = "context"
 let g:SuperTabContextDefaultCompletionType = "<c-n>"
 
-" pep8
-nnoremap <leader>p <esc>:call Pep8()<cr>
+" Ack
+nnoremap <leader>a <esc>:Ack! 
+
+" Folding
+nnoremap <leader>z <esc>:set foldlevel=10000<cr>
+nnoremap <leader>Z <esc>:set foldlevel=-10000<cr>
 
 " :: Syntax and colours ::
 
@@ -217,6 +227,14 @@ if has("autocmd")
 
   " don't expand tabs to spaces in makefiles
   au FileType make setlocal noexpandtab
+
+  au FileType python
+    \ nnoremap <leader>8 <esc>:call Pep8()<cr> |
+    \ setlocal omnifunc=pythoncomplete#Complete |
+    \ setlocal foldmethod=indent |
+    \ setlocal foldlevel=-99 |
+  " stupid rope
+  " source $HOME/.vim/sadness/ropevim/rope.vim
 
   " reload vimrc when we save it
   au BufWritePost .vimrc so ~/.vimrc
