@@ -16,6 +16,9 @@ alias l='ls -lha'
 alias screen='screen -U'
 alias sr='screen -r'
 
+# working dir
+alias cpwd="pwd | pbcopy"
+
 # stuff
 alias diditwork='test $? -eq 0 && echo yeah || echo nope'
 
