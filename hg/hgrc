@@ -13,6 +13,7 @@ graphlog =
 record =
 prompt = ~/.dotfiles/hg/hg-prompt/prompt.py
 hgattic = ~/.dotfiles/hg/hgattic/attic.py
+transplant =
 
 [bookmarks]
 track.current = True
@@ -35,3 +36,6 @@ ignore = version, help, update, serve, record
 
 [trusted]
 groups = www-data root
+
+[web]
+cacerts = /etc/hg-dummy-cert.pem
