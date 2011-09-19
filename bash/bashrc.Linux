@@ -73,6 +73,7 @@ export PATH
 [ -f ~/.bash_defs ]         && . ~/.bash_defs	      	# function defs
 [ -f ~/.bash_aliases ]      && . ~/.bash_aliases	    # alias definitions
 [ -f /etc/bash_completion ] && . /etc/bash_completion 
+[ -f ~/.bashrc.local ]      && . ~/.bashrc.local        # local bashrc
 
 
 ###############################################################################
