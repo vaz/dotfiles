@@ -96,11 +96,8 @@ nnoremap <silent> <leader>r :set rnu!<cr>
 nnoremap <silent> H :bp<cr>
 nnoremap <silent> L :bn<cr>
 nnoremap <silent> <tab> <c-^>
+nnoremap <silent> <s-tab> :ls<cr>:b 
 nnoremap <silent> <leader>d :bd<cr>
-nnoremap <silent> <leader>. :ls<cr>:b 
-
-" shift-tab inserts a real tab
-inoremap <s-tab> <c-v><tab>
 
 " Switch from 2 space tabs to 4 space tabs (soft tabs)
 nnoremap <leader>2 <esc>:set expandtab softtabstop=2 shiftwidth=2<cr>
