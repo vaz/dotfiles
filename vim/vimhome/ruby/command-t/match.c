@@ -48,15 +48,13 @@ double recursive_match(matchinfo_t *m,  // sharable meta-data
     int dot_file_match = 0;     // true if abbrev matches a dot-file
     int dot_search = 0;         // true if searching for a dot
 
-    long i;
-    for (i = abbrev_idx; i < m->abbrev_len; i++)
+    for (long i = abbrev_idx; i < m->abbrev_len; i++)
     {
         char c = m->abbrev_p[i];
         if (c == '.')
             dot_search = 1;
         int found = 0;
-        long j;
-        for (j = str_idx; j < m->str_len; j++, str_idx++)
+        for (long j = str_idx; j < m->str_len; j++, str_idx++)
         {
             char d = m->str_p[j];
             if (d == '.')
@@ -159,8 +157,7 @@ VALUE CommandTMatch_initialize(int argc, VALUE *argv, VALUE self)
         // filter out dot files
         if (!m.always_show_dot_files)
         {
-            long i;
-            for (i = 0; i < m.str_len; i++)
+            for (long i = 0; i < m.str_len; i++)
             {
                 char c = m.str_p[i];
                 if (c == '.' && (i == 0 || m.str_p[i - 1] == '/'))

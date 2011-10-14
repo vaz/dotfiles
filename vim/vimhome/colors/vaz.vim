@@ -71,7 +71,7 @@ hi Typedef                  ctermfg=210               " #ff8787
 
 hi Special                  ctermfg=85                " #5fffaf
 hi SpecialChar              ctermfg=159               " #afffff
-hi SpecialKey               ctermfg=234
+hi SpecialKey               ctermfg=234 ctermbg=232
 hi Tag                      ctermfg=49                " #00ffaf
 
 hi Underlined  cterm=UNDERLINE  ctermfg=11            " #ffff00
@@ -80,13 +80,8 @@ hi Error       cterm=BOLD   ctermfg=15  ctermbg=124   " #ffffff #af0000
 hi Todo        cterm=BOLD   ctermfg=216 ctermbg=53    " #ffaf87 #5f005f
 
 " vim-indent-guides
-hi IndentGuidesOdd                      ctermbg=232
-hi IndentGuidesEven                     ctermbg=233
+hi IndentGuidesOdd          ctermfg=233 ctermbg=232
+hi IndentGuidesEven         ctermfg=233 ctermbg=16
 
 " vim: set et :
-
-
-
-
-
 

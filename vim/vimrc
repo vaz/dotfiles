@@ -26,20 +26,24 @@ set virtualedit=all     " can move cursor even where there's no characters
 set hidden              " buffers can be hidden while modified
 set noerrorbells        " error bells are annoying
 set visualbell          " error bells are annoying
-set t_vb=               " error bells are annoying
-set listchars=tab:>·,eol:$ " show >··· for tabs and $ for line endings
+set t_vb=               " error bells are annoying   
+set listchars=tab:»\ ,trail:·,extends:#,precedes:#,nbsp:·
 set clipboard+=unnamed  " make the unnamed register equal os clipboard
 set mouse=a             " mainly just so I can resize split windows easier
-setlocal cursorline     " cursor line highlighting
+" setlocal cursorline     " cursor line highlighting
 set viminfo='20,<50,s10,h,% " remember marks, searches, registers, buffer list
 runtime macros/matchit.vim " % matches more than just brackets:
-set completeopt=menuone,longest,preview
+set completeopt=menuone,longest,preview   
 
 
 " :: Keymappings and commands ::
 
 " better ESC
 inoremap kj <esc>
+
+" easier ex mode
+nnoremap ; :
+cnoremap kj <C-c>
 
 " Better mapleader
 let mapleader=","
@@ -49,7 +53,7 @@ let g:mapleader=","
 nmap Q gq
 
 " clear highlighting from last search
-nnoremap <silent> /<esc> :nohl<cr>
+nnoremap <silent> <leader>/ :nohl<cr>
 
 " Make Y work like y$ (instead of like yy), because D is like d$
 map Y y$
@@ -68,10 +72,7 @@ imap <c-a> <c-o>^
 imap <c-e> <c-o>$
 
 " pressing return in normal mode opens a line below
-nnoremap <cr> mOo<esc>`O
-" pressing shift-return in normal opens a line above
-" doesn't seem to work?
-nnoremap <s-cr> O<esc> 
+nnoremap <cr> O<esc>
 
 " swap ` with ' because ' is closer and ` is useless
 nnoremap ' `
@@ -85,26 +86,34 @@ nnoremap <c-y> 5<c-y>
 nnoremap <silent> <leader>s :set list!<cr>
 
 " local cd to current file's dir
-nnoremap <silent> <leader>l :lcd %:p:h<cr>
+nnoremap <leader>l :lcd %:p:h<cr>
 
 " toggle showing relative line numbers
 " I should make an autocmd so it only shows it in local buffer
 " and maybe adjusts vertical splits
 nnoremap <silent> <leader>r :set rnu!<cr>
 
-" easier switching buffers
+" easier switching buffers, opening files
 nnoremap <silent> H :bp<cr>
 nnoremap <silent> L :bn<cr>
-nnoremap <silent> <tab> <c-^>
-nnoremap <silent> <s-tab> :ls<cr>:b 
 nnoremap <silent> <leader>d :bd<cr>
+nnoremap <silent> <tab> <c-^>
+nnoremap <silent> <s-tab> :LustyJuggler<cr>
+nnoremap <silent> <leader><tab> :LustyBufferExplorer<cr>
+nnoremap <silent> <leader><space> :CommandT<cr>
+nnoremap <silent> <leader>o :LustyFilesystemExplorer<cr>
+nnoremap <silent> <leader>O :LustyFilesystemExplorerFromHere<cr>
 
-" Switch from 2 space tabs to 4 space tabs (soft tabs)
-nnoremap <leader>2 <esc>:set expandtab softtabstop=2 shiftwidth=2<cr>
-nnoremap <leader>4 <esc>:set expandtab softtabstop=4 shiftwidth=4<cr>
+" NERDtree mappings
+"nnoremap <silent> <leader><tab> :NERDTreeToggle<cr>
 
-" mapping to open CommandT
-nnoremap <leader><space> :CommandT<cr>
+" Switch tabbing style
+nnoremap <leader>2 <esc>:set expandtab tabstop=2 softtabstop=2 shiftwidth=2<cr>
+nnoremap <leader>4 <esc>:set expandtab tabstop=4 softtabstop=4 shiftwidth=4<cr>
+nnoremap <leader>8 <esc>:set expandtab tabstop=8 softtabstop=8 shiftwidth=8<cr>
+nnoremap <leader><leader>2 <esc>:set noexpandtab tabstop=2 softtabstop=2 shiftwidth=2<cr>
+nnoremap <leader><leader>4 <esc>:set noexpandtab tabstop=4 softtabstop=4 shiftwidth=4<cr>
+nnoremap <leader><leader>8 <esc>:set noexpandtab tabstop=8 softtabstop=8 shiftwidth=8<cr>
 
 " Conque term mappings
 nnoremap <leader>Cc :ConqueTerm bash<cr>
@@ -120,17 +129,14 @@ let g:ConqueTerm_TERM   = 'xterm-256color'
 let g:ConqueTerm_ReadUnfocused = 1 " keep updating when not in buffer
 let g:ConqueTerm_CWInsert = 1 " Can <C-w> out of a terminal buffer
 
-" NERDtree mappings
-nnoremap <silent> <leader><tab> :NERDTreeToggle<cr>
-
 " Command for opening a url on a mac:
 command! -bar -nargs=1 OpenURL :!open <args>
 
 " Zen Coding
 let g:user_zen_expandabbr_key = '<c-e>'
 
-" save a file you edited without the needed permissions
-" nnoremap <leader>W <esc>:w !sudo tee > /dev/null %
+" sudo save a file
+cmap w!! w !sudo tee % >/dev/null
 
 " vimrc editing mappings
 nnoremap <leader>v <esc>:e ~/.vimrc<cr>
@@ -186,8 +192,8 @@ if has("autocmd")
   au FileType text setlocal textwidth=78
 
   " set cursorline for current window only
-  au WinEnter,BufEnter * setlocal cursorline
-  au WinLeave,BufLeave * setlocal nocursorline
+  " au WinEnter,BufEnter * setlocal cursorline
+  " au WinLeave,BufLeave * setlocal nocursorline
 
   " set relative line numbers only in current window
   if version >= 703
@@ -228,10 +234,7 @@ if has("autocmd")
   au FileType python
     \ nnoremap <leader>8 <esc>:call Pep8()<cr> |
     \ setlocal omnifunc=pythoncomplete#Complete |
-    \ setlocal foldmethod=indent |
-    \ setlocal foldlevel=-99 |
-  " stupid rope
-  " source $HOME/.vim/sadness/ropevim/rope.vim
+    \ setlocal foldmethod=indent
 
   " reload vimrc when we save it
   au BufWritePost .vimrc so ~/.vimrc

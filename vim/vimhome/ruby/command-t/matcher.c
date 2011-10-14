@@ -96,7 +96,7 @@ VALUE CommandTMatcher_initialize(int argc, VALUE *argv, VALUE self)
     return Qnil;
 }
 
-VALUE CommandTMatcher_sorted_matchers_for(VALUE self, VALUE abbrev, VALUE options)
+VALUE CommandTMatcher_sorted_matches_for(VALUE self, VALUE abbrev, VALUE options)
 {
     // process optional options hash
     VALUE limit_option = CommandT_option_from_hash("limit", options);
@@ -115,12 +115,11 @@ VALUE CommandTMatcher_sorted_matchers_for(VALUE self, VALUE abbrev, VALUE option
 
     // apply optional limit option
     long limit = NIL_P(limit_option) ? 0 : NUM2LONG(limit_option);
-    if (limit == 0 || RARRAY_LEN(matches)< limit)
+    if (limit == 0 || RARRAY_LEN(matches) < limit)
         limit = RARRAY_LEN(matches);
 
     // will return an array of strings, not an array of Match objects
-    long i;
-    for (i = 0; i < limit; i++)
+    for (long i = 0; i < limit; i++)
     {
         VALUE str = rb_funcall(RARRAY_PTR(matches)[i], rb_intern("to_s"), 0);
         RARRAY_PTR(matches)[i] = str;
@@ -154,8 +153,7 @@ VALUE CommandTMatcher_matches_for(VALUE self, VALUE abbrev)
     }
     abbrev = rb_funcall(abbrev, rb_intern("downcase"), 0);
     VALUE paths = rb_funcall(scanner, rb_intern("paths"), 0);
-    long i, max;
-    for (i = 0, max = RARRAY_LEN(paths); i < max; i++)
+    for (long i = 0, max = RARRAY_LEN(paths); i < max; i++)
     {
         VALUE path = RARRAY_PTR(paths)[i];
         VALUE match = rb_funcall(cCommandTMatch, rb_intern("new"), 3, path, abbrev, options);
