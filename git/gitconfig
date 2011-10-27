@@ -1,6 +1,6 @@
 [user]
-	name = Vaz Allen
-	email = vaz@tryptid.com
+  name = Vaz Allen
+  email = vaz@tryptid.com
 [core]
   editor = vim
 [push]
