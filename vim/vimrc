@@ -98,11 +98,18 @@ nnoremap <silent> H :bp<cr>
 nnoremap <silent> L :bn<cr>
 nnoremap <silent> <leader>d :bd<cr>
 nnoremap <silent> <tab> <c-^>
-nnoremap <silent> <s-tab> :LustyJuggler<cr>
-nnoremap <silent> <leader><tab> :LustyBufferExplorer<cr>
-nnoremap <silent> <leader><space> :CommandT<cr>
-nnoremap <silent> <leader>o :LustyFilesystemExplorer<cr>
-nnoremap <silent> <leader>O :LustyFilesystemExplorerFromHere<cr>
+if has("ruby") && has("mac")
+  nnoremap <silent> <s-tab> :LustyJuggler<cr>
+  nnoremap <silent> <leader><tab> :LustyBufferExplorer<cr>
+  nnoremap <silent> <leader><space> :CommandT<cr>
+  nnoremap <silent> <leader>o :LustyFilesystemExplorer<cr>
+  nnoremap <silent> <leader>O :LustyFilesystemExplorerFromHere<cr>
+else
+  nnoremap <silent> <s-tab> :ls<cr>:b 
+  nnoremap <silent> <leader>o :NERDTreeToggle<cr>
+  let g:LustyJugglerSuppressRubyWarning = 1
+endif
+
 
 " NERDtree mappings
 "nnoremap <silent> <leader><tab> :NERDTreeToggle<cr>
