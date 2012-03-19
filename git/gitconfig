@@ -12,6 +12,7 @@
   st = status
   ci = commit
   br = branch
+  dif = diff
   unstage = reset HEAD --
   l = log --pretty=oneline --abbrev-commit
   gl = log --pretty=oneline --abbrev-commit --graph

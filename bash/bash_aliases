@@ -2,7 +2,7 @@
 
 if [ "`uname`" = "Darwin" ]; then
     alias ls='ls -Gp'
-    alias wget='curl -O'
+    which wget >/dev/null 2>&1 || alias wget='curl -O'
 else
     alias ls='ls --color=auto -p'
 fi

@@ -28,7 +28,7 @@ export LSCOLORS='ExfxcxdxCxegedabagacad'
 
 function __prompt_char {
   git branch >/dev/null 2>/dev/null && echo '± ' && return
-  hg  root   >/dev/null 2>/dev/null && echo 'µ ' && return
+  hg  root   >/dev/null 2>/dev/null && echo '☿ ' && return
   echo '$ '
   # Ȣ ȣ  ʢʡ  μ  ☿
 }
@@ -65,8 +65,8 @@ export PS1='\n\[\e[1;35m\]\u\[\e[0m\]\[\e[0;35m\]@\h\[\e[0m\] \
 # macports etc
 PATH=/opt/local/bin:/opt/local/sbin:$PATH
 
-# private bin and /usr/local before /usr
-PATH=$HOME/bin:/usr/local/bin:$PATH
+# private bin, rbenv and /usr/local before /usr
+PATH=$HOME/bin:$HOME/.rbenv/bin:/usr/local/bin:/usr/local/sbin:$PATH
 
 export PATH
 
@@ -77,6 +77,7 @@ export PATH
 [ -f ~/.bash_defs ]         && . ~/.bash_defs	      	# function defs
 [ -f ~/.bash_aliases ]      && . ~/.bash_aliases	    # alias definitions
 [ -f /opt/local/etc/bash_completion ] && . /opt/local/etc/bash_completion
+[ -f ~/bin/z.sh ]           && . ~/bin/z.sh
 
 
 ###############################################################################
@@ -85,3 +86,8 @@ export PATH
 if [ -n "$SSH_CLIENT" -a `expr "$TERM" : screen` -eq 0 ]; then
   screen -S vaz -rd || screen -S vaz
 fi
+
+###############################################################################
+## rbenv
+
+which rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"

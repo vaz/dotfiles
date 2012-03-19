@@ -1,3 +1,16 @@
+function workon {
+  . "$1/bin/activate"
+}
+
+function mongod-env {
+  if [ -d "$1" -a -f "$1/bin/activate" ]; then
+    mkdir -p $1/var/{data,log,run}
+    mongod --fork --dbpath="$1/var/data/" --logpath="$1/var/log/mongodb.log" --logappend --pidfilepath="$/var/run/mongod.pid"
+  else
+    echo "Doesn't seem to be a virtualenv."
+  fi
+}
+
 function showasm {
   opts=""
   (( $# )) && if [ "$1" = "-o" ]; then
@@ -16,7 +29,7 @@ function showasm {
     echo "$@" | $cmd -
   fi
 
-}     
+}
 
 if [ "`uname`" = "Darwin" ]; then
   function showAllFiles {

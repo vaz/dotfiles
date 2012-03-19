@@ -14,3 +14,5 @@ setlocal comments=s1:/*,mb:*,ex:*/ commentstring&
 setlocal formatoptions-=t formatoptions+=croql
 
 let &l:include = '^\s*@import\s\+\%(url(\)\='
+
+set omnifunc=csscomplete#CompleteCSS

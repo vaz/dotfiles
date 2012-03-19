@@ -1,3 +1,5 @@
 syntax: glob
 
 *.pyc
+vim/vimhome/undo
+.DS_Store

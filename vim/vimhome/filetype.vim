@@ -338,7 +338,8 @@ au BufNewFile,BufRead *.tlh			setf cpp
 
 " Cascading Style Sheets
 au BufNewFile,BufRead *.css			setf css
-au BufNewFile,BufRead *.less    setf css
+au BufNewFile,BufRead *.less			setf css
+au BufNewFile,BufRead *.scss			setf css
 
 " Century Term Command Scripts (*.cmd too)
 au BufNewFile,BufRead *.con			setf cterm
@@ -2156,6 +2157,9 @@ au BufNewFile,BufRead zsh*,zlog*		call s:StarSetf('zsh')
 " Wikipedia. So I can use vim as an external editor for wiki pages.
 au BufNewFile,BufRead *.wiki          setf Wikipedia
 au BufNewFile,BufRead *wikipedia.org* call s:StarSetf('Wikipedia')
+
+" nginx
+au BufNewFile,BufRead nginx*.conf,*/nginx/conf/* setf nginx
 
 " Generic configuration file (check this last, it's just guessing!)
 au BufNewFile,BufRead,StdinReadPost *

@@ -14,7 +14,8 @@ hi Normal       cterm=NONE  ctermfg=229 ctermbg=NONE  " #ffffaf #00005f
 hi NonText                  ctermfg=234                " dark grey
 
 hi Cursor       cterm=NONE  ctermfg=16  ctermbg=229   " #000000 #ffffaf
-hi CursorLine   cterm=NONE              ctermbg=233
+hi CursorLine   cterm=NONE              ctermbg=232
+hi CursorColumn cterm=NONE              ctermbg=232
 hi LineNr                   ctermfg=235
 
 hi Directory                ctermfg=27                " #005fff
@@ -71,13 +72,15 @@ hi Typedef                  ctermfg=210               " #ff8787
 
 hi Special                  ctermfg=85                " #5fffaf
 hi SpecialChar              ctermfg=159               " #afffff
-hi SpecialKey               ctermfg=234 ctermbg=232
+hi SpecialKey               ctermfg=238 ctermbg=232
 hi Tag                      ctermfg=49                " #00ffaf
 
 hi Underlined  cterm=UNDERLINE  ctermfg=11            " #ffff00
 
 hi Error       cterm=BOLD   ctermfg=15  ctermbg=124   " #ffffff #af0000 
 hi Todo        cterm=BOLD   ctermfg=216 ctermbg=53    " #ffaf87 #5f005f
+
+hi ColorColumn                          ctermbg=232
 
 " vim-indent-guides
 hi IndentGuidesOdd          ctermfg=233 ctermbg=232

@@ -15,11 +15,11 @@ set ignorecase          " ignore case when searching in all lower-case
 set smartcase           " but not when searching with some caps
 set scrolloff=3         " keep n lines ahead or behind always showing
 set wildmode=longest,list " tab autocomplete like bash
+set wildignore=*.pyc,*.o,.git,.hg,.svn " ignore these files in wildcard
 set foldmethod=marker   " folding code manually (no text inserted)
 set shortmess+=I        " skip splash screen on empty files
 set expandtab           " expand tabs into spaces
 set tabstop=8           " How many spaces does a tab show up as
-set list                " show control characters, line endings etc.
 set softtabstop=2
 set shiftwidth=2
 set virtualedit=all     " can move cursor even where there's no characters
@@ -27,13 +27,23 @@ set hidden              " buffers can be hidden while modified
 set noerrorbells        " error bells are annoying
 set visualbell          " error bells are annoying
 set t_vb=               " error bells are annoying   
+set list                " show control characters, line endings etc.
 set listchars=tab:»\ ,trail:·,extends:#,precedes:#,nbsp:·
 set clipboard+=unnamed  " make the unnamed register equal os clipboard
 set mouse=a             " mainly just so I can resize split windows easier
+set splitright splitbelow " split more intuitively
+set cursorline
+set cursorcolumn
+set colorcolumn=72,73,74,75,76,77,78,79,80 " so I know 72 and 80
 " setlocal cursorline     " cursor line highlighting
 set viminfo='20,<50,s10,h,% " remember marks, searches, registers, buffer list
 runtime macros/matchit.vim " % matches more than just brackets:
-set completeopt=menuone,longest,preview   
+set completeopt=menuone,longest,preview
+if version >= 703
+  set rnu
+else
+  set nu
+endif
 
 
 " :: Keymappings and commands ::
@@ -43,33 +53,34 @@ inoremap kj <esc>
 
 " easier ex mode
 nnoremap ; :
+vnoremap ; :
 cnoremap kj <C-c>
+
+" allow usual ;
+nnoremap <leader>; ;
 
 " Better mapleader
 let mapleader=","
 let g:mapleader=","
 
-" use Q for formatting
-nmap Q gq
+" use Q to show command history
+nmap Q q:
 
 " clear highlighting from last search
 nnoremap <silent> <leader>/ :nohl<cr>
 
-" Make Y work like y$ (instead of like yy), because D is like d$
+" Make Y work like other capitals
 map Y y$
 
 " Make up and down keys useful for wrapped lines.
 map <up> gk
 map <down> gj
 
+" easier window movement
 nnoremap <c-h> <c-w>h
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
-
-" move to start or end of line in insert mode
-imap <c-a> <c-o>^
-imap <c-e> <c-o>$
 
 " pressing return in normal mode opens a line below
 nnoremap <cr> O<esc>
@@ -82,16 +93,47 @@ nnoremap ` '
 nnoremap <c-e> 5<c-e>
 nnoremap <c-y> 5<c-y>
 
+" keep search pattern at centre of screen
+nnoremap n nzz
+nnoremap N Nzz
+
 " toggle showing control characters
 nnoremap <silent> <leader>s :set list!<cr>
+
+" easy underlining/overlining
+nnoremap <leader>== yyPv$r=jyypv$r=
+nnoremap <leader>** yyPv$r*jyypv$r*
+nnoremap <leader>=  yypv$r=
+nnoremap <leader>-  yypv$r-
+
+" paste with blackhole register
+nnoremap <silent> <leader>p "_p
+nnoremap <silent> <leader>P "_P
+
+" show syntax highlighting groups for word under cursor
+nnoremap <silent> <leader>h :call <SID>SynStack()<CR>
+function! <SID>SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
 
 " local cd to current file's dir
 nnoremap <leader>l :lcd %:p:h<cr>
 
+function! NumberToggle()
+  if(&number == 1)
+    set rnu
+  elseif(&relativenumber == 1)
+    set nornu
+  else
+    set nu
+  endif
+endfunc
+
 " toggle showing relative line numbers
-" I should make an autocmd so it only shows it in local buffer
-" and maybe adjusts vertical splits
-nnoremap <silent> <leader>r :set rnu!<cr>
+nnoremap <silent> <leader>n :call NumberToggle()<cr>
 
 " easier switching buffers, opening files
 nnoremap <silent> H :bp<cr>
@@ -104,8 +146,16 @@ if has("ruby") && has("mac")
   nnoremap <silent> <leader><space> :CommandT<cr>
   nnoremap <silent> <leader>o :LustyFilesystemExplorer<cr>
   nnoremap <silent> <leader>O :LustyFilesystemExplorerFromHere<cr>
+
+  let g:CommandTMaxFiles = 50000
+  let g:CommandTMaxHeight = 20
+  let g:CommandTMinHeight = 20
+  let g:CommandTMatchWindowReverse = 1
+  let g:CommandTCancelMap = ['<C-c>', '<esc>']
 else
   nnoremap <silent> <s-tab> :ls<cr>:b 
+  nnoremap <silent> <leader><tab> :ls<cr>:b 
+  nnoremap <silent> <leader><space> :NERDTreeToggle<cr>
   nnoremap <silent> <leader>o :NERDTreeToggle<cr>
   let g:LustyJugglerSuppressRubyWarning = 1
 endif
@@ -153,16 +203,34 @@ nnoremap <leader>V <esc>:so ~/.vimrc<cr>
 let g:indent_guides_auto_colors = 0
 let g:indent_guides_enable_on_vim_startup = 1
 
-" supertab
-let g:SuperTabDefaultCompletionType = "context"
-let g:SuperTabContextDefaultCompletionType = "<c-n>"
-
 " Ack
 nnoremap <leader>a <esc>:Ack! 
 
 " Folding
 nnoremap <leader>z <esc>:set foldlevel=10000<cr>
 nnoremap <leader>Z <esc>:set foldlevel=-10000<cr>
+
+" Supertab settings
+let g:SuperTabDefaultCompletionType = "context"
+let g:SuperTabContextDefaultCompletionType = "<c-n>"
+let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
+let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&keywordfunc', '&completefunc']
+let g:SuperTabDefaultCompletionTypeDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>", '&keywordfunc:<c-n>']
+let g:SuperTabRetainCompletionDuration = 'completion'
+let g:SuperTabLongestEnhanced = 1
+
+" easy-motion
+let g:EasyMotion_leader_key = '<space>'
+
+
+" if exists("+undofile")
+"   if isdirectory($HOME . '/.vim/undo') == 0
+"     :silent !mkdir -p ~/.vim/undo > /dev/null 2>&1
+"   endif
+"   set undodir=./.vim-undo//
+"   set undodir+=~/.vim/undo//
+"   set undofile
+" endif
 
 " :: Syntax and colours ::
 
@@ -198,22 +266,13 @@ if has("autocmd")
   " For all text files set 'textwidth' to 78 characters.
   au FileType text setlocal textwidth=78
 
+  " absolute line numbers in insert mode
+  au InsertEnter * :set nu
+  au InsertLeave * :set rnu
+
   " set cursorline for current window only
   " au WinEnter,BufEnter * setlocal cursorline
   " au WinLeave,BufLeave * setlocal nocursorline
-
-  " set relative line numbers only in current window
-  if version >= 703
-    au BufRead,WinEnter,BufEnter *
-      \ setlocal rnu |
-      " \ exec 'vertical resize +'.string(strlen(line('$'))+1)
-    au BufLeave,WinLeave *
-      \ setlocal nornu |
-      " \ exec 'vertical resize -'.string(strlen(line('$'))+1)
-  else
-    au BufRead,BufEnter,WinEnter * setlocal nu
-    au BufLeave,WinLeave * setlocal nonu
-  endif
 
   " Leave insert mode when idling
   " au CursorHoldI * stopinsert   " nope this is pretty annoying.
@@ -241,7 +300,12 @@ if has("autocmd")
   au FileType python
     \ nnoremap <leader>8 <esc>:call Pep8()<cr> |
     \ setlocal omnifunc=pythoncomplete#Complete |
-    \ setlocal foldmethod=indent
+    \ setlocal foldmethod=indent |
+    \ setlocal foldlevel=9999
+
+  au FileType css let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
+
+  au FileType php set expandtab tabstop=8 softtabstop=2 shiftwidth=2
 
   " reload vimrc when we save it
   au BufWritePost .vimrc so ~/.vimrc
