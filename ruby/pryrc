@@ -1,0 +1,12 @@
+def make_prompt char, obj, level
+  if "#{obj}" == "main"
+    "    "
+  else
+    "#{printf '%-3s', level} #{obj} #{char} "
+  end
+end
+
+Pry.config.prompt = [
+  -> obj, level, _ { make_prompt '>', obj, level },
+  -> obj, level, _ { make_prompt ' ', obj, level }
+]
