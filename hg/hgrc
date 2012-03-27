@@ -36,7 +36,7 @@ pager = LESS="FSRX" less
 ignore = version, help, update, serve, record
 
 [trusted]
-groups = www-data root
+groups = www-data root www hg
 
 [web]
 cacerts = /etc/hg-dummy-cert.pem

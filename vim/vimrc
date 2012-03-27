@@ -28,7 +28,7 @@ set noerrorbells        " error bells are annoying
 set visualbell          " error bells are annoying
 set t_vb=               " error bells are annoying   
 set list                " show control characters, line endings etc.
-set listchars=tab:»\ ,trail:·,extends:#,precedes:#,nbsp:·
+silent! set listchars=tab:»\ ,trail:·,extends:#,precedes:#,nbsp:·
 set clipboard+=unnamed  " make the unnamed register equal os clipboard
 set mouse=a             " mainly just so I can resize split windows easier
 set splitright splitbelow " split more intuitively
