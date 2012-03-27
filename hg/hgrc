@@ -13,6 +13,7 @@ graphlog =
 record =
 prompt = ~/.dotfiles/hg/hg-prompt/prompt.py
 hgattic = ~/.dotfiles/hg/hgattic/attic.py
+flow = ~/.dotfiles/hg/hgflow/src/hgflow/hgflow.py
 transplant =
 
 [bookmarks]
