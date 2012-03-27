@@ -34,7 +34,7 @@ set mouse=a             " mainly just so I can resize split windows easier
 set splitright splitbelow " split more intuitively
 set cursorline
 set cursorcolumn
-set colorcolumn=72,73,74,75,76,77,78,79,80 " so I know 72 and 80
+silent! set colorcolumn=72,73,74,75,76,77,78,79,80 " so I know 72 and 80
 " setlocal cursorline     " cursor line highlighting
 set viminfo='20,<50,s10,h,% " remember marks, searches, registers, buffer list
 runtime macros/matchit.vim " % matches more than just brackets:
