@@ -124,7 +124,11 @@ nnoremap <leader>l :lcd %:p:h<cr>
 
 function! NumberToggle()
   if(&number == 1)
-    set rnu
+    if version >= 703
+      set rnu
+    else
+      set nonu
+    endif
   elseif(&relativenumber == 1)
     set nornu
   else
@@ -267,8 +271,10 @@ if has("autocmd")
   au FileType text setlocal textwidth=78
 
   " absolute line numbers in insert mode
-  au InsertEnter * :set nu
-  au InsertLeave * :set rnu
+  if version >= 703
+    au InsertEnter * :set nu
+    au InsertLeave * :set rnu
+  endif
 
   " set cursorline for current window only
   " au WinEnter,BufEnter * setlocal cursorline
