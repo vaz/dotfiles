@@ -38,7 +38,8 @@ dotfiles = {
   'ruby' => {
     "autotest"        => "#{HOME}/.autotest",
     "irbrc"           => "#{HOME}/.irbrc",
-    "pryrc"           => "#{HOME}/.pryrc"
+    "pryrc"           => "#{HOME}/.pryrc",
+    "bundle"          => "#{HOME}/.bundle"
   },
   'screen' => {
     "screenrc"        => "#{HOME}/.screenrc"

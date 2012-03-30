@@ -4,3 +4,4 @@ syntax: glob
 vim/vimhome/undo
 .DS_Store
 vim/vimhome/bundle
+ruby/bundle
