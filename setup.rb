@@ -80,11 +80,17 @@ dotfiles.each do |dir, files|
 end
 
 unless /\+ruby/ =~ `vim --version`
+  puts "Compiling a vim that doesn't suck..."
   system "#{DOTFILES}/vim/compile-vim.sh"
 end
 
 sudo ||= `which rbenv` && $?.success?
 puts "rbenv exists so assuming no sudo needed" unless sudo
+
 system "#{sudo ? 'sudo' : ''} gem install bundler --no-rdoc --no-ri"
-`vim +BundleInstall! +BundleClean +q >/dev/null 2>&1`
-`cd #{HOME}/.vim/bundle/command-t && bundle install && rake make`
+
+system "git clone https://github.com/gmarik/vundle.git #{DOTFILES}/vim/vimhome/bundle/vundle"
+
+system "vim +BundleInstall! +BundleClean +q /dev/zero"
+
+#system "cd #{HOME}/.vim/bundle/command-t && bundle install && rake make"
