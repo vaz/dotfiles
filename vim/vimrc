@@ -206,6 +206,7 @@ Bundle 'sjbach/lusty'
   nnoremap <silent> <leader><tab> :LustyBufferExplorer<cr>
   nnoremap <silent> <leader>o :LustyFilesystemExplorer<cr>
   nnoremap <silent> <leader>O :LustyFilesystemExplorerFromHere<cr>
+  let g:LustyJugglerSuppressRubyWarning = 1
 Bundle 'ack.vim'
   nnoremap <leader>a <esc>:Ack! 
 Bundle 'rstacruz/sparkup'
