@@ -84,3 +84,9 @@ export PATH
 if [ -n "$SSH_CLIENT" -a `expr "$TERM" : screen` -eq 0 ]; then
   screen -S vaz -rd || screen -S vaz
 fi
+
+
+# rbenv
+
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
