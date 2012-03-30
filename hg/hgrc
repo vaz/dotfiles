@@ -41,4 +41,4 @@ ignore = version, help, update, serve, record
 groups = www-data root www hg
 
 [web]
-cacerts = /etc/hg-dummy-cert.pem
+cacerts = ~/.dotfiles/hg/hg-dummy-cert.pem
