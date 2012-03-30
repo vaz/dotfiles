@@ -6,9 +6,14 @@ puts "You probably want to install git." if `which git` and $? != 0
 puts "You probably want to install hg." if `which hg` and $? != 0
 puts "You probably want to install bash-completion" if `which __git_ps1` and $? != 0
 
-if ARGV[0] == '-f'
+if ARGV.include? '-f'
   puts "Not creating backups!"
   destructive = true
+end
+
+if ARGV.include? '-s'
+  puts "Forcing use of sudo"
+  sudo = true
 end
 
 HOME = ENV['HOME']
@@ -70,7 +75,10 @@ dotfiles.each do |dir, files|
 end
 
 unless /+ruby/ =~ `vim --version`
-  puts "Install vim with ruby support"
-else
-  `cd #{HOME}/.vim/bundle/command-t && bundle install && rake make`
+  system "#{DOTFILES}/vim/compile-vim.sh"
 end
+
+sudo ||= `which rbenv` && $?.success?
+puts "rbenv exists so assuming no sudo needed" unless sudo
+system "#{sudo ? 'sudo' : ''} gem install bundler"
+`cd #{HOME}/.vim/bundle/command-t && bundle install && rake make`
