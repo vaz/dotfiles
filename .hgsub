@@ -1,4 +1,4 @@
 hg/hg-prompt = https://vaz@bitbucket.org/sjl/hg-prompt
-hg/hgattic = https://bitbucket.org/Bill_Barry/hgattic
+hg/hgattic = https://bitbucket.org/sinbad/hgattic
 hg/hgflow = https://bitbucket.org/yinwm/hgflow
 hg/localbranch = https://pk11@bitbucket.org/pk11/mercurial-extensions-localbranch
