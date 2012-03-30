@@ -2,8 +2,14 @@
 
 require 'fileutils'
 
-puts "You probably want to install git." if `which git` and $? != 0
-puts "You probably want to install hg." if `which hg` and $? != 0
+if `which git` and $? != 0
+  puts "Please install git."
+  exit
+end
+
+deps = %w(libncurses5-dev libxml2 libxml2-dev libxslt1-dev ruby1.8-dev)
+system "which apt-get >/dev/null 2>&1 && sudo apt-get install -y #{deps.join ' '}"
+
 puts "You probably want to install bash-completion" if `which __git_ps1` and $? != 0
 
 flags = ARGV[1,1000].join
@@ -54,6 +60,11 @@ dotfiles = {
   }
 }
 
+if not destructive
+  backups_dir = "#{HOME}/.backups"
+  FileUtils.mkdir_p backups_dir
+end
+
 dotfiles.each do |dir, files|
   files.each do |src, dst|
     if File.exists? dst or File.symlink? dst
@@ -65,8 +76,9 @@ dotfiles.each do |dir, files|
           File.delete dst
         end
       else
-        puts "backup:  #{dst} to #{dst}.bak"
-        File.rename(dst, "#{dst}.bak")
+        bak = "#{backups_dir}/#{File.basename dst}"
+        puts "backup:  #{dst} to #{bak}"
+        File.rename(dst, "#{bak}")
       end
     end
 
@@ -91,6 +103,6 @@ system "#{sudo ? 'sudo' : ''} gem install bundler --no-rdoc --no-ri"
 
 system "git clone https://github.com/gmarik/vundle.git #{DOTFILES}/vim/vimhome/bundle/vundle"
 
-system "vim +BundleInstall! +BundleClean +q /dev/zero"
+system "vim +BundleInstall! +BundleClean +qall /dev/zero"
 
-#system "cd #{HOME}/.vim/bundle/command-t && bundle install && rake make"
+system "cd #{HOME}/.vim/bundle/command-t && bundle install && rake make"
