@@ -19,9 +19,11 @@ end
 HOME = ENV['HOME']
 DOTFILES = File.expand_path(File.dirname(__FILE__))
 
+uname = `uname`.chomp
+
 dotfiles = {
   'bash' => {
-    "bashrc.#{`uname`.chomp}" => "#{HOME}/.bashrc",
+    "bashrc.#{uname}" => "#{HOME}/.bashrc",
     "bash_aliases"    => "#{HOME}/.bash_aliases",
     "bash_defs"       => "#{HOME}/.bash_defs",
     "profile"         => "#{HOME}/.profile"
@@ -33,7 +35,7 @@ dotfiles = {
     "gitconfig"       => "#{HOME}/.gitconfig"
   },
   'hg' => {
-    "hgrc"            => "#{HOME}/.hgrc"
+    "hgrc.#{uname}"   => "#{HOME}/.hgrc"
   },
   'ruby' => {
     "autotest"        => "#{HOME}/.autotest",
