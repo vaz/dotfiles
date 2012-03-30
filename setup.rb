@@ -68,3 +68,9 @@ dotfiles.each do |dir, files|
     puts "symlink: #{dst} -> #{src}"
   end
 end
+
+unless /+ruby/ =~ `vim --version`
+  puts "Install vim with ruby support"
+else
+  `cd #{HOME}/.vim/bundle/command-t && bundle install && rake make`
+end
