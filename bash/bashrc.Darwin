@@ -76,7 +76,7 @@ export PATH
 
 [ -f ~/.bash_defs ]         && . ~/.bash_defs	      	# function defs
 [ -f ~/.bash_aliases ]      && . ~/.bash_aliases	    # alias definitions
-[ -f /opt/local/etc/bash_completion ] && . /opt/local/etc/bash_completion
+[ -f /usr/local/etc/bash_completion ] && . /usr/local/etc/bash_completion
 [ -f ~/bin/z.sh ]           && . ~/bin/z.sh
 
 
