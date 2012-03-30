@@ -1,8 +1,3 @@
-" skip if started as evim
-if v:progname =~? "evim"
-  finish
-endif
-
 " :: Settings ::
 set nocompatible
 set backspace=indent,eol,start
@@ -144,29 +139,6 @@ nnoremap <silent> H :bp<cr>
 nnoremap <silent> L :bn<cr>
 nnoremap <silent> <leader>d :bd<cr>
 nnoremap <silent> <tab> <c-^>
-if has("ruby") && has("mac")
-  nnoremap <silent> <s-tab> :LustyJuggler<cr>
-  nnoremap <silent> <leader><tab> :LustyBufferExplorer<cr>
-  nnoremap <silent> <leader><space> :CommandT<cr>
-  nnoremap <silent> <leader>o :LustyFilesystemExplorer<cr>
-  nnoremap <silent> <leader>O :LustyFilesystemExplorerFromHere<cr>
-
-  let g:CommandTMaxFiles = 50000
-  let g:CommandTMaxHeight = 20
-  let g:CommandTMinHeight = 20
-  let g:CommandTMatchWindowReverse = 1
-  let g:CommandTCancelMap = ['<C-c>', '<esc>']
-else
-  nnoremap <silent> <s-tab> :ls<cr>:b 
-  nnoremap <silent> <leader><tab> :ls<cr>:b 
-  nnoremap <silent> <leader><space> :NERDTreeToggle<cr>
-  nnoremap <silent> <leader>o :NERDTreeToggle<cr>
-  let g:LustyJugglerSuppressRubyWarning = 1
-endif
-
-
-" NERDtree mappings
-"nnoremap <silent> <leader><tab> :NERDTreeToggle<cr>
 
 " Switch tabbing style
 nnoremap <leader>2 <esc>:set expandtab tabstop=2 softtabstop=2 shiftwidth=2<cr>
@@ -176,25 +148,8 @@ nnoremap <leader><leader>2 <esc>:set noexpandtab tabstop=2 softtabstop=2 shiftwi
 nnoremap <leader><leader>4 <esc>:set noexpandtab tabstop=4 softtabstop=4 shiftwidth=4<cr>
 nnoremap <leader><leader>8 <esc>:set noexpandtab tabstop=8 softtabstop=8 shiftwidth=8<cr>
 
-" Conque term mappings
-nnoremap <leader>Cc :ConqueTerm bash<cr>
-nnoremap <leader>CC :ConqueTerm 
-nnoremap <leader>Cs :ConqueTermSplit bash<cr>
-nnoremap <leader>CS :ConqueTermSplit 
-nnoremap <leader>Cv :ConqueTermVSplit bash<cr>
-nnoremap <leader>CV :ConqueTermVSplit 
-
-" Conque settings
-let g:ConqueTerm_EscKey = '<esc>'
-let g:ConqueTerm_TERM   = 'xterm-256color'
-let g:ConqueTerm_ReadUnfocused = 1 " keep updating when not in buffer
-let g:ConqueTerm_CWInsert = 1 " Can <C-w> out of a terminal buffer
-
 " Command for opening a url on a mac:
 command! -bar -nargs=1 OpenURL :!open <args>
-
-" Zen Coding
-let g:user_zen_expandabbr_key = '<c-e>'
 
 " sudo save a file
 cmap w!! w !sudo tee % >/dev/null
@@ -203,38 +158,63 @@ cmap w!! w !sudo tee % >/dev/null
 nnoremap <leader>v <esc>:e ~/.vimrc<cr>
 nnoremap <leader>V <esc>:so ~/.vimrc<cr>
 
-" vim-indent-guides
-let g:indent_guides_auto_colors = 0
-let g:indent_guides_enable_on_vim_startup = 1
-
-" Ack
-nnoremap <leader>a <esc>:Ack! 
-
 " Folding
 nnoremap <leader>z <esc>:set foldlevel=10000<cr>
 nnoremap <leader>Z <esc>:set foldlevel=-10000<cr>
 
-" Supertab settings
-let g:SuperTabDefaultCompletionType = "context"
-let g:SuperTabContextDefaultCompletionType = "<c-n>"
-let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
-let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&keywordfunc', '&completefunc']
-let g:SuperTabDefaultCompletionTypeDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>", '&keywordfunc:<c-n>']
-let g:SuperTabRetainCompletionDuration = 'completion'
-let g:SuperTabLongestEnhanced = 1
-
-" easy-motion
-let g:EasyMotion_leader_key = '<space>'
 
 
-" if exists("+undofile")
-"   if isdirectory($HOME . '/.vim/undo') == 0
-"     :silent !mkdir -p ~/.vim/undo > /dev/null 2>&1
-"   endif
-"   set undodir=./.vim-undo//
-"   set undodir+=~/.vim/undo//
-"   set undofile
-" endif
+" :: Plugins ::
+
+" Vundle
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" Let Vundle manage Vundle!
+Bundle 'gmarik/Vundle'
+
+Bundle 'matchit.zip'
+Bundle 'tpope/vim-surround'
+Bundle 'vim-scripts/TailMinusF'
+Bundle 'Lokaltog/vim-easymotion'
+  let g:EasyMotion_leader_key = '<space>'
+Bundle 'nathanaelkane/vim-indent-guides'
+  let g:indent_guides_auto_colors = 0
+  let g:indent_guides_enable_on_vim_startup = 1
+Bundle 'vimoutliner/vimoutliner'
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'scrooloose/nerdtree'
+Bundle 'ervandew/supertab'
+  let g:SuperTabDefaultCompletionType = "context"
+  let g:SuperTabContextDefaultCompletionType = "<c-n>"
+  let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
+  let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&keywordfunc', '&completefunc']
+  let g:SuperTabDefaultCompletionTypeDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>", '&keywordfunc:<c-n>']
+  let g:SuperTabRetainCompletionDuration = 'completion'
+  let g:SuperTabLongestEnhanced = 1
+Bundle 'altercation/vim-colors-solarized'
+  let g:solarized_termcolors=256
+Bundle 'git://git.wincent.com/command-t.git'
+  nnoremap <silent> <leader><space> :CommandT<cr>
+  let g:CommandTMaxFiles = 50000
+  let g:CommandTMaxHeight = 20
+  let g:CommandTMinHeight = 20
+  let g:CommandTMatchWindowReverse = 1
+  let g:CommandTCancelMap = ['<C-c>', '<esc>']
+Bundle 'sjbach/lusty'
+  nnoremap <silent> <s-tab> :LustyJuggler<cr>
+  nnoremap <silent> <leader><tab> :LustyBufferExplorer<cr>
+  nnoremap <silent> <leader>o :LustyFilesystemExplorer<cr>
+  nnoremap <silent> <leader>O :LustyFilesystemExplorerFromHere<cr>
+Bundle 'ack.vim'
+  nnoremap <leader>a <esc>:Ack! 
+Bundle 'rstacruz/sparkup'
+Bundle 'tpope/vim-rails.git'
+Bundle 'tpope/vim-fugitive'
+Bundle 'groenewege/vim-less'
+Bundle 'timcharper/textile.vim'
+
+
 
 " :: Syntax and colours ::
 
@@ -249,74 +229,58 @@ if &t_Co > 2
 endif
 
 
-
 " :: Autocommands ::
 
-if has("autocmd")
-  " Enable file type detection.
-  filetype plugin indent on
+" Enable file type detection.
+filetype plugin indent on
 
-  " make sure grep shows filename even if searching for single file
-  " this is for LaTeX-Suite.
-  set grepprg=grep\ -nH\ $*
+" make sure grep shows filename even if searching for single file
+" this is for LaTeX-Suite.
+set grepprg=grep\ -nH\ $*
 
-  " Make sure new empty .tex files load vim-latex
-  let g:tex_flavor='latex'
+" Put these in an autocmd group, so that we can delete them easily.
+augroup vimrcEx
+au!
 
-  " Put these in an autocmd group, so that we can delete them easily.
-  augroup vimrcEx
-  au!
+" For all text files set 'textwidth' to 78 characters.
+au FileType text setlocal textwidth=78
 
-  " For all text files set 'textwidth' to 78 characters.
-  au FileType text setlocal textwidth=78
+" absolute line numbers in insert mode
+au InsertEnter * :set nu
+au InsertLeave * :set rnu
 
-  " absolute line numbers in insert mode
-  if version >= 703
-    au InsertEnter * :set nu
-    au InsertLeave * :set rnu
-  endif
+" set cursorline for current window only
+" au WinEnter,BufEnter * setlocal cursorline
+" au WinLeave,BufLeave * setlocal nocursorline
 
-  " set cursorline for current window only
-  " au WinEnter,BufEnter * setlocal cursorline
-  " au WinLeave,BufLeave * setlocal nocursorline
+" Leave insert mode when idling
+" au CursorHoldI * stopinsert   " nope this is pretty annoying.
 
-  " Leave insert mode when idling
-  " au CursorHoldI * stopinsert   " nope this is pretty annoying.
+" when editing a file, always jump to the last known cursor position.
+" Don't do it when the position is invalid or when inside an event handler
+" (happens when dropping a file on gvim).
+au BufReadPost *
+  \ if line("'\"") > 0 && line("'\"") <= line("$") |
+  \   exe "normal g`\"" |
+  \ endif
 
-  " when editing a file, always jump to the last known cursor position.
-  " Don't do it when the position is invalid or when inside an event handler
-  " (happens when dropping a file on gvim).
-  au BufReadPost *
-    \ if line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal g`\"" |
-    \ endif
+" auto-detect git commit message files for syntax highlighting
+au BufNewFile,BufRead COMMIT_EDITMSG set filetype=gitcommit
 
-  " auto-detect git commit message files for syntax highlighting
-  au BufNewFile,BufRead COMMIT_EDITMSG set filetype=gitcommit
+" don't expand tabs to spaces in makefiles
+au FileType make setlocal noexpandtab
 
-  " Don't show control chars in conque term
-  au FileType conque_term
-    \ setlocal nolist |
-    \ setlocal nornu | 
-    \ map <C-x> <F5>
+au FileType python
+  \ nnoremap <leader>8 <esc>:call Pep8()<cr> |
+  \ setlocal omnifunc=pythoncomplete#Complete |
+  \ setlocal foldmethod=indent |
+  \ setlocal foldlevel=9999
 
-  " don't expand tabs to spaces in makefiles
-  au FileType make setlocal noexpandtab
+au FileType css let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
 
-  au FileType python
-    \ nnoremap <leader>8 <esc>:call Pep8()<cr> |
-    \ setlocal omnifunc=pythoncomplete#Complete |
-    \ setlocal foldmethod=indent |
-    \ setlocal foldlevel=9999
+au FileType php set expandtab tabstop=8 softtabstop=2 shiftwidth=2
 
-  au FileType css let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
+" reload vimrc when we save it
+au BufWritePost .vimrc so ~/.vimrc
 
-  au FileType php set expandtab tabstop=8 softtabstop=2 shiftwidth=2
-
-  " reload vimrc when we save it
-  au BufWritePost .vimrc so ~/.vimrc
-
-  augroup END
-else
-  set autoindent
-endif
+augroup END
