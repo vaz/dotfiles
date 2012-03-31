@@ -194,6 +194,7 @@ Bundle 'ervandew/supertab'
   let g:SuperTabLongestEnhanced = 1
 Bundle 'altercation/vim-colors-solarized'
   let g:solarized_termcolors=256
+  let g:solarized_hitrail=1    "default value is 0
 Bundle 'git://git.wincent.com/command-t.git'
   nnoremap <silent> <leader><space> :CommandT<cr>
   let g:CommandTMaxFiles = 50000
@@ -214,7 +215,6 @@ Bundle 'tpope/vim-rails.git'
 Bundle 'tpope/vim-fugitive'
 Bundle 'groenewege/vim-less'
 Bundle 'timcharper/textile.vim'
-
 
 
 " :: Syntax and colours ::
@@ -271,11 +271,7 @@ au BufNewFile,BufRead COMMIT_EDITMSG set filetype=gitcommit
 " don't expand tabs to spaces in makefiles
 au FileType make setlocal noexpandtab
 
-au FileType python
-  \ nnoremap <leader>8 <esc>:call Pep8()<cr> |
-  \ setlocal omnifunc=pythoncomplete#Complete |
-  \ setlocal foldmethod=indent |
-  \ setlocal foldlevel=9999
+au FileType python nnoremap <leader>8 <esc>:call Pep8()<cr>
 
 au FileType css let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
 
