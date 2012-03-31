@@ -96,10 +96,14 @@ unless /\+ruby/ =~ `vim --version`
   system "#{DOTFILES}/vim/compile-vim.sh"
 end
 
-sudo ||= `which rbenv` && $?.success?
+rbenv_exists = `which rbenv` && $? == 0
+sudo ||= (not rbenv_exists)
 puts "rbenv exists so assuming no sudo needed" unless sudo
 
 system "#{sudo ? 'sudo' : ''} gem install bundler --no-rdoc --no-ri"
+if rbenv_exists
+  system "rbenv rehash"
+end
 
 system "git clone https://github.com/gmarik/vundle.git #{DOTFILES}/vim/vimhome/bundle/vundle"
 

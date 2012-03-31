@@ -247,8 +247,8 @@ au!
 au FileType text setlocal textwidth=78
 
 " absolute line numbers in insert mode
-au InsertEnter * :set nu
-au InsertLeave * :set rnu
+"au InsertEnter * :set nu
+"au InsertLeave * :set rnu
 
 " set cursorline for current window only
 " au WinEnter,BufEnter * setlocal cursorline
