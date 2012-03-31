@@ -5,8 +5,6 @@ require 'fileutils'
 
 include FileUtils
 
-`hash -r`
-
 HOME = ENV['HOME']
 DOTFILES = File.expand_path(File.dirname(__FILE__))
 UNAME = `uname`.chomp
@@ -126,6 +124,7 @@ task :vim => [:hg, :ruby] do
 
   system "vim +BundleInstall! +BundleClean +q +q /dev/zero"
   system "cd #{HOME}/.vim/bundle/command-t && bundle install && rake make"
+  system "source #{HOME}/.bashrc"
 end
 
 
