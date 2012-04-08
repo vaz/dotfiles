@@ -131,8 +131,19 @@ function! GetPythonIndent(lnum)
     let thisline = getline(a:lnum)
     let thisindent = indent(a:lnum)
 
-    " If the line starts with 'elif' or 'else', line up with 'if' or 'elif'
-    if thisline =~ '^\s*\(elif\|else\)\>'
+    " If the line starts with else, line up with
+    " 'try', 'except', 'if', 'elif' or 'for'.
+    if thisline =~ '^\s*\(else\)\>'
+        let bslnum = s:BlockStarter(a:lnum, '^\s*\(try\|except\|if\|elif\|for\)\>')
+        if bslnum > 0
+            return indent(bslnum)
+        else
+            return -1
+        endif
+    endif
+
+    " If the line starts with 'elif', line up with 'if' or 'elif'
+    if thisline =~ '^\s*\(elif\)\>'
         let bslnum = s:BlockStarter(a:lnum, '^\s*\(if\|elif\)\>')
         if bslnum > 0
             return indent(bslnum)

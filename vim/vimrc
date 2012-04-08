@@ -17,20 +17,24 @@ set expandtab           " expand tabs into spaces
 set tabstop=8           " How many spaces does a tab show up as
 set softtabstop=2
 set shiftwidth=2
+set textwidth=80        " text width is 80
+set formatoptions-=t    " but don't automatically word wrap me
 set virtualedit=all     " can move cursor even where there's no characters
 set hidden              " buffers can be hidden while modified
 set noerrorbells        " error bells are annoying
 set visualbell          " error bells are annoying
 set t_vb=               " error bells are annoying   
 set list                " show control characters, line endings etc.
-silent! set listchars=tab:»\ ,trail:·,extends:#,precedes:#,nbsp:·
+silent! set listchars=tab:»\ ,trail:·,extends:#,precedes:#,nbsp:·,eol:¬
+silent! set showbreak=↪
 set clipboard+=unnamed  " make the unnamed register equal os clipboard
 set mouse=a             " mainly just so I can resize split windows easier
 set splitright splitbelow " split more intuitively
+set hlsearch
 set cursorline
 set cursorcolumn
+"set laststatus=2 " for later if I want a fancy status line
 silent! set colorcolumn=72,73,74,75,76,77,78,79,80 " so I know 72 and 80
-" setlocal cursorline     " cursor line highlighting
 set viminfo='20,<50,s10,h,% " remember marks, searches, registers, buffer list
 runtime macros/matchit.vim " % matches more than just brackets:
 set completeopt=menuone,longest,preview
@@ -154,14 +158,41 @@ command! -bar -nargs=1 OpenURL :!open <args>
 " sudo save a file
 cmap w!! w !sudo tee % >/dev/null
 
-" vimrc editing mappings
-nnoremap <leader>v <esc>:e ~/.vimrc<cr>
-nnoremap <leader>V <esc>:so ~/.vimrc<cr>
+" quick edit files
+nnoremap <leader>ev <esc>:e ~/.vimrc<cr>
+nnoremap <leader>eg <esc>:e ~/.gvimrc<cr>
+
+fun! EditColourFile()
+  redir => l:cs | silent colorscheme | redir END
+  let l:cs = "~/.vim/colors/".substitute(l:cs, '^\n', '', '').".vim"
+  exec "e" l:cs
+endf
+
+nnoremap <leader>ec <esc>:call EditColourFile()<cr>
 
 " Folding
 nnoremap <leader>z <esc>:set foldlevel=10000<cr>
 nnoremap <leader>Z <esc>:set foldlevel=-10000<cr>
 
+" dragging lines
+nnoremap <silent> ∆ :m+<cr>
+nnoremap <silent> ˚ :m-<cr>
+vnoremap ∆ :m'>+<CR>gv
+vnoremap ˚ :m-2<CR>gv
+
+" good regexes
+nnoremap / /\v
+vnoremap / /\v
+
+ " Keep search matches in the middle of the window.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" inside/around []
+onoremap ir i[
+onoremap ar a[
+vnoremap ir i[
+vnoremap ar a[
 
 
 " :: Plugins ::
@@ -226,7 +257,6 @@ endif
 if &t_Co > 2 
   syntax on
   colorscheme vaz
-  set hlsearch
 endif
 
 
@@ -241,43 +271,64 @@ set grepprg=grep\ -nH\ $*
 
 " Put these in an autocmd group, so that we can delete them easily.
 augroup vimrcEx
-au!
+  au!
 
-" For all text files set 'textwidth' to 78 characters.
-au FileType text setlocal textwidth=78
+  " For all text files set 'textwidth' to 78 characters.
+  au FileType text setlocal textwidth=78
 
-" absolute line numbers in insert mode
-"au InsertEnter * :set nu
-"au InsertLeave * :set rnu
+  " absolute line numbers in insert mode
+  au InsertEnter * :set nu
+  au InsertLeave * :set rnu
 
-" set cursorline for current window only
-" au WinEnter,BufEnter * setlocal cursorline
-" au WinLeave,BufLeave * setlocal nocursorline
+  " Leave insert mode when idling
+  " au CursorHoldI * stopinsert   " nope this is pretty annoying.
 
-" Leave insert mode when idling
-" au CursorHoldI * stopinsert   " nope this is pretty annoying.
+  " when editing a file, always jump to the last known cursor position.
+  " Don't do it when the position is invalid or when inside an event handler
+  " (happens when dropping a file on gvim).
+  au BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal g`\"" |
+    \ endif
 
-" when editing a file, always jump to the last known cursor position.
-" Don't do it when the position is invalid or when inside an event handler
-" (happens when dropping a file on gvim).
-au BufReadPost *
-  \ if line("'\"") > 0 && line("'\"") <= line("$") |
-  \   exe "normal g`\"" |
-  \ endif
+  " resize splits when window is resized
+  au VimResized * :wincmd =
 
-" auto-detect git commit message files for syntax highlighting
-au BufNewFile,BufRead COMMIT_EDITMSG set filetype=gitcommit
+  " auto-detect git commit message files for syntax highlighting
+  au BufNewFile,BufRead COMMIT_EDITMSG set filetype=gitcommit
 
-" don't expand tabs to spaces in makefiles
-au FileType make setlocal noexpandtab
+  " don't expand tabs to spaces in makefiles
+  au FileType make setlocal noexpandtab
 
-au FileType python nnoremap <leader>8 <esc>:call Pep8()<cr>
+  au FileType ruby nnoremap <leader>r <esc>:!ruby %<cr>
 
-au FileType css let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
+  au FileType python nnoremap <leader>P <esc>:call Pep8()<cr> |
+                   \ nnoremap <leader>r <esc>:!python %<cr>
 
-au FileType php set expandtab tabstop=8 softtabstop=2 shiftwidth=2
+  au FileType css let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
 
-" reload vimrc when we save it
-au BufWritePost .vimrc so ~/.vimrc
+  au FileType php set expandtab tabstop=8 softtabstop=2 shiftwidth=2
 
+  " reload vimrc when we save it
+  au BufWritePost .vimrc so ~/.vimrc
+
+  " A mapping to source vim files
+  " And a mapping to start automatically sourcing the current vim file
+  " every time it saves (Good for editing colour files)
+  au FileType vim
+        \ nnoremap <leader>. <esc>:so %<cr> |
+        \ nnoremap <leader>S <esc>:au BufWritePost <buffer> :so %<cr>
+
+augroup END
+
+augroup lines
+  au!
+  au WinLeave * set nocursorline
+  au WinLeave * set nocursorcolumn
+  au InsertEnter * set nocursorline
+  au InsertEnter * set nocursorcolumn
+  au WinEnter * set cursorline
+  au WinEnter * set cursorcolumn
+  au InsertLeave * set cursorline
+  au InsertLeave * set cursorcolumn
 augroup END
