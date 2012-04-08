@@ -88,6 +88,7 @@ end
 directory "#{HOME}/bin"
 task :bin => "#{HOME}/bin" do
   dotfiles 'bin', 'ack' => 'bin/ack'
+  dotfiles 'bin', 'z.sh' => 'bin/z.sh'
 end
 
 task :hg do

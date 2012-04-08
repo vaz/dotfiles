@@ -76,6 +76,7 @@ export PATH
 [ -f ~/.bash_aliases ]      && . ~/.bash_aliases	    # alias definitions
 [ -f /etc/bash_completion ] && . /etc/bash_completion 
 [ -f ~/.bashrc.local ]      && . ~/.bashrc.local        # local bashrc
+[ -f ~/bin/z.sh ]           && . ~/bin/z.sh
 
 
 ###############################################################################
