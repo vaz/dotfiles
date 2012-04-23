@@ -7,6 +7,9 @@
   default = current
 [merge]
   tool = vimdiff
+[log]
+  abbrevCommit = true
+  decorate = short
 [alias]
   co = checkout
   st = status
@@ -14,13 +17,13 @@
   br = branch
   dif = diff
   unstage = reset HEAD --
-  l = log --pretty=oneline --abbrev-commit
-  gl = log --pretty=oneline --abbrev-commit --graph
+  l = log --pretty=oneline
+  gl = log --pretty=oneline --graph
   glog = log --graph
-  fetchdiff = log -p HEAD..FETCH_HEAD --abbrev-commit
-  in = whatchanged ..origin
-  out = whatchanged origin..
-  last = show HEAD --abbrev-commit
+  wc = whatchanged
+  in = "!f(){ git whatchanged ..origin/$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f 3); }; f"
+  out = "!f(){ git whatchanged origin/$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f 3)..; }; f"
+  last = show HEAD
   todo = grep -n TODO
   xxx = grep -n XXX
 [color]
