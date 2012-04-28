@@ -246,6 +246,7 @@ Bundle 'tpope/vim-rails.git'
 Bundle 'tpope/vim-fugitive'
 Bundle 'groenewege/vim-less'
 Bundle 'timcharper/textile.vim'
+Bundle 'scrooloose/syntastic'
 
 
 " :: Syntax and colours ::
