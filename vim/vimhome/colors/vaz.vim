@@ -27,6 +27,7 @@ hi DiffText                 ctermfg=15                " #ffffff
 
 hi ErrorMsg                 ctermfg=51  ctermbg=124   " #0000ff #af0000
 hi WarningMsg               ctermfg=15  ctermbg=58    " #ffffff #5f5f00
+hi SpellBad                 ctermfg=255 ctermbg=197   " #eeeeee reddishpurple
 
 hi Folded                   ctermfg=122 ctermbg=233   " #87ffd7 #1c1c1c
 hi FoldColumn               ctermfg=122 ctermbg=233   " #87ffd7 #1c1c1c
