@@ -17,6 +17,7 @@
   ci = commit
   br = branch
   dif = diff
+  mt = mergetool
   unstage = reset HEAD --
   l = log --pretty=oneline --abbrev-commit
   gl = log --pretty=oneline --graph --abbrev-commit
