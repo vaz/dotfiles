@@ -23,7 +23,7 @@ hi Directory                ctermfg=27                " #005fff
 hi DiffAdd                  ctermfg=195 ctermbg=22    " #d7ffff #005f00
 hi DiffChange               ctermfg=244 ctermbg=17    " #808080 #00005f
 hi DiffDelete               ctermfg=195 ctermbg=52    " #d7ffff #5f0000
-hi DiffText                 ctermfg=15                " #ffffff 
+hi DiffText                 ctermfg=15  ctermbg=197   " #ffffff pinkish
 
 hi ErrorMsg                 ctermfg=51  ctermbg=124   " #0000ff #af0000
 hi WarningMsg               ctermfg=15  ctermbg=58    " #ffffff #5f5f00
