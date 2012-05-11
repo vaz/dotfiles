@@ -24,9 +24,9 @@
   mp = merge -X patience
   ff = "!f(){ git merge --ff-only origin/$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f 3-); }; f"
   unstage = reset HEAD --
-  l  = log --pretty=oneline --abbrev-commit
-  gl = log --pretty=oneline --abbrev-commit --graph
-  g  = log --pretty=oneline --abbrev-commit --graph --all
+  l = log --pretty=format:'%Cgreen%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+  gl = log --pretty=format:'%Cgreen%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --graph
+  g = log --pretty=format:'%Cgreen%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative --graph --all
   glog = log --graph
   wc = whatchanged
   in = "!f(){ git whatchanged ..origin/$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f 3-); }; f"
