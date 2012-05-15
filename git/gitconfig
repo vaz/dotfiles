@@ -31,6 +31,8 @@
   wc = whatchanged
   in = "!f(){ git whatchanged ..origin/$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f 3-); }; f"
   out = "!f(){ git whatchanged origin/$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f 3-)..; }; f"
+  inp = "!f(){ git log -p ..origin/$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f 3-); }; f"
+  outp = "!f(){ git log -p origin/$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f 3-)..; }; f"
   last = show HEAD
   up = merge --ff-only
   todo = grep -n TODO
