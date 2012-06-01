@@ -220,8 +220,8 @@ exec "hi EasyMotionTarget guifg=".s:magenta."   guibg=NONE            gui=bold"
 exec "hi EasyMotionShade  guifg=".s:b1."        guibg=NONE            gui=bold"
 " }}}
 " {{{ Indent Guides
-exec "hi IndentGuidesOdd  guibg=#121411"
-exec "hi IndentGuidesEven guibg=#222643"
+exec "hi IndentGuidesOdd  guibg=#040729"
+exec "hi IndentGuidesEven guibg=#1d213e"
 " }}}
 
 

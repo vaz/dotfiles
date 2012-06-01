@@ -34,7 +34,7 @@ set hlsearch
 set cursorline
 set cursorcolumn
 "set laststatus=2 " for later if I want a fancy status line
-silent! set colorcolumn=72,73,74,75,76,77,78,79,80 " so I know 72 and 80
+silent! set colorcolumn=80 " so I know 72 and 80
 set viminfo='20,<50,s10,h,% " remember marks, searches, registers, buffer list
 runtime macros/matchit.vim " % matches more than just brackets:
 set completeopt=menuone,longest,preview
@@ -48,7 +48,7 @@ endif
 " :: Keymappings and commands ::
 
 " better ESC
-inoremap kj <esc>
+" inoremap kj <esc>
 
 " easier ex mode
 nnoremap ; :
@@ -69,7 +69,7 @@ nmap Q q:
 nnoremap <silent> <leader>/ :nohl<cr>
 
 " Make Y work like other capitals
-map Y y$
+noremap Y y$
 
 " Make up and down keys useful for wrapped lines.
 map <up> gk
@@ -80,6 +80,24 @@ nnoremap <c-h> <c-w>h
 nnoremap <c-j> <c-w>j
 nnoremap <c-k> <c-w>k
 nnoremap <c-l> <c-w>l
+
+nnoremap <silent> <leader>w :call MaximizeToggle ()<CR>
+
+function! MaximizeToggle()
+  if exists("s:maximize_session")
+    exec "source " . s:maximize_session
+    call delete(s:maximize_session)
+    unlet s:maximize_session
+    let &hidden=s:maximize_hidden_save
+    unlet s:maximize_hidden_save
+  else
+    let s:maximize_hidden_save = &hidden
+    let s:maximize_session = tempname()
+    set hidden
+    exec "mksession! " . s:maximize_session
+    only
+  endif
+endfunction
 
 " pressing return in normal mode opens a line below
 nnoremap <cr> O<esc>
@@ -119,7 +137,7 @@ function! <SID>SynStack()
 endfunc
 
 " local cd to current file's dir
-nnoremap <leader>l :lcd %:p:h<cr>
+nnoremap <leader>c :lcd %:p:h<cr>
 
 function! NumberToggle()
   if(&number == 1)
@@ -247,6 +265,7 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'groenewege/vim-less'
 Bundle 'timcharper/textile.vim'
 Bundle 'scrooloose/syntastic'
+  nnoremap <leader>s :SyntasticToggleMode<cr>
 
 
 " :: Syntax and colours ::
