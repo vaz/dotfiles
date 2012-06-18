@@ -8,6 +8,7 @@
 [merge]
   tool = vimdiff
   defaultToUpstream = true
+  conflictstyle = diff3
 [mergetool]
   keepBackups = false
 [log]
@@ -20,10 +21,12 @@
   br = branch
   dif = diff
   d = diff
+  dp = diff --patience
   dc = diff --cached
   mt = mergetool
   mr = merge
   mp = merge -X patience
+  rp = rebase -m -X patience
   ff = "!f(){ test -z \"$1\" && r=origin || r=\"$1\"; git merge --ff-only origin/$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f 3-); }; f"
   unstage = reset HEAD --
   l = log --pretty=format:'%Cgreen%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
@@ -35,9 +38,13 @@
   out = "!f(){ test -z \"$1\" && r=origin || r=\"$1\"; git whatchanged $r/$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f 3-)..; }; f"
   inp = "!f(){ test -z \"$1\" && r=origin || r=\"$1\"; git log -p ..$r/$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f 3-); }; f"
   outp = "!f(){ test -z \"$1\" && r=origin || r=\"$1\"; git log -p $r/$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f 3-)..; }; f"
+  showlocal = "!f(){ fn=\"$1\"; git diff \":1:${fn}\" \":2:${fn}\"; }; f"
+  showremote = "!f(){ fn=\"$1\"; git diff \":1:${fn}\" \":3:${fn}\"; }; f"
   last = show HEAD
   up = merge --ff-only
   todo = grep -n TODO
   xxx = grep -n XXX
 [color]
   ui = auto
+[rerere]
+  enabled = 1
