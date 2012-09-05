@@ -99,8 +99,10 @@ function! MaximizeToggle()
   endif
 endfunction
 
-" pressing return in normal mode opens a line below
-nnoremap <cr> O<esc>
+" pressing return in normal mode opens a line above
+nnoremap <cr> mOO<esc>`O
+" pressing shift-return in normal mode opens line below
+nnoremap <s-cr> mOo<esc>`O
 
 " swap ` with ' because ' is closer and ` is useless
 nnoremap ' `
@@ -212,6 +214,9 @@ onoremap ar a[
 vnoremap ir i[
 vnoremap ar a[
 
+" select last put text
+nnoremap <expr> gl '`[' . strpart(getregtype(), 0, 1) . '`]'
+
 
 " :: Plugins ::
 
@@ -258,14 +263,24 @@ Bundle 'sjbach/lusty'
   nnoremap <silent> <leader>O :LustyFilesystemExplorerFromHere<cr>
   let g:LustyJugglerSuppressRubyWarning = 1
 Bundle 'ack.vim'
-  nnoremap <leader>a <esc>:Ack! 
-Bundle 'rstacruz/sparkup'
+  nnoremap <leader>a <esc>:Ack 
+Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+  augroup sparkup_types
+    autocmd!
+    autocmd FileType mustache,php,htmldjango runtime! ftplugin/html/sparkup.vim
+    let g:sparkupExecuteMapping = '<c-l>'
+  augroup END
 Bundle 'tpope/vim-rails.git'
 Bundle 'tpope/vim-fugitive'
 Bundle 'groenewege/vim-less'
 Bundle 'timcharper/textile.vim'
 Bundle 'scrooloose/syntastic'
   nnoremap <leader>s :SyntasticToggleMode<cr>
+Bundle 'mattn/calendar-vim'
+Bundle 'chrisbra/NrrwRgn'
+Bundle 'vim-scripts/utl.vim'
+Bundle 'hsitz/VimOrganizer'
+Bundle 'tomasr/molokai'
 
 
 " :: Syntax and colours ::
@@ -336,9 +351,16 @@ augroup vimrcEx
   " And a mapping to start automatically sourcing the current vim file
   " every time it saves (Good for editing colour files)
   au FileType vim
-        \ nnoremap <leader>. <esc>:so %<cr> |
+        \ nnoremap <leader>. <esc>:so %<cr>|
         \ nnoremap <leader>S <esc>:au BufWritePost <buffer> :so %<cr>
 
+  " don't always center the cursor in screen when switching buffers
+  au BufLeave * let b:winview = winsaveview()
+  au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
+
+  au VimEnter * syntax keyword Statement lambda conceal cchar=λ
+  au VimEnter * hi! link Conceal Statement
+  au VimEnter * set conceallevel=2
 augroup END
 
 augroup lines

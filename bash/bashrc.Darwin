@@ -67,6 +67,8 @@ PATH=/opt/local/bin:/opt/local/sbin:$PATH
 # private bin, rbenv and /usr/local before /usr
 PATH=$HOME/bin:$HOME/.rbenv/bin:/usr/local/bin:/usr/local/sbin:$PATH
 
+PATH=$PATH:$HOME/Library/Trigger\ Toolkit
+
 export PATH
 
 
@@ -94,6 +96,10 @@ which rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
 # macvim
 
 which mvim >/dev/null 2>&1 && alias vim='mvim -v'
+
+# emacs
+
+which /Applications/Emacs.app/Contents/MacOS/Emacs >/dev/null 2>&1 && alias emacs='/Applications/Emacs.app/Contents/MacOS/Emacs -nw'
 
 export EDITOR='mvim -v'
 export VISUAL='mvim -f'
