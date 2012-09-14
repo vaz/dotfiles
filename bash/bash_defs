@@ -57,5 +57,6 @@ function listcolours {
 }
 
 function rr {
-  find . -iname "$2" -print0 | xargs -0 "$1"
+  pattern="$1"; shift
+  find . -iname "$pattern" -print0 | xargs -0 "$@"
 }
