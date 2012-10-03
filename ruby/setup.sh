@@ -6,7 +6,7 @@ git clone git://github.com/sstephenson/ruby-build.git $HOME/.rbenv/plugins/ruby-
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 rbenv versions | grep '1.9.3-p194' || rbenv install 1.9.3-p194
-rbenv global 1.9.3-p125
+rbenv global 1.9.3-p194
 rbenv rehash
 gem install bundler --no-ri --no-rdoc
 gem install noexec --no-ri --no-rdoc

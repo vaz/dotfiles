@@ -34,7 +34,7 @@ set hlsearch
 set cursorline
 set cursorcolumn
 "set laststatus=2 " for later if I want a fancy status line
-silent! set colorcolumn=80 " so I know 72 and 80
+silent! set colorcolumn=80 " so I know 80
 set viminfo='20,<50,s10,h,% " remember marks, searches, registers, buffer list
 runtime macros/matchit.vim " % matches more than just brackets:
 set completeopt=menuone,longest,preview
@@ -291,7 +291,8 @@ endif
 
 if &t_Co > 2 
   syntax on
-  colorscheme vaz
+  colorscheme molokai
+  hi Normal ctermbg=none
 endif
 
 
