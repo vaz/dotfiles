@@ -12,14 +12,9 @@ UNAME = `uname`.chomp
 def mac?; UNAME == 'Darwin' end
 def linux?; UNAME == 'Linux' end
 
-unless mac? or linux?
-  puts "What system are you on, anyway?"
-  exit
-end
+(puts "What system are you on, anyway?"; exit) unless mac? or linux?
 
-def has? cmd
-  `which #{cmd}` and $? == 0
-end
+def has? cmd; `which #{cmd}` and $? == 0 end
 def missing? cmd; not has?(cmd) end
 
 def pkginstall aptname, brewname = nil
@@ -85,9 +80,13 @@ task :bash => :git do
                     "profile"         => '.profile'
 end
 
+task :ack => :brew do
+  pkginstall 'ack'
+end
+
+
 directory "#{HOME}/bin"
 task :bin => "#{HOME}/bin" do
-  dotfiles 'bin', 'ack' => 'bin/ack'
   dotfiles 'bin', 'z.sh' => 'bin/z.sh'
 end
 
