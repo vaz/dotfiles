@@ -17,6 +17,7 @@ flow = ~/.dotfiles/hg/hgflow/src/hgflow/hgflow.py
 localbranch = ~/.dotfiles/hg/localbranch/localbranch.py
 transplant =
 convert =
+hggit =
 
 [bookmarks]
 track.current = True
