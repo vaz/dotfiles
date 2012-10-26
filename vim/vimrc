@@ -23,9 +23,9 @@ set virtualedit=all     " can move cursor even where there's no characters
 set hidden              " buffers can be hidden while modified
 set noerrorbells        " error bells are annoying
 set visualbell          " error bells are annoying
-set t_vb=               " error bells are annoying   
+set t_vb=               " error bells are annoying
 set list                " show control characters, line endings etc.
-silent! set listchars=tab:»\ ,trail:·,extends:#,precedes:#,nbsp:·,eol:¬
+silent! set listchars=tab:→\ ,trail:␣,extends:…,precedes:…,nbsp:·,eol:¬
 silent! set showbreak=↪
 set clipboard+=unnamed  " make the unnamed register equal os clipboard
 set mouse=a             " mainly just so I can resize split windows easier
