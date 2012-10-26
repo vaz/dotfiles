@@ -49,14 +49,13 @@ if [ "`uname`" = "Darwin" ]; then
   }
 fi
 
-# doesn't work with stupid bsd echo.
 function listcolours {
   for ((i=0; i<=7; i++)); do
     echo -e "\033[0;3${i}m0;3$i \033[1;3${i}m1;3$i \033[0;4${i}m0;4$i \033[0m"
   done
 }
 
-function rr {
+function map {
   pattern="$1"; shift
   find . -iname "$pattern" -print0 | xargs -0 "$@"
 }
