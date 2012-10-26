@@ -95,8 +95,7 @@ task :hg do
 end
 
 task :ruby => :git do
-  dotfiles 'ruby',  'autotest'  => '.autotest',
-                    'irbrc'     => '.irbrc',
+  dotfiles 'ruby',  'irbrc'     => '.irbrc',
                     'pryrc'     => '.pryrc',
                     'bundle'    => '.bundle'
 
