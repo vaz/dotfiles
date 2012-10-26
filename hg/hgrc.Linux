@@ -11,10 +11,10 @@ color =
 pager =
 graphlog =
 record =
-prompt = ~/.dotfiles/hg/hg-prompt/prompt.py
-hgattic = ~/.dotfiles/hg/hgattic/attic.py
-flow = ~/.dotfiles/hg/hgflow/src/hgflow/hgflow.py
-localbranch = ~/.dotfiles/hg/localbranch/localbranch.py
+prompt = ~/.dotfiles/hg/extensions/hg-prompt/prompt.py
+hgattic = ~/.dotfiles/hg/extensions/hgattic/attic.py
+flow = ~/.dotfiles/hg/extensions/hgflow/src/hgflow/hgflow.py
+localbranch = ~/.dotfiles/hg/extensions/localbranch/localbranch.py
 transplant =
 convert =
 
