@@ -26,11 +26,12 @@ def pkginstall aptname, brewname = nil
     print "Installing #{brewname}... "
     r = `brew install #{brewname}`
   end
-  if $? != 0
-    puts r
-  else
-    puts "Done." and true
-  end
+  $? != 0 ? (puts r)
+          : (puts "done."; true)
+end
+
+def genheader prefix='#'
+  "#{prefix} this file is generated, make your edits elsewhere!\n\n"
 end
 
 def dotfiles type, mapping={}
@@ -38,12 +39,12 @@ def dotfiles type, mapping={}
     src = File.join(DOTFILES, type, src)
     dst = File.join(HOME, dst) unless dst.start_with? '/'
     bak_dir = File.join(HOME, ".backups")
-    FileUtils.mkdir_p bak_dir
+    mkdir_p bak_dir
 
     if File.exists? dst or File.symlink? dst
       if File.symlink? dst
         puts "delete:  #{dst}"
-        File.directory?(dst) ? FileUtils.rm_rf(dst) : File.delete(dst)
+        File.directory?(dst) ? rm_rf(dst) : File.delete(dst)
       else
         bak = File.join(bak_dir, basename(dst))
         puts "backup:  #{dst} to #{bak}"
@@ -52,11 +53,29 @@ def dotfiles type, mapping={}
     end
 
     puts "symlink: #{dst} -> #{src}"
-    FileUtils.symlink src, dst
+    symlink src, dst
   end
 end
 
-task :default => [:vim, :screen, :bash, :bin]
+def hgclone mapping={}
+  mapping.each do |rmt, path|
+    if File.exists? path
+      print "hg: updating #{path}..."
+      r = `(cd #{path} && HGRCPATH='' hg pull --update 2>/dev/null)`
+      $? != 0 ? (puts r)
+              : (puts "done." ; true)
+    else
+      rmt = "https://bitbucket.org/#{rmt}" if rmt.match(%r{^[\w-]+/[\w-]+$})
+      print "hg: cloning #{rmt} into #{path}..."
+      r = `HGRCPATH='' hg clone --insecure #{rmt} #{path} 2>/dev/null`
+      $? != 0 ? (puts r)
+              : (puts "done." ; true)
+    end
+  end
+end
+
+
+task :default => [:vim, :screen, :bash, :bin, :ack]
 
 
 task :brew do
@@ -93,7 +112,18 @@ task :bin => "#{HOME}/bin" do
 end
 
 task :hg do
-  dotfiles 'hg', "hgrc.#{UNAME}" => '.hgrc'
+  `(cd #{DOTFILES}/hg;
+    echo '#{genheader}' | cat - hgrc hgrc.#{UNAME} > hgrc.local)`
+
+  dotfiles 'hg', "hgrc.local" => '.hgrc'
+
+  hgext = "#{DOTFILES}/hg/ext"
+
+  mkdir_p hgext
+
+  hgclone 'sjl/hg-prompt' => "#{hgext}/prompt"
+  hgclone 'pk11/mercurial-extensions-localbranch' => "#{hgext}/localbranch"
+  hgclone 'yinwm/hgflow' => "#{hgext}/flow"
 end
 
 task :ruby => :git do

@@ -7,3 +7,5 @@ vim/vimhome/undo
 ruby/bundle
 .hgignore
 emacs/
+hg/ext
+*.local
