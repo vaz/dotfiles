@@ -69,7 +69,8 @@ end
 
 task :git => :brew do
   pkginstall "git-core", "git" unless has?('git')
-  dotfiles 'git', 'gitconfig' => '.gitconfig'
+  dotfiles 'git', 'gitconfig' => '.gitconfig',
+                  'gitignore' => '.gitignore'
 end
 
 task :bash => :git do
