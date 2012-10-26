@@ -83,6 +83,7 @@ end
 
 task :ack => :brew do
   pkginstall 'ack'
+  dotfiles 'ack', 'ackrc' => '.ackrc'
 end
 
 
