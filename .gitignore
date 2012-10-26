@@ -1,8 +1,9 @@
-syntax: glob
-
 *.swp
 *.pyc
-vim/vimhome/undo
+*~
 .DS_Store
 vim/vimhome/bundle
+vim/vimhome/undo
 ruby/bundle
+.hgignore
+emacs/
