@@ -360,6 +360,10 @@ augroup vimrcEx
   au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 
   au VimEnter * syntax keyword Statement lambda conceal cchar=λ
+  au VimEnter * syntax match Operator "->" conceal cchar=→
+  au VimEnter * syntax match Operator "=>" conceal cchar=➧
+  au FileType haskell,lhaskell syntax match Operator "<-" conceal cchar=←
+  au FileType haskell,lhaskell syntax match Operator "-<" conceal cchar=⤛
   au VimEnter * hi! link Conceal Statement
   au VimEnter * set conceallevel=2
 augroup END
