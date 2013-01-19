@@ -1,33 +1,60 @@
+# TODO: some good python
+#
 require 'rubygems'
 require 'rake'
 require 'fileutils'
 
-
 include FileUtils
 
-HOME = ENV['HOME']
-DOTFILES = File.expand_path(File.dirname(__FILE__))
-UNAME = `uname`.chomp
 
-def mac?; UNAME == 'Darwin' end
-def linux?; UNAME == 'Linux' end
+HOME      = ENV['HOME']
+DOTFILES  = File.expand_path(File.dirname(__FILE__))
+PLATFORM  = `uname`.chomp.downcase
 
-(puts "What system are you on, anyway?"; exit) unless mac? or linux?
+def mac?;   PLATFORM =~ /darwin/ end
+def linux?; PLATFORM =~ /linux/  end
 
-def has? cmd; `which #{cmd}` and $? == 0 end
+module Tty extend self
+  def escape n; "\033[#{n}m" if STDOUT.tty? end
+  def reset; escape 0; end
+  def bold n; escape "1;#{n}" end
+  def underline n; escape "4;#{n}" end
+end
+
+module Colourized
+  TAGS = %w(k r g y b m c w)
+  VALUES = (30..37).to_a
+  PAIRS = TAGS.zip(VALUES)
+
+  def coloured
+    self # TODO
+  end
+end
+
+def invoke task; Rake::Task[task].invoke end
+
+
+mac? or linux? or abort "since when do you use #{PLATFORM}? peace out."
+
+def has?     cmd; system "which -s #{cmd}" end
 def missing? cmd; not has?(cmd) end
 
-def pkginstall aptname, brewname = nil
-  brewname = aptname if brewname.nil?
-  if linux?
-    print "Installing #{aptname}... "
-    r = `sudo apt-get install -y #{aptname}`
-  elsif mac?
-    print "Installing #{brewname}... "
-    r = `brew install #{brewname}`
+def quietly  cmd; system "#{cmd} >/dev/null 2>&1" end
+
+def ok? desc, r
+  print "#{desc}... "
+  $?.success? ? puts('done.') : puts(r)
+  $?.success?
+end
+
+def pkginstall name, brewname=nil
+  cmd = 'sudo apt-get install -y'
+  if mac?
+    cmd = 'brew install'
+    name = brewname or name
   end
-  $? != 0 ? (puts r)
-          : (puts "done."; true)
+  ok? "installing #{name}",
+      `#{cmd} #{name}`
 end
 
 def genheader prefix='#'
@@ -58,18 +85,14 @@ def dotfiles type, mapping={}
 end
 
 def hgclone mapping={}
-  mapping.each do |rmt, path|
+  mapping.each do |r, path|
     if File.exists? path
-      print "hg: updating #{path}..."
-      r = `(cd #{path} && HGRCPATH='' hg pull --update 2>/dev/null)`
-      $? != 0 ? (puts r)
-              : (puts "done." ; true)
+      ok? "hg: updating #{path}",
+          `(cd #{path} && HGRCPATH='' hg pull --update 2>/dev/null)`
     else
-      rmt = "https://bitbucket.org/#{rmt}" if rmt.match(%r{^[\w-]+/[\w-]+$})
-      print "hg: cloning #{rmt} into #{path}..."
-      r = `HGRCPATH='' hg clone --insecure #{rmt} #{path} 2>/dev/null`
-      $? != 0 ? (puts r)
-              : (puts "done." ; true)
+      r = "https://bitbucket.org/#{r}" if r =~ /^[\w-]+\/[\w-]+$/
+      ok? "hg: cloning #{r} into #{path}",
+          `HGRCPATH='' hg clone --insecure #{r} #{path} 2>/dev/null`
     end
   end
 end
@@ -80,24 +103,22 @@ task :default => [:vim, :screen, :bash, :bin, :ack]
 
 task :brew do
   if mac? and missing? 'brew'
-    puts "Installing brew..."
-    `/usr/bin/ruby -e "$(/usr/bin/curl -fksSL https://raw.github.com/mxcl/homebrew/master/Library/Contributions/install_homebrew.rb)"`
-    puts "Done."
+    ok? "installing brew",
+        `$0 -e "$(/usr/bin/curl -fksSL raw.github.com/mxcl/homebrew/go)"`
   end
 end
 
 task :git => :brew do
-  pkginstall "git-core", "git" unless has?('git')
+  pkginstall "git-core", "git" unless has? 'git'
   dotfiles 'git', 'gitconfig' => '.gitconfig',
                   'gitignore' => '.gitignore'
 end
 
+directory "#{HOME}/.sh"
 task :bash => :git do
   pkginstall 'bash-completion'
-  dotfiles 'bash',  "bashrc.#{UNAME}" => '.bashrc',
-                    "bash_aliases"    => '.bash_aliases',
-                    "bash_defs"       => '.bash_defs',
-                    "profile"         => '.profile'
+  dotfiles 'bash',  "bashrc" => '.bashrc'
+  dotfiles 'bash',  "profile" => '.profile' if mac?
 end
 
 task :ack => :brew do
@@ -112,14 +133,12 @@ task :bin => "#{HOME}/bin" do
 end
 
 task :hg do
-  `(cd #{DOTFILES}/hg;
-    echo '#{genheader}' | cat - hgrc hgrc.#{UNAME} > hgrc.local)`
+  hg = "#{DOTFILES}/hg"
+  `(cd "#{hg}"; echo '#{genheader}' | cat - hgrc hgrc.#{PLATFORM} >hgrc.local)`
 
   dotfiles 'hg', "hgrc.local" => '.hgrc'
 
-  hgext = "#{DOTFILES}/hg/ext"
-
-  mkdir_p hgext
+  hgext = (mkdir_p "#{hg}/ext").first
 
   hgclone 'sjl/hg-prompt' => "#{hgext}/prompt"
   hgclone 'pk11/mercurial-extensions-localbranch' => "#{hgext}/localbranch"
@@ -131,11 +150,8 @@ task :ruby => :git do
                     'pryrc'     => '.pryrc',
                     'bundle'    => '.bundle'
 
-  if missing? 'rbenv' or /^ruby 1.9/ !~ `ruby -v`
-    puts "Installing ruby with rbenv..."
-    r = `#{DOTFILES}/ruby/setup.sh`
-    puts r unless $? == 0
-  end
+  puts "Installing ruby with rbenv..."
+  system "#{DOTFILES}/ruby/install-ruby.sh"
 end
 
 task :screen do
@@ -147,7 +163,9 @@ task :vim => [:hg, :ruby] do
                   'vimhome' => '.vim'
 
   unless /\+ruby/ =~ `vim --version`
-    pkginstall "libncurses5-dev libxml2-dev libxslt1-dev ruby1.8-dev" if linux?
+    %w(libncurses5-dev libxml2-dev libxslt1-dev ruby1.8-dev).map |pkg| do
+      pkginstall pkg
+    end if linux?
     puts "Compiling a vim that doesn't suck..."
     r = `#{DOTFILES}/vim/compile-vim.sh`
     puts r unless $? == 0
@@ -157,5 +175,3 @@ task :vim => [:hg, :ruby] do
   system "cd #{HOME}/.vim/bundle/command-t && bundle install && rake make"
   system "source #{HOME}/.bashrc"
 end
-
-
