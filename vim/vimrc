@@ -1,4 +1,6 @@
-" :: Settings ::
+" vim: fdm=marker:fdl=0:fen
+
+" :: Settings :: {{{
 set nocompatible
 set backspace=indent,eol,start
 set writebackup         " keep a backup file
@@ -11,19 +13,18 @@ set smartcase           " but not when searching with some caps
 set scrolloff=3         " keep n lines ahead or behind always showing
 set wildmode=longest,list " tab autocomplete like bash
 set wildignore=*.pyc,*.o,.git,.hg,.svn " ignore these files in wildcard
+set nofoldenable
 set foldmethod=marker   " folding code manually (no text inserted)
 set shortmess+=I        " skip splash screen on empty files
 set expandtab           " expand tabs into spaces
 set tabstop=8           " How many spaces does a tab show up as
 set softtabstop=2
 set shiftwidth=2
-set textwidth=80        " text width is 80
-set formatoptions-=t    " but don't automatically word wrap me
-set virtualedit=all     " can move cursor even where there's no characters
+set textwidth=79        " text width below 80
+set formatoptions=croql " but don't automatically word wrap
+set virtualedit=onemore,block " can move one past $, anywhere in visual block
 set hidden              " buffers can be hidden while modified
-set noerrorbells        " error bells are annoying
-set visualbell          " error bells are annoying
-set t_vb=               " error bells are annoying
+set noerrorbells visualbell t_vb= " error bells are annoying
 set list                " show control characters, line endings etc.
 silent! set listchars=tab:→\ ,trail:␣,extends:…,precedes:…,nbsp:·,eol:¬
 silent! set showbreak=↪
@@ -31,36 +32,37 @@ set clipboard+=unnamed  " make the unnamed register equal os clipboard
 set mouse=a             " mainly just so I can resize split windows easier
 set splitright splitbelow " split more intuitively
 set hlsearch
-set cursorline
-set cursorcolumn
-"set laststatus=2 " for later if I want a fancy status line
+set cursorline cursorcolumn
 silent! set colorcolumn=80 " so I know 80
+set laststatus=2
 set viminfo='20,<50,s10,h,% " remember marks, searches, registers, buffer list
-runtime macros/matchit.vim " % matches more than just brackets:
 set completeopt=menuone,longest,preview
-if version >= 703
-  set rnu
-else
-  set nu
-endif
+if version >= 703 | set rnu | else | set nu | endif
 
-
-" :: Keymappings and commands ::
-
-" better ESC
-" inoremap kj <esc>
-
-" easier ex mode
-nnoremap ; :
-vnoremap ; :
-cnoremap kj <C-c>
-
-" allow usual ;
-nnoremap <leader>; ;
+" }}}
+" :: Keymappings and commands ::"{{{
 
 " Better mapleader
 let mapleader=","
 let g:mapleader=","
+
+" easier ex mode
+noremap ; :
+cnoremap kj <C-c>
+
+" free up =
+noremap g= =
+
+" add current location to jump list
+nnoremap K m`
+
+" navigate changelist with - and =
+noremap - g;
+noremap = g,
+
+" navigate jumplist with _ and +
+noremap _ <C-o>
+noremap + <C-i>
 
 " use Q to show command history
 nmap Q q:
@@ -72,8 +74,12 @@ nnoremap <silent> <leader>/ :nohl<cr>
 noremap Y y$
 
 " Make up and down keys useful for wrapped lines.
-map <up> gk
-map <down> gj
+noremap <up> <c-u>
+noremap <down> <c-d>
+noremap <left> ^
+noremap <right> $
+nnoremap <space>h ^
+nnoremap <space>l $l
 
 " easier window movement
 nnoremap <c-h> <c-w>h
@@ -104,26 +110,25 @@ nnoremap <cr> mOO<esc>`O
 " pressing shift-return in normal mode opens line below
 nnoremap <s-cr> mOo<esc>`O
 
-" swap ` with ' because ' is closer and ` is useless
-nnoremap ' `
-nnoremap ` '
+" swap ` for ' because ' is closer and ` is more useful.
+noremap ' `
 
 " scroll viewport faster
 nnoremap <c-e> 5<c-e>
 nnoremap <c-y> 5<c-y>
 
 " keep search pattern at centre of screen
-nnoremap n nzz
-nnoremap N Nzz
+noremap n nzz
+noremap N Nzz
 
 " toggle showing control characters
 nnoremap <silent> <leader>s :set list!<cr>
 
 " easy underlining/overlining
-nnoremap <leader>== yyPv$r=jyypv$r=
-nnoremap <leader>** yyPv$r*jyypv$r*
-nnoremap <leader>=  yypv$r=
-nnoremap <leader>-  yypv$r-
+nnoremap <leader>u== yyPv$r=xjyypv$r=x
+nnoremap <leader>u** yyPv$r*XJyypv$r*x
+nnoremap <leader>u=  yypv$r=x
+nnoremap <leader>u-  yypv$r-x
 
 " paste with blackhole register
 nnoremap <silent> <leader>p "_p
@@ -161,8 +166,8 @@ nnoremap <silent> <leader>n :call NumberToggle()<cr>
 " easier switching buffers, opening files
 nnoremap <silent> H :bp<cr>
 nnoremap <silent> L :bn<cr>
-nnoremap <silent> <leader>d :bd<cr>
-nnoremap <silent> <tab> <c-^>
+nnoremap <silent> <backspace> :bd<cr>
+nnoremap <silent> ` <c-^>
 
 " Switch tabbing style
 nnoremap <leader>2 <esc>:set expandtab tabstop=2 softtabstop=2 shiftwidth=2<cr>
@@ -196,13 +201,13 @@ nnoremap <leader>Z <esc>:set foldlevel=-10000<cr>
 
 " dragging lines
 nnoremap <silent> ∆ :m+<cr>
-nnoremap <silent> ˚ :m-<cr>
+nnoremap <silent> ˚ :m-2<cr>
 vnoremap ∆ :m'>+<CR>gv
 vnoremap ˚ :m-2<CR>gv
 
-" good regexes
-nnoremap / /\v
-vnoremap / /\v
+" good regexes in search
+nnoremap <silent> / :nohl<cr>/\v
+vnoremap <silent> / :nohl<cr>/\v
 
  " Keep search matches in the middle of the window.
 nnoremap n nzzzv
@@ -217,8 +222,8 @@ vnoremap ar a[
 " select last put text
 nnoremap <expr> gl '`[' . strpart(getregtype(), 0, 1) . '`]'
 
-
-" :: Plugins ::
+"}}}
+" :: Plugins ::"{{{
 
 " Vundle
 set rtp+=~/.vim/bundle/vundle/
@@ -227,8 +232,11 @@ call vundle#rc()
 " Let Vundle manage Vundle!
 Bundle 'gmarik/vundle'
 
-Bundle 'matchit.zip'
 Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-repeat'
+Bundle 'tpope/vim-abolish'
+Bundle 'tpope/vim-commentary'
+  " autocmd FileType whatever set commentstring=#\ %s
 Bundle 'vim-scripts/TailMinusF'
 Bundle 'Lokaltog/vim-easymotion'
   let g:EasyMotion_leader_key = '<space>'
@@ -236,8 +244,8 @@ Bundle 'nathanaelkane/vim-indent-guides'
   let g:indent_guides_auto_colors = 0
   let g:indent_guides_enable_on_vim_startup = 1
 Bundle 'vimoutliner/vimoutliner'
-Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
+  nnoremap <leader>t :NERDTreeToggle<cr>
 Bundle 'ervandew/supertab'
   let g:SuperTabDefaultCompletionType = "context"
   let g:SuperTabContextDefaultCompletionType = "<c-n>"
@@ -257,8 +265,8 @@ Bundle 'git://git.wincent.com/command-t.git'
   let g:CommandTMatchWindowReverse = 1
   let g:CommandTCancelMap = ['<C-c>', '<esc>']
 Bundle 'sjbach/lusty'
-  nnoremap <silent> <s-tab> :LustyJuggler<cr>
-  nnoremap <silent> <leader><tab> :LustyBufferExplorer<cr>
+  nnoremap <silent> <tab> :LustyJuggler<cr>
+  nnoremap <silent> <s-tab> :LustyBufferExplorer<cr>
   nnoremap <silent> <leader>o :LustyFilesystemExplorer<cr>
   nnoremap <silent> <leader>O :LustyFilesystemExplorerFromHere<cr>
   let g:LustyJugglerSuppressRubyWarning = 1
@@ -281,9 +289,13 @@ Bundle 'chrisbra/NrrwRgn'
 Bundle 'vim-scripts/utl.vim'
 Bundle 'hsitz/VimOrganizer'
 Bundle 'tomasr/molokai'
+Bundle 'trapd00r/vim-syntax-vidir-ls'
+Bundle 'kchmck/vim-coffee-script'
+Bundle 'vim-scripts/matchit.zip'
+Bundle 'vim-scripts/ruby-matchit'
 
-
-" :: Syntax and colours ::
+"}}}
+" :: Syntax and colours ::"{{{
 
 if &term =~ "256color"
   set t_Co=256
@@ -293,10 +305,12 @@ if &t_Co > 2
   syntax on
   colorscheme molokai
   hi Normal ctermbg=none
+  hi CursorLine guibg=#232526
+  hi CursorColumn guibg=#232526
 endif
 
-
-" :: Autocommands ::
+"}}}
+" :: Autocommands ::"{{{
 
 " Enable file type detection.
 filetype plugin indent on
@@ -333,6 +347,8 @@ augroup vimrcEx
   " auto-detect git commit message files for syntax highlighting
   au BufNewFile,BufRead COMMIT_EDITMSG set filetype=gitcommit
 
+  au BufNewFile,BufRead * if &syntax == '' | set foldmethod=indent | endif
+
   " don't expand tabs to spaces in makefiles
   au FileType make setlocal noexpandtab
 
@@ -359,6 +375,7 @@ augroup vimrcEx
   au BufLeave * let b:winview = winsaveview()
   au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 
+  " conceal to prettify
   au VimEnter * syntax keyword Statement lambda conceal cchar=λ
   au VimEnter * syntax match Operator "->" conceal cchar=→
   au VimEnter * syntax match Operator "=>" conceal cchar=➧
@@ -370,12 +387,7 @@ augroup END
 
 augroup lines
   au!
-  au WinLeave * set nocursorline
-  au WinLeave * set nocursorcolumn
-  au InsertEnter * set nocursorline
-  au InsertEnter * set nocursorcolumn
-  au WinEnter * set cursorline
-  au WinEnter * set cursorcolumn
-  au InsertLeave * set cursorline
-  au InsertLeave * set cursorcolumn
+  au WinLeave,InsertEnter * set nocursorline | set nocursorcolumn
+  au WinEnter,InsertLeave * set cursorline | set cursorcolumn
 augroup END
+"}}}
