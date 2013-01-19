@@ -1,0 +1,85 @@
+##
+## vaz's .bashrc
+##
+###############################################################################
+
+[ -z "$PS1" ] && return
+
+
+###############################################################################
+## includes
+
+. ~/.shlib/aliases.sh
+. ~/.shlib/vcs.sh
+. ~/.shlib/string.sh
+. ~/.shlib/functions.sh
+
+for f in /usr/local/etc/bash_completion /etc/bash_completion; do
+  [ -f "$f" ] && { . "$f"; break; }
+done
+[ -f ~/.bashrc.local ]      && . ~/.bashrc.local        # local bashrc
+[ -f ~/bin/z.sh ]           && . ~/bin/z.sh
+
+
+###############################################################################
+## shell options
+
+umask 002
+
+set -o vi                       # vi mode!
+set -o notify                   # notify immediately when jobs complete
+shopt -s cdspell                # fix typo'd args to cd
+shopt -s checkwinsize           # check window size after each cmd
+shopt -s cmdhist                # history saves multi-line cmd as one entry
+shopt -s extglob                # extended pathname expansion
+shopt -s lithist                # multi-line hist preserves newlines
+export HISTCONTROL=ignoreboth   # no dups in history
+
+# make less show info for archives, pics, ...
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+darwin && export LSCOLORS='ExfxcxdxCxegedabagacad'
+
+###############################################################################
+## prompt
+
+export PROMPT_COMMAND='echo -ne "\n$([ $? = 0 ] && echo `@g` || echo `@r`)• "'
+export PS1="`@M`\u@`@m`\h`@x` `@g`\w`@x`"'$(__git_prompt)$(__hg_prompt)
+  $(__prompt_char)'
+
+
+###############################################################################
+## PATH
+
+# private bin, rbenv and /usr/local before /usr
+PATH=$HOME/bin:$HOME/.rbenv/bin:/usr/local/bin:/usr/local/sbin:$PATH
+
+export PATH
+
+
+###############################################################################
+## automatic screen
+
+if [ -n "$SSH_CLIENT" -a `expr "$TERM" : screen` -eq 0 ]; then
+  screen -S vaz -rd || screen -S vaz
+fi
+
+
+###############################################################################
+## program-specific setup
+
+which -s rbenv && eval "$(rbenv init -)"
+
+export EDITOR='vim'
+
+darwin && {
+  # emacs
+  emacs_exec=/Applications/Emacs.app/Contents/MacOS/Emacs
+  which -s $emacs_exec && alias emacs="$emacs_exec -nw"
+
+  export VISUAL='mvim -f'
+  export LANG='en_CA.UTF-8'
+
+  export VIDIR_EDITOR='mvim -v'
+  export VIDIR_EDITOR_ARGS='-c :set nolist | :set ft=vidir-ls'
+}

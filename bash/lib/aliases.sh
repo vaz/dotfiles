@@ -21,8 +21,22 @@ alias sr='screen -r'
 # working dir
 alias cpwd="pwd | pbcopy"
 
-# stuff
-alias diditwork='test $? -eq 0 && echo yeah || echo nope'
+# history search
+alias hgrep='history|grep '
+alias .p='. "${HOME}/.bashrc"'
+alias .a='. "${HOME}/.bash_aliases"'
+alias .f='. "${HOME}/.bash_defs"'
+
+function e { "${EDITOR}" "$@"; }
+# idea: this can be expanded into a dotfile-editing wrapper tool
+# with fuzzy-matching
+# also: my dotfiles setup stuff could also be generalized.
+alias ev='e "${HOME}/.vimrc"'
+alias ep='e "${HOME}/.bashrc"'
+alias ea='e "${HOME}/.bash_aliases"'
+alias ef='e "${HOME}/.bash_defs"'
+alias eg='e "${HOME}/.gitconfig"'
+alias eh='e "${HOME}/.hgrc"'
 
 # mud habits
 alias grr='echo Grrrrr.'
@@ -33,9 +47,4 @@ alias sigh='echo You sigh.'
 alias hmm='echo Hmmm.'
 alias lol='echo Hahaha.'
 alias haha='echo Hahaha.'
-
-alias ng='sudo /etc/init.d/nginx'
-
-# work stuff
-alias wdo='sudo -u www-data'
-
+alias no='echo NO.'
