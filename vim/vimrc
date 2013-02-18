@@ -1,79 +1,98 @@
-" vim: fdm=marker:fdl=0:fen
+" vim: ft=vim:fdm=marker:fen:fdl=0:
+" ䷀ ䷁ ䷂ ䷃ ䷄ ䷅ ䷆ ䷇ ䷈ ䷉ ䷊ ䷋ ䷌ ䷍ ䷎ ䷏ ䷐ ䷑ ䷒ ䷓ ䷔ ䷕ ䷖ ䷗ ䷘ ䷙ ䷚ ䷛ ䷜ ䷝ ䷞ ䷟ •
+" •
+" ䷣   ——Vaz•縷々
+" •
+" ䷠ ䷡ ䷢ ䷣ ䷤ ䷥ ䷦ ䷧ ䷨ ䷩ ䷪ ䷫ ䷬ ䷭ ䷮ ䷯ ䷰ ䷱ ䷲ ䷳ ䷴ ䷵ ䷶ ䷷ ䷸ ䷹ ䷺ ䷻ ䷼ ䷽ ䷾ ䷿ •
+"
+" TODO:{{{1
+" - fix completion
+" - fix auto-indent/auto-bullet list
+" - make K do something useful (look up something...)
+" - spell check when it makes sense
 
-" :: Settings :: {{{
-set nocompatible
-set backspace=indent,eol,start
-set writebackup         " keep a backup file
-set history=500
-set ruler
-set showcmd             " display incomplete commands
+" :: Settings {{{1
+" :::: general {{{2
+set nocompatible                  " thanks for everything, vi
+set dir=~/.vim/swap,.             " keep swap files in home dir
+set nobackup                      " don't keep backup after writing
+set writebackup bdir=~/.vim/tmp/  " use backup when writing a file
+set history=500                   " remember 500 ex commands
+set clipboard+=unnamed            " unnamed register = os clipboard
+set viminfo='20,h                 " remember marks in 'files, not hlsearch
+set viminfo+=<50,s10              " remember registers: <Lines sSize-in-Kb
+set viminfo+=%                    " remember buflist if invoked w/o args
+set cryptmethod=blowfish          " use actually secure crypto with :X
+
+" :::: control {{{2
+set mouse=a                       " enable mouse (scrolling is nice)
+set backspace=indent,eol,start    " <bs> over stuff like a normal editor
+set virtualedit=onemore,block     " move one past eol, anywhere in ^V
+
+" :::: formatting {{{2
+set expandtab                     " expand tabs into spaces
+set tabstop=8                     " hard tab indent size
+set softtabstop=2                 " virtual indent size for tab and backspace and some other stuff
+set shiftwidth=2
+set textwidth=78        " text width below 80
+set formatoptions=croql " but don't automatically word wrap
+
+" :::: search {{{2
 set incsearch           " do incremental searching
 set ignorecase          " ignore case when searching in all lower-case
 set smartcase           " but not when searching with some caps
-set scrolloff=3         " keep n lines ahead or behind always showing
-set wildmode=longest,list " tab autocomplete like bash
-set wildignore=*.pyc,*.o,.git,.hg,.svn " ignore these files in wildcard
-set nofoldenable
-set foldmethod=marker   " folding code manually (no text inserted)
+set nohlsearch          " don't highlight search results by default
+
+" :::: interface {{{2
+silent! set beval bdlay=300     " enable popup balloons
+set showcmd             " display incomplete normal mode commands
 set shortmess+=I        " skip splash screen on empty files
-set expandtab           " expand tabs into spaces
-set tabstop=8           " How many spaces does a tab show up as
-set softtabstop=2
-set shiftwidth=2
-set textwidth=79        " text width below 80
-set formatoptions=croql " but don't automatically word wrap
-set virtualedit=onemore,block " can move one past $, anywhere in visual block
+set ruler
+set scrolloff=3         " keep n lines ahead or behind always showing
 set hidden              " buffers can be hidden while modified
-set noerrorbells visualbell t_vb= " error bells are annoying
+set splitright splitbelow " split more intuitively
+set diffopt+=vertical   " always vertical split when :diffsplit
+set cursorline cursorcolumn
+silent! set colorcolumn=80 " so I know 80
+set laststatus=2        " always show status lines
 set list                " show control characters, line endings etc.
 silent! set listchars=tab:→\ ,trail:␣,extends:…,precedes:…,nbsp:·,eol:¬
 silent! set showbreak=↪
-set clipboard+=unnamed  " make the unnamed register equal os clipboard
-set mouse=a             " mainly just so I can resize split windows easier
-set splitright splitbelow " split more intuitively
-set hlsearch
-set cursorline cursorcolumn
-silent! set colorcolumn=80 " so I know 80
-set laststatus=2
-set viminfo='20,<50,s10,h,% " remember marks, searches, registers, buffer list
-set completeopt=menuone,longest,preview
 if version >= 703 | set rnu | else | set nu | endif
+set noerrorbells visualbell t_vb= " error bells are annoying
+silent! set conceallevel=2 " conceal shows replacements
+silent! set concealcursor=nc " and always conceal in normal mode and search
+set completeopt=menuone,longest,preview
+set foldenable foldlevel=1000 foldmethod=marker
+set display=lastline  " show as much as possible from last (long) line
+
+set wildmode=longest,list " tab autocomplete like bash
+set wildignore=*.pyc,*.o,.git,.hg,.svn,.cvs " ignore these files in wildcard
+
+
+" :: Keymappings and commands ::{{{1
+
+" :::: general {{{2
+
+" set mapleader
+let mapleader="\\"
+let g:mapleader="\\"
 
 " }}}
-" :: Keymappings and commands ::"{{{
+" :::: movement {{{2
 
-" Better mapleader
-let mapleader=","
-let g:mapleader=","
+" swap ` for ' because ' is closer and ` is more useful.
+noremap ' `
 
-" easier ex mode
-noremap ; :
-cnoremap kj <C-c>
-
-" free up =
+" navigate changelist with _ and +, jumplist with - and =
+" map g= to = to free up =
 noremap g= =
+noremap _ g;
+noremap + g,
+noremap - <c-o>
+noremap = <c-i>
 
-" add current location to jump list
-nnoremap K m`
-
-" navigate changelist with - and =
-noremap - g;
-noremap = g,
-
-" navigate jumplist with _ and +
-noremap _ <C-o>
-noremap + <C-i>
-
-" use Q to show command history
-nmap Q q:
-
-" clear highlighting from last search
-nnoremap <silent> <leader>/ :nohl<cr>
-
-" Make Y work like other capitals
-noremap Y y$
-
-" Make up and down keys useful for wrapped lines.
+" make up and down keys useful
 noremap <up> <c-u>
 noremap <down> <c-d>
 noremap <left> ^
@@ -81,11 +100,27 @@ noremap <right> $
 nnoremap <space>h ^
 nnoremap <space>l $l
 
-" easier window movement
-nnoremap <c-h> <c-w>h
-nnoremap <c-j> <c-w>j
-nnoremap <c-k> <c-w>k
-nnoremap <c-l> <c-w>l
+" make window movement a lot easier
+noremap q <c-w>
+noremap Q <c-w><c-w>
+" don't like accidently quitting windows with qq
+noremap qq <c-w><c-w>
+" use c-q to record
+noremap <c-q> q
+
+" }}}
+" :::: diff {{{2
+
+nnoremap <leader>du :diffupdate<cr>
+nnoremap <leader>dt :diffthis<cr>
+nnoremap <leader>do :diffoff<cr>
+nnoremap <leader>do :diffoff!<cr>
+nnoremap <leader>ds :vert diffsplit<cr>
+
+" }}}
+
+" make Y work like D, C, ...
+noremap Y y$
 
 nnoremap <silent> <leader>w :call MaximizeToggle ()<CR>
 
@@ -108,10 +143,8 @@ endfunction
 " pressing return in normal mode opens a line above
 nnoremap <cr> mOO<esc>`O
 " pressing shift-return in normal mode opens line below
+" this only works in gui vim
 nnoremap <s-cr> mOo<esc>`O
-
-" swap ` for ' because ' is closer and ` is more useful.
-noremap ' `
 
 " scroll viewport faster
 nnoremap <c-e> 5<c-e>
@@ -169,7 +202,7 @@ nnoremap <silent> L :bn<cr>
 nnoremap <silent> <backspace> :bd<cr>
 nnoremap <silent> ` <c-^>
 
-" Switch tabbing style
+" switch tabbing style
 nnoremap <leader>2 <esc>:set expandtab tabstop=2 softtabstop=2 shiftwidth=2<cr>
 nnoremap <leader>4 <esc>:set expandtab tabstop=4 softtabstop=4 shiftwidth=4<cr>
 nnoremap <leader>8 <esc>:set expandtab tabstop=8 softtabstop=8 shiftwidth=8<cr>
@@ -187,43 +220,67 @@ cmap w!! w !sudo tee % >/dev/null
 nnoremap <leader>ev <esc>:e ~/.vimrc<cr>
 nnoremap <leader>eg <esc>:e ~/.gvimrc<cr>
 
+" todo: there's an autocmd you can use triggered on colorscheme load
+" maybe to be more specific about location
 fun! EditColourFile()
   redir => l:cs | silent colorscheme | redir END
-  let l:cs = "~/.vim/colors/".substitute(l:cs, '^\n', '', '').".vim"
-  exec "e" l:cs
+  exec "e" "~/.vim/colors/".substitute(l:cs, '^\n', '', '').".vim"
 endf
 
 nnoremap <leader>ec <esc>:call EditColourFile()<cr>
 
-" Folding
-nnoremap <leader>z <esc>:set foldlevel=10000<cr>
-nnoremap <leader>Z <esc>:set foldlevel=-10000<cr>
+" folding
+nnoremap <leader>z :echo "use builtin zR to open all folds"<cr>
+nnoremap <leader>Z :echo "use builtin zM to close all folds"<cr>
 
 " dragging lines
 nnoremap <silent> ∆ :m+<cr>
 nnoremap <silent> ˚ :m-2<cr>
-vnoremap ∆ :m'>+<CR>gv
-vnoremap ˚ :m-2<CR>gv
+vnoremap ∆ :m'>+<cr>gv
+vnoremap ˚ :m-2<cr>gv
 
-" good regexes in search
-nnoremap <silent> / :nohl<cr>/\v
-vnoremap <silent> / :nohl<cr>/\v
+" good regexes in search, clear old highlighting
+noremap <silent> / :set hls<cr>/\v
+onoremap <silent> / /\v
 
- " Keep search matches in the middle of the window.
-nnoremap n nzzzv
-nnoremap N Nzzzv
+" turn on search highlighting for n/n and */#
+noremap <silent> n nzv:set hls<cr>
+noremap <silent> N Nzv:set hls<cr>
+ounmap n
+ounmap N
+noremap <silent> * *zv:set hls<cr>
+noremap <silent> # #zv:set hls<cr>
+ounmap *
+ounmap #
 
-" inside/around []
+" inside/around [] - why did I pick r? bRackets?
 onoremap ir i[
 onoremap ar a[
 vnoremap ir i[
 vnoremap ar a[
 
+" insert timestamps
+iab <expr> ~~t strftime("%H:%M:%S")
+iab <expr> ~~d strftime("%y年%m月%d日")
+iab <expr> ~~D strftime("%y/%m/%d/")
+iab <expr> ~~s strftime("%y年%m月%d日 %H:%M:%S")
+iab <expr> ~~S strftime("%y/%m/%d/ %H:%M:%S")
+iab <expr> ~~l strftime("%a %d %b %Y")
+iab <expr> ~~z strftime("%a %d %b %Y %H:%M:%S")
+iab <expr> ~~L strftime("%A %d %B %Y")
+iab <expr> ~~Z strftime("%A %d %B %Y %H:%M:%S")
+
+nmap ,it i~~t 
+nmap ,id i~~d
+nmap ,is i~~s
+
 " select last put text
 nnoremap <expr> gl '`[' . strpart(getregtype(), 0, 1) . '`]'
 
-"}}}
-" :: Plugins ::"{{{
+" ^w for window stuff is so annoying
+" wow this is the best thing i ever did
+
+" :: Plugins ::{{{1
 
 " Vundle
 set rtp+=~/.vim/bundle/vundle/
@@ -254,6 +311,9 @@ Bundle 'ervandew/supertab'
   let g:SuperTabDefaultCompletionTypeDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>", '&keywordfunc:<c-n>']
   let g:SuperTabRetainCompletionDuration = 'completion'
   let g:SuperTabLongestEnhanced = 1
+  augroup supertab
+    au FileType css let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
+  augroup END
 Bundle 'altercation/vim-colors-solarized'
   let g:solarized_termcolors=256
   let g:solarized_hitrail=1    "default value is 0
@@ -293,9 +353,19 @@ Bundle 'trapd00r/vim-syntax-vidir-ls'
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'vim-scripts/matchit.zip'
 Bundle 'vim-scripts/ruby-matchit'
+Bundle 'jamessan/vim-gnupg'
+  let g:GPGFilenamePattern = '*\.\(gpg\|asc\|pgp\).txt,*.\(gpg\|asc\|pgp\)'
+Bundle 'jcf/vim-latex'
+  augroup latexsuite
+    au!
+    au FileType tex set sw=2 iskeyword+=:
+  augroup END
+  set grepprg=grep\ -nH\ $*
+  let g:tex_flavor='latex'
+Bundle 'matthias-guenther/hammer.vim'
+" ::bundle tail::
 
-"}}}
-" :: Syntax and colours ::"{{{
+" :: Syntax and colours ::"{{{1
 
 if &term =~ "256color"
   set t_Co=256
@@ -307,24 +377,25 @@ if &t_Co > 2
   hi Normal ctermbg=none
   hi CursorLine guibg=#232526
   hi CursorColumn guibg=#232526
+  hi Folded guifg=#bb88bb guibg=#000000
+  hi Search ctermfg=253 ctermbg=233
+  hi DiffText cterm=bold ctermbg=17 guibg=#4C2755 gui=bold,italic
+  hi DiffChange ctermfg=181 ctermbg=18 guifg=#89807D guibg=#2C1735
 endif
 
-"}}}
-" :: Autocommands ::"{{{
+" :: Autocommands ::{{{1
 
 " Enable file type detection.
 filetype plugin indent on
 
-" make sure grep shows filename even if searching for single file
-" this is for LaTeX-Suite.
-set grepprg=grep\ -nH\ $*
-
 " Put these in an autocmd group, so that we can delete them easily.
-augroup vimrcEx
+augroup vimrc
   au!
 
-  " For all text files set 'textwidth' to 78 characters.
-  au FileType text setlocal textwidth=78
+  " text formatting:
+  " set nolist showbreak= linebreak
+
+  au FileType text set nolist showbreak= linebreak commentstring=%s
 
   " absolute line numbers in insert mode
   au InsertEnter * :set nu
@@ -332,6 +403,9 @@ augroup vimrcEx
 
   " Leave insert mode when idling
   " au CursorHoldI * stopinsert   " nope this is pretty annoying.
+
+  " Turn off search highlighting when moving
+  au CursorMoved,InsertEnter * set nohls
 
   " when editing a file, always jump to the last known cursor position.
   " Don't do it when the position is invalid or when inside an event handler
@@ -357,12 +431,11 @@ augroup vimrcEx
   au FileType python nnoremap <leader>P <esc>:call Pep8()<cr> |
                    \ nnoremap <leader>r <esc>:!python %<cr>
 
-  au FileType css let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
 
   au FileType php set expandtab tabstop=8 softtabstop=2 shiftwidth=2
 
   " reload vimrc when we save it
-  au BufWritePost .vimrc so ~/.vimrc
+  au BufWritePost .vimrc so ~/.vimrc | normal! zv
 
   " A mapping to source vim files
   " And a mapping to start automatically sourcing the current vim file
@@ -382,7 +455,11 @@ augroup vimrcEx
   au FileType haskell,lhaskell syntax match Operator "<-" conceal cchar=←
   au FileType haskell,lhaskell syntax match Operator "-<" conceal cchar=⤛
   au VimEnter * hi! link Conceal Statement
-  au VimEnter * set conceallevel=2
+
+  au FileType help nnoremap <silent> <cr> <c-]>
+
+  " always show where we are, foldwise
+  au BufReadPost * normal! zv
 augroup END
 
 augroup lines
@@ -390,4 +467,3 @@ augroup lines
   au WinLeave,InsertEnter * set nocursorline | set nocursorcolumn
   au WinEnter,InsertLeave * set cursorline | set cursorcolumn
 augroup END
-"}}}
