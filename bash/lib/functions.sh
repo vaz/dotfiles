@@ -2,8 +2,15 @@
 darwin () { [ "`uname`" = "Darwin" ]; }
 linux () {  [ "`uname`" = "Linux"  ]; }
 
+not () { "$@"; return $(( ! $? )); }
+
+truthy? () { none? '[ "$1" = "'"$(downcase "$1")"'" ]' false no off f n 0; }
+
+is? () { not empty? "$1" && { (( "$1" )) || truthy? "$1"; }; }
+
 # warn and die
 warn () { echo "$@" >&2; }
+debug () { is? "$DEBUG" && warn "$@"; }
 die () { warn "$@" && exit; }
 
 # print last exit code
@@ -30,6 +37,38 @@ proc () {
   local __f
   eval '__f(){' "$1" '; }'
   __f "${@:2}"
+}
+
+each () {
+  local cmd="$1"; shift
+  for arg; do
+    "$1" "$arg"
+  done
+}
+
+all? () {
+  local f="$1"; shift
+  for arg; do proc "$f" "$arg" || return 1; done
+  return 0
+}
+
+# 
+not-all? () {
+  local f="$1"; shift
+  for arg; do proc "$f" "$arg" || return 0; done
+  return 1
+}
+
+any? () {
+  local f="$1"; shift
+  for arg; do proc "$f" "$arg" && return 0; done
+  return 1
+}
+
+none? () {
+  local f="$1"; shift
+  for arg; do proc "$f" "$arg" && return 1; done
+  return 0;
 }
 
 # returns numerical max of all args
@@ -64,17 +103,11 @@ slice () {
   (( $m < 0 )) && m=$(($# + m + 1))
 
   # limit range
-  (( $n < 1 )) && n=1
-  (( $m > $# )) && m=$#
+  n=$(max $n 1)
+  m=$(min $m $#)
 
   local d=$((m - n + 1))
   (( $d > 0 )) && echo "${@: $n: $d}"
-}
-
-function listcolours {
-  for ((i=0; i<=7; i++)); do
-    echo -e "\033[0;3${i}m0;3$i \033[1;3${i}m1;3$i \033[0;4${i}m0;4$i \033[0m"
-  done
 }
 
 forfiles () {
@@ -95,11 +128,22 @@ __cd () {
   silently pushd "$@"
   otherwise try _z "$@"
   otherwise builtin cd "$@"
+  _z --add $(pwd -P 2>/dev/null) 2>/dev/null
 }
 alias cd='__cd '
 
 # activate $1, a virtualenv (python)
 activate () { . "$1/bin/activate"; }
+
+
+vundle-upgrade () { vim +BundleInstall! +BundleClean +q +q /dev/zero; }
+
+vundle-get () {
+  sed -i.bak -Ee 's#^(" ::bundle tail::)#Bundle '"'$1'"'\'$'\n''\1#' ~/.vimrc
+  vundle-upgrade
+}
+
+
 
 # start mongod in the context of virtualenv $1 (python)
 mongod-env () {

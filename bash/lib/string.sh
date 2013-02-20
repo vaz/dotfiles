@@ -11,12 +11,19 @@ esc () { echo -ne '\033'"$@"; }
 # length of args treated as a single token
 len () { echo -n $(expr "$*" : '.*'); }
 
-# index of substring $1 in target $2
+empty? () { [ "$1" = "" ]; }
+
+# index of substring $1 in ${@:1} (rest)
 indexof () {
-  local target=' '"$2"
-  local pos=$(len "${target%$1*}")
-  echo -n $((pos % ${#target} - 1))
+  local needle="$1"; shift
+  local haystack=' '"$*"
+  local pos=$(len "${haystack%$needle*}")
+  local r=$((pos % ${#haystack} - 1))
+  (( r >= 0 )) && echo $r
 }
+
+# is string $1 contained in ${@:1} (rest) ?
+includes? () { quietly indexof "$@"; }
 
 # }}}
 # :: colours :: {{{
@@ -43,20 +50,29 @@ _colour () {
 
 @ () {
   [[ $1 = [suUx] ]] && { eval "@$1 $@"; return; }
-  local codes='krgybmcwKRGYBMCW' b=0 c="${1:0:1}"
+  local codes='krgybmcwKRGYBMCW' b=0 c="${1:0:1}" bg=0
   shift
 
-  isupper $c && b=1
+  [ "$c" = "-" ] && { bg=1; c="${1:1:1}"; } || { isupper $c && b=1; }
 
+  debug $c
   # modulo to ignore case:
-  local i=$(expr $(indexof "$c" "$codes") % 8)
+  local i=$(indexof "$c" "$codes")
+  i=$(expr $i % 8)
 
+  debug $b $((i+30)) "$@"
   _colour $b $((i+30)) "$@"
 }
 
-for _c in k r g y b m c w K R G Y B M C W; do
+for _c in k r g y b m c w K R G Y B M C W -k -r -g -y -b -m -c -w; do
   eval "@$_c(){ @ $_c \"\$@\" ; }"
 done
 unset _c _C
+
+listcolours () {
+  for ((i=0; i<=7; i++)); do
+    echo -e "\033[0;3${i}m0;3$i \033[1;3${i}m1;3$i \033[0;4${i}m0;4$i \033[0m"
+  done
+}
 
 #}}}
