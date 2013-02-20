@@ -1,4 +1,5 @@
 # TODO: some good python
+# This is all fucked up.
 #
 require 'rubygems'
 require 'rake'
@@ -114,10 +115,10 @@ task :git => :brew do
                   'gitignore' => '.gitignore'
 end
 
-directory "#{HOME}/.sh"
 task :bash => :git do
   pkginstall 'bash-completion'
-  dotfiles 'bash',  "bashrc" => '.bashrc'
+  dotfiles 'bash',  "bashrc" => '.bashrc',
+                    "lib" => '.sh'
   dotfiles 'bash',  "profile" => '.profile' if mac?
 end
 

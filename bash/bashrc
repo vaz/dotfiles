@@ -9,10 +9,10 @@
 ###############################################################################
 ## includes
 
-. ~/.shlib/aliases.sh
-. ~/.shlib/vcs.sh
-. ~/.shlib/string.sh
-. ~/.shlib/functions.sh
+. ~/.sh/aliases.sh
+. ~/.sh/vcs.sh
+. ~/.sh/string.sh
+. ~/.sh/functions.sh
 
 for f in /usr/local/etc/bash_completion /etc/bash_completion; do
   [ -f "$f" ] && { . "$f"; break; }
