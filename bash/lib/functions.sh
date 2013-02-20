@@ -1,31 +1,31 @@
 # filesystem detection
-darwin(){ [ "`uname`" = "Darwin" ]; }
-linux(){  [ "`uname`" = "Linux"  ]; }
+darwin () { [ "`uname`" = "Darwin" ]; }
+linux () {  [ "`uname`" = "Linux"  ]; }
 
 # warn and die
-warn(){ echo "$@" >&2; }
-die(){ warn "$@" && exit; }
+warn () { echo "$@" >&2; }
+die () { warn "$@" && exit; }
 
 # print last exit code
 ? (){ echo $?; }
 
 # readable way to ignore output
-quietly(){ "$@" >/dev/null; }
+quietly () { "$@" >/dev/null; }
 alias q='quietly '
 
 # readable way to ignore output and error
-silently(){ "$@" >/dev/null 2>&1; }
+silently () { "$@" >/dev/null 2>&1; }
 alias qq='silently '
 
 # readable way to ignore errors
-try(){ "$@" 2>/dev/null; }
+try () { "$@" 2>/dev/null; }
 
 # otherwise allows for some more readable constructions
 otherwise () { [ $? = 0 ] || "$@"; }
 
 # eval $1 as the body of an anonymous function, and invoke it
 # passing the remaining arguments
-proc(){
+proc () {
   : ${1?"Usage: $FUNCNAME functionbody [args...]"}
   local __f
   eval '__f(){' "$1" '; }'
@@ -33,14 +33,14 @@ proc(){
 }
 
 # returns numerical max of all args
-max(){
+max () {
   local m="$1"
   for arg; do (("$arg" > "$m")) && m="$arg"; done
   echo "$m"
 }
 
 # returns numerical min of all args
-min(){
+min () {
   local m="$1"
   for arg; do (("$arg" > "$m")) && m="$arg"; done
   echo "$m"
@@ -54,7 +54,7 @@ min(){
 # ..m is equivalent to 1..m
 # n is equivalent to n..n (a single argument)
 # invalid slices will echo nothing
-slice(){
+slice () {
   local range="$1"; shift
   local n="${range%..*}"; n=${n:-0}
   local m="${range#*..}"; m=${m:-$#}
@@ -77,20 +77,20 @@ function listcolours {
   done
 }
 
-function forfiles {
+forfiles () {
   find . -iname "$1" -print0 | xargs -0 "${@:2}"
 }
 
-function /   { pcregrep --colour     $*; }
-function /i  { pcregrep --colour -i  $*; }
-function /r  { pcregrep --colour -r  $*; }
-function /ir { pcregrep --colour -ir $*; }
+/   () { pcregrep --colour     $*; }
+/i  () { pcregrep --colour -i  $*; }
+/r  () { pcregrep --colour -r  $*; }
+/ir () { pcregrep --colour -ir $*; }
 
 
 alias back='quietly popd'
 alias fd='quietly pushd'
 
-function __cd {
+__cd () {
   [ -z "$1" ] && { [ "$PWD" = "$HOME" ] || silently pushd "$HOME"; return; }
   silently pushd "$@"
   otherwise try _z "$@"
@@ -99,10 +99,10 @@ function __cd {
 alias cd='__cd '
 
 # activate $1, a virtualenv (python)
-activate(){ . "$1/bin/activate"; }
+activate () { . "$1/bin/activate"; }
 
 # start mongod in the context of virtualenv $1 (python)
-mongod-env(){
+mongod-env () {
   [[ -d "$1" && -f "$1/bin/activate" ]] && {
     mkdir -p $1/var/{data,log,run}
     mongod --fork --logappend\
@@ -115,7 +115,7 @@ mongod-env(){
 }
 
 # show gcc's assembly output for the given source file or string
-function showasm {
+showasm () {
   : ${1?"Usage: $FUNCAME [gcc-options] <file|string>"}
 
   local src="${@: -1}"

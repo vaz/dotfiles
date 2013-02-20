@@ -1,6 +1,6 @@
 
 # fastest one :)
-__hgdir(){
+__hgdir () {
   unset cd # in case there's some expensive function instead.
   (
     [ -z "$1" ] && builtin cd "$1"
@@ -17,7 +17,7 @@ __hgdir(){
 }
 
 # display branch and bookmark for hg in prompt
-__hg_prompt() {
+__hg_prompt () {
   # hg is so slow
   # I'm giving up on being able to see if it's dirty or not
   # we can grab the branch and bookmark easily without invoking hg
@@ -34,7 +34,7 @@ __hg_prompt() {
 }
 
 # display branch and status char for git in prompt
-__git_prompt(){
+__git_prompt () {
   local st="$(git status 2>/dev/null)"
   test -z "$st" && return
 
@@ -47,7 +47,7 @@ __git_prompt(){
 }
 
 
-function __prompt_char {
+__prompt_char () {
   git branch >/dev/null 2>&1 && echo '± ' && return
   __hgdir    >/dev/null 2>&1 && echo '☿ ' && return
   echo '$ '
@@ -66,8 +66,7 @@ export -f __prompt_char
 
 # u  3  9
 # s  8 30
-hgdir_cdrecursive () 
-{ 
+hgdir_cdrecursive () {
     local dir="${1:-$PWD}"
     #dir=$(cd $dir; pwd -P)
 
@@ -81,8 +80,7 @@ hgdir_cdrecursive ()
 
 # r  3  7
 # s  5 16
-hgdir_recursive () 
-{ 
+hgdir_recursive () {
     local dir="${1:-$PWD}"
     #dir=$(cd $dir; pwd -P)
 
@@ -96,8 +94,7 @@ hgdir_recursive ()
 
 # r  2 4
 # s  5 14
-hgdir_loop () 
-{ 
+hgdir_loop () {
     local dir="${1:-$PWD}"
     #dir=$(cd $dir && pwd -P)
 
@@ -111,7 +108,7 @@ hgdir_loop ()
     done
 }
 
-__old_hg_prompt(){
+__old_hg_prompt () {
   echo -e $(hg prompt "\
 {\033[0m on \033[0;35m{branch}}\
 {\033[0m at \033[0;34m{bookmark}}\

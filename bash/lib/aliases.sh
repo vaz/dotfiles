@@ -27,7 +27,7 @@ alias .p='. "${HOME}/.bashrc"'
 alias .a='. "${HOME}/.bash_aliases"'
 alias .f='. "${HOME}/.bash_defs"'
 
-function e { "${EDITOR}" "$@"; }
+e () { "${EDITOR}" "$@"; }
 # idea: this can be expanded into a dotfile-editing wrapper tool
 # with fuzzy-matching
 # also: my dotfiles setup stuff could also be generalized.
