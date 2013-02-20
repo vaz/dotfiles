@@ -1,6 +1,6 @@
 #!/bin/bash
 
-clone-or-pull(){
+clone-or-pull () {
   echo "Updating $1 from $2..."
   [ -d "$1" ] && (cd "$1"; git pull) || git clone "$2" "$1"
 }
