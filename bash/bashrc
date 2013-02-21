@@ -43,9 +43,10 @@ darwin && export LSCOLORS='ExfxcxdxCxegedabagacad'
 ###############################################################################
 ## prompt
 
-export PROMPT_COMMAND='echo -ne "\n$([ $? = 0 ] && echo `@g` || echo `@r`)• "'
-export PS1="`@M`\u@`@m`\h`@x` `@g`\w`@x`"'$(__git_prompt)$(__hg_prompt)
-  $(__prompt_char)'
+export PROMPT_COMMAND='if [ $? = 0 ]; then okclr="`@G`"; else okclr="`@r`"; fi'
+export PS1="
+`@M`\u`@m`@\h`@x` `@g`\w`@k`"'$(__git_prompt)$(__hg_prompt)
+\[`echo -ne $okclr`\]$(__prompt_char)\['`@x`'\]'
 
 
 ###############################################################################
