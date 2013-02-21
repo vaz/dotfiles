@@ -105,8 +105,25 @@ noremap q <c-w>
 noremap Q <c-w><c-w>
 " don't like accidently quitting windows with qq
 noremap qq <c-w><c-w>
-" use c-q to record
-noremap <c-q> q
+" relegate recording to leader mapping
+noremap <leader>q q
+
+" }}}
+" :::: search {{{2
+
+" good regexes in search, clear old highlighting
+noremap <silent> / :set hls<cr>/\v
+onoremap <silent> / /\v
+
+" turn on search highlighting for n/n and */#
+noremap <silent> n nzv:set hls<cr>
+noremap <silent> N Nzv:set hls<cr>
+ounmap n
+ounmap N
+noremap <silent> * *zv:set hls<cr>
+noremap <silent> # #zv:set hls<cr>
+ounmap *
+ounmap #
 
 " }}}
 " :::: diff {{{2
@@ -118,9 +135,35 @@ nnoremap <leader>do :diffoff!<cr>
 nnoremap <leader>ds :vert diffsplit<cr>
 
 " }}}
+" :::: GPG encryption {{{2
+
+function! WriteGPGEncrypted(fn)
+  if !len(a:fn)
+    let l:fn=expand("%")
+    if !(l:fn =~ '\.\(gpg\|asc\|pgp\)$')
+      let l:fn=l:fn . '.gpg'
+    endif
+  else
+    let l:fn=expand(a:fn)
+  endif
+  let l:fn=escape(l:fn, '#%\[]')
+  exe "w !gpg -ae -o '" . l:fn . "'"
+endfunction
+
+command! -nargs=? WriteGPGEncrypted call WriteGPGEncrypted("<args>")
+
+" }}}
+
+" scroll viewport faster
+nnoremap <c-e> 5<c-e>
+nnoremap <c-y> 5<c-y>
 
 " make Y work like D, C, ...
 noremap Y y$
+
+" paste with blackhole register to preserve current register contents
+nnoremap <silent> <leader>p "_p
+nnoremap <silent> <leader>P "_P
 
 nnoremap <silent> <leader>w :call MaximizeToggle ()<CR>
 
@@ -146,26 +189,14 @@ nnoremap <cr> mOO<esc>`O
 " this only works in gui vim
 nnoremap <s-cr> mOo<esc>`O
 
-" scroll viewport faster
-nnoremap <c-e> 5<c-e>
-nnoremap <c-y> 5<c-y>
-
-" keep search pattern at centre of screen
-noremap n nzz
-noremap N Nzz
-
 " toggle showing control characters
 nnoremap <silent> <leader>s :set list!<cr>
 
 " easy underlining/overlining
-nnoremap <leader>u== yyPv$r=xjyypv$r=x
-nnoremap <leader>u** yyPv$r*XJyypv$r*x
-nnoremap <leader>u=  yypv$r=x
-nnoremap <leader>u-  yypv$r-x
-
-" paste with blackhole register
-nnoremap <silent> <leader>p "_p
-nnoremap <silent> <leader>P "_P
+nnoremap <leader>uo= yyPVr=jyypVr=
+nnoremap <leader>uo* yyPVr*jyypVr*
+nnoremap <leader>u=  yypVr=
+nnoremap <leader>u-  yypVr-
 
 " show syntax highlighting groups for word under cursor
 nnoremap <silent> <leader>h :call <SID>SynStack()<CR>
@@ -200,7 +231,14 @@ nnoremap <silent> <leader>n :call NumberToggle()<cr>
 nnoremap <silent> H :bp<cr>
 nnoremap <silent> L :bn<cr>
 nnoremap <silent> <backspace> :bd<cr>
-nnoremap <silent> ` <c-^>
+
+function! FlipIfListed()
+  if buflisted(expand("#"))
+    exe "normal! \<c-^>"
+  endif
+endfunction
+nnoremap <silent> ` :call FlipIfListed()<cr>
+
 
 " switch tabbing style
 nnoremap <leader>2 <esc>:set expandtab tabstop=2 softtabstop=2 shiftwidth=2<cr>
@@ -214,7 +252,7 @@ nnoremap <leader><leader>8 <esc>:set noexpandtab tabstop=8 softtabstop=8 shiftwi
 command! -bar -nargs=1 OpenURL :!open <args>
 
 " sudo save a file
-cmap w!! w !sudo tee % >/dev/null
+cnoremap w!! w !sudo tee % >/dev/null
 
 " quick edit files
 nnoremap <leader>ev <esc>:e ~/.vimrc<cr>
@@ -239,26 +277,6 @@ nnoremap <silent> ˚ :m-2<cr>
 vnoremap ∆ :m'>+<cr>gv
 vnoremap ˚ :m-2<cr>gv
 
-" good regexes in search, clear old highlighting
-noremap <silent> / :set hls<cr>/\v
-onoremap <silent> / /\v
-
-" turn on search highlighting for n/n and */#
-noremap <silent> n nzv:set hls<cr>
-noremap <silent> N Nzv:set hls<cr>
-ounmap n
-ounmap N
-noremap <silent> * *zv:set hls<cr>
-noremap <silent> # #zv:set hls<cr>
-ounmap *
-ounmap #
-
-" inside/around [] - why did I pick r? bRackets?
-onoremap ir i[
-onoremap ar a[
-vnoremap ir i[
-vnoremap ar a[
-
 " insert timestamps
 iab <expr> ~~t strftime("%H:%M:%S")
 iab <expr> ~~d strftime("%y年%m月%d日")
@@ -270,15 +288,12 @@ iab <expr> ~~z strftime("%a %d %b %Y %H:%M:%S")
 iab <expr> ~~L strftime("%A %d %B %Y")
 iab <expr> ~~Z strftime("%A %d %B %Y %H:%M:%S")
 
-nmap ,it i~~t 
-nmap ,id i~~d
-nmap ,is i~~s
+nnoremap ,it i~~t 
+nnoremap ,id i~~d
+nnoremap ,is i~~s
 
 " select last put text
 nnoremap <expr> gl '`[' . strpart(getregtype(), 0, 1) . '`]'
-
-" ^w for window stuff is so annoying
-" wow this is the best thing i ever did
 
 " :: Plugins ::{{{1
 
@@ -354,7 +369,9 @@ Bundle 'kchmck/vim-coffee-script'
 Bundle 'vim-scripts/matchit.zip'
 Bundle 'vim-scripts/ruby-matchit'
 Bundle 'jamessan/vim-gnupg'
-  let g:GPGFilenamePattern = '*\.\(gpg\|asc\|pgp\).txt,*.\(gpg\|asc\|pgp\)'
+  let s:GPGext='\(gpg\|asc\|pgp\)'
+  let g:GPGFilenamePattern='*#'.s:GPGext.'*,*.'.s:GPGext.'.txt,*.'.s:GPGext
+  let g:GPGPreferArmor=1
 Bundle 'jcf/vim-latex'
   augroup latexsuite
     au!
