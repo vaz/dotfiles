@@ -15,8 +15,8 @@
 " :::: general {{{2
 set nocompatible                  " thanks for everything, vi
 set dir=~/.vim/swap,.             " keep swap files in home dir
-set nobackup                      " don't keep backup after writing
 set writebackup bdir=~/.vim/tmp/  " use backup when writing a file
+set backup                        " keep backup after writing
 set history=500                   " remember 500 ex commands
 set clipboard+=unnamed            " unnamed register = os clipboard
 set viminfo='20,h                 " remember marks in 'files, not hlsearch
@@ -225,6 +225,9 @@ nnoremap <leader><leader>8 <esc>:set noexpandtab tabstop=8 softtabstop=8 shiftwi
 " }}}
 " :::: editing {{{2
 
+" make R in visual mode do what I would expect it to
+vnoremap R r R
+
 " pressing return in normal mode opens a line above
 nnoremap <cr> mOO<esc>`O
 " pressing shift-return in normal mode opens line below
@@ -244,6 +247,13 @@ vnoremap ∆ :m'>+<cr>gv
 vnoremap ˚ :m-2<cr>gv
 
 " }}}
+" :::: text objects {{{2
+
+onoremap ir i[
+onoremap ar a[
+vnoremap ir i[
+vnoremap ar a[
+
 " :::: introspection {{{2
 
 " show syntax highlighting groups for word under cursor
@@ -415,6 +425,7 @@ Bundle 'jcf/vim-latex'
 Bundle 'matthias-guenther/hammer.vim'
 Bundle 'file:///Users/vaz/src/vim/gitgutter'
 Bundle 'Lokaltog/vim-powerline'
+  let g:Powerline_symbols = 'fancy'
 " ::bundle tail::
 
 " :: Syntax and colours ::"{{{1
