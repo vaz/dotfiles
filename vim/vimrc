@@ -78,6 +78,9 @@ set wildignore=*.pyc,*.o,.git,.hg,.svn,.cvs " ignore these files in wildcard
 let mapleader="\\"
 let g:mapleader="\\"
 
+" local cd to current file's dir
+nnoremap <leader>c :lcd %:p:h<cr>
+
 " }}}
 " :::: movement {{{2
 
@@ -100,13 +103,10 @@ noremap <right> $
 nnoremap <space>h ^
 nnoremap <space>l $l
 
-" make window movement a lot easier
-noremap q <c-w>
-noremap Q <c-w><c-w>
-" don't like accidently quitting windows with qq
-noremap qq <c-w><c-w>
-" relegate recording to leader mapping
-noremap <leader>q q
+" scroll viewport faster
+nnoremap <c-e> 5<c-e>
+nnoremap <c-y> 5<c-y>
+
 
 " }}}
 " :::: search {{{2
@@ -153,10 +153,7 @@ endfunction
 command! -nargs=? WriteGPGEncrypted call WriteGPGEncrypted("<args>")
 
 " }}}
-
-" scroll viewport faster
-nnoremap <c-e> 5<c-e>
-nnoremap <c-y> 5<c-y>
+" :::: registers {{{2
 
 " make Y work like D, C, ...
 noremap Y y$
@@ -165,7 +162,17 @@ noremap Y y$
 nnoremap <silent> <leader>p "_p
 nnoremap <silent> <leader>P "_P
 
-nnoremap <silent> <leader>w :call MaximizeToggle ()<CR>
+" }}}
+" :::: windows {{{2
+
+" make window movement a lot easier
+noremap q <c-w>
+noremap Q <c-w><c-w>
+" don't like accidently quitting windows with qq
+noremap qq <c-w><c-w>
+" relegate recording to leader mapping
+noremap <leader>q q
+
 
 function! MaximizeToggle()
   if exists("s:maximize_session")
@@ -182,33 +189,13 @@ function! MaximizeToggle()
     only
   endif
 endfunction
+nnoremap <silent> <leader>w :call MaximizeToggle ()<CR>
 
-" pressing return in normal mode opens a line above
-nnoremap <cr> mOO<esc>`O
-" pressing shift-return in normal mode opens line below
-" this only works in gui vim
-nnoremap <s-cr> mOo<esc>`O
+" }}}
+" :::: display {{{2
 
 " toggle showing control characters
-nnoremap <silent> <leader>s :set list!<cr>
-
-" easy underlining/overlining
-nnoremap <leader>uo= yyPVr=jyypVr=
-nnoremap <leader>uo* yyPVr*jyypVr*
-nnoremap <leader>u=  yypVr=
-nnoremap <leader>u-  yypVr-
-
-" show syntax highlighting groups for word under cursor
-nnoremap <silent> <leader>h :call <SID>SynStack()<CR>
-function! <SID>SynStack()
-  if !exists("*synstack")
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
-
-" local cd to current file's dir
-nnoremap <leader>c :lcd %:p:h<cr>
+nnoremap <silent> <leader>L :set list!<cr>
 
 function! NumberToggle()
   if(&number == 1)
@@ -227,19 +214,6 @@ endfunc
 " toggle showing relative line numbers
 nnoremap <silent> <leader>n :call NumberToggle()<cr>
 
-" easier switching buffers, opening files
-nnoremap <silent> H :bp<cr>
-nnoremap <silent> L :bn<cr>
-nnoremap <silent> <backspace> :bd<cr>
-
-function! FlipIfListed()
-  if buflisted(expand("#"))
-    exe "normal! \<c-^>"
-  endif
-endfunction
-nnoremap <silent> ` :call FlipIfListed()<cr>
-
-
 " switch tabbing style
 nnoremap <leader>2 <esc>:set expandtab tabstop=2 softtabstop=2 shiftwidth=2<cr>
 nnoremap <leader>4 <esc>:set expandtab tabstop=4 softtabstop=4 shiftwidth=4<cr>
@@ -248,11 +222,56 @@ nnoremap <leader><leader>2 <esc>:set noexpandtab tabstop=2 softtabstop=2 shiftwi
 nnoremap <leader><leader>4 <esc>:set noexpandtab tabstop=4 softtabstop=4 shiftwidth=4<cr>
 nnoremap <leader><leader>8 <esc>:set noexpandtab tabstop=8 softtabstop=8 shiftwidth=8<cr>
 
-" Command for opening a url on a mac:
-command! -bar -nargs=1 OpenURL :!open <args>
+" }}}
+" :::: editing {{{2
 
-" sudo save a file
-cnoremap w!! w !sudo tee % >/dev/null
+" pressing return in normal mode opens a line above
+nnoremap <cr> mOO<esc>`O
+" pressing shift-return in normal mode opens line below
+" this only works in gui vim
+nnoremap <s-cr> mOo<esc>`O
+
+" easy underlining/overlining
+nnoremap <leader>uo= yyPVr=jyypVr=
+nnoremap <leader>uo* yyPVr*jyypVr*
+nnoremap <leader>u=  yypVr=
+nnoremap <leader>u-  yypVr-
+
+" dragging lines
+nnoremap <silent> ∆ :m+<cr>
+nnoremap <silent> ˚ :m-2<cr>
+vnoremap ∆ :m'>+<cr>gv
+vnoremap ˚ :m-2<cr>gv
+
+" }}}
+" :::: introspection {{{2
+
+" show syntax highlighting groups for word under cursor
+nnoremap <silent> <leader>h :call <SID>SynStack()<CR>
+function! <SID>SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
+
+" }}}
+" :::: buffers {{{2
+
+" easier switching buffers, opening files
+nnoremap <silent> H :bp<cr>
+nnoremap <silent> L :bn<cr>
+nnoremap <silent> <backspace> :bd<cr>
+
+function! FlipIfListed()
+  if empty(expand("#")) || buflisted(expand("#"))
+    exe "normal! \<c-^>"
+  endif
+endfunction
+nnoremap <silent> ` :call FlipIfListed()<cr>
+
+" }}}
+" :::: vim config file shortcuts {{{2
 
 " quick edit files
 nnoremap <leader>ev <esc>:e ~/.vimrc<cr>
@@ -261,21 +280,18 @@ nnoremap <leader>eg <esc>:e ~/.gvimrc<cr>
 " todo: there's an autocmd you can use triggered on colorscheme load
 " maybe to be more specific about location
 fun! EditColourFile()
-  redir => l:cs | silent colorscheme | redir END
-  exec "e" "~/.vim/colors/".substitute(l:cs, '^\n', '', '').".vim"
+  for p in split(&runtimepath, ',')
+    let f = p."/colors/".g:colors_name.".vim"
+    if filereadable(f)
+      exe "e ".f
+    endif
+  endfor
 endf
 
 nnoremap <leader>ec <esc>:call EditColourFile()<cr>
 
-" folding
-nnoremap <leader>z :echo "use builtin zR to open all folds"<cr>
-nnoremap <leader>Z :echo "use builtin zM to close all folds"<cr>
-
-" dragging lines
-nnoremap <silent> ∆ :m+<cr>
-nnoremap <silent> ˚ :m-2<cr>
-vnoremap ∆ :m'>+<cr>gv
-vnoremap ˚ :m-2<cr>gv
+" }}}
+" :::: timestamps {{{2
 
 " insert timestamps
 iab <expr> ~~t strftime("%H:%M:%S")
@@ -292,8 +308,25 @@ nnoremap ,it i~~t
 nnoremap ,id i~~d
 nnoremap ,is i~~s
 
+" }}}
+" :::: visual mode {{{2
+
 " select last put text
 nnoremap <expr> gl '`[' . strpart(getregtype(), 0, 1) . '`]'
+
+" }}}
+" :::: opening and saving {{{2
+
+" Command for opening a url on a mac:
+command! -bar -nargs=1 OpenURL :!open <args>
+
+" sudo save a file
+cnoremap w!! w !sudo tee % >/dev/null
+
+" open in Marked
+nnoremap <leader>m :silent !open -a Marked.app '%:p'<cr>
+
+" }}}
 
 " :: Plugins ::{{{1
 
@@ -380,6 +413,8 @@ Bundle 'jcf/vim-latex'
   set grepprg=grep\ -nH\ $*
   let g:tex_flavor='latex'
 Bundle 'matthias-guenther/hammer.vim'
+Bundle 'file:///Users/vaz/src/vim/gitgutter'
+Bundle 'Lokaltog/vim-powerline'
 " ::bundle tail::
 
 " :: Syntax and colours ::"{{{1
