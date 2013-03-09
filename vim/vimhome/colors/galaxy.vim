@@ -1,135 +1,217 @@
-" Name: galaxy vim colorscheme
-" Author: Vaz
-" License: public domain
-" Created: March 2012
-" Modified: March 2012
+" Name:      galaxy vim colorscheme
+" Author:    Vaz
+" License:   public domain
+" Created:   March 2012
+" Modified:  March 2013
 
 
 " {{{ Introduction
-hi clear
+hi clear Normal
 set background=dark
+hi! clear
 
 if exists("syntax_on")
   syntax reset
 endif
 
 let colors_name = "galaxy"
+
 " }}}
-" {{{ Colour RGB table
-" This is probably out of date now.
-"                 RGB         Hex
-" background    7/  5/ 25   #070519
-" br black     42/ 35/ 59   #2a233b
-" black       101/112/144   #657090
-" white       183/198/224   #b7c6e0
-" br white    240/249/255   #f0f9ff
+" {{{ Colour functions
 
-"                       DARK                      BRIGHT
-"                 RGB         Hex           RGB         Hex
-" magenta     255/ 42/128   #ff2a80     255/128/196   #ff80c4
-" green        48/255/112   #30ff70     144/255/150   #90ff96
-" yellow      169/255/ 37   #a9ff25     208/255/128   #d0ff80
-" blue         73/128/255   #4980ff     155/192/255   #9bc0ff
-" purple      208/ 90/255   #d05aff     233/186/255   #e7baff
-" cyan        112/255/182   #70ffb6     180/255/228   #b4ffe4
+function! s:hex2rgb(hex)
+  let hex = a:hex
+  if hex[0] == '#' | let hex = hex[1:] | endif
+  return [eval('0x'.hex[0:1]), eval('0x'.hex[2:3]), eval('0x'.hex[4:5])]
+endfunction
+
+function! s:rgb2xyz(rgb)
+  " from http://www.cs.rit.edu/~ncs/color/t_convert.html#RGB%20to%20XYZ%20&%20XYZ%20to%20RGB
+  let [r, g, b] = a:rgb
+  let x = 0.412453 * r + 0.357580 * g + 0.180423 * b
+  let y = 0.212671 * r + 0.715160 * g + 0.072169 * b
+  let z = 0.019334 * r + 0.119193 * g + 0.950227 * b
+  return [x, y, z]
+endfunction
+
+function! s:xyz2256(xyz)
+  let [x, y, z] = a:xyz
+  return 16 + (x * 36) + (y * 6) + z
+endfunction
+
+function! s:get_gui(key) dict
+  if a:key ==? 'fg' || a:key ==? 'bg' || a:key ==? 'none' | return a:key | endif
+  return get(get(self, a:key, {}), 'gui', 'NONE')
+endfunction
+
+function! s:get_cterm(key) dict
+  if a:key ==? 'fg' || a:key ==? 'bg' || a:key ==? 'none' | return a:key | endif
+  if has_key(self, a:key)
+    let c = self[a:key]
+    if &t_Co > 255
+      if has_key(c, '256')
+        return c['256']
+      elseif has_key(c, 'gui')
+        return xyz2256(rgb2xyz(hex2rgb(c.gui)))
+      endif
+    elseif &t_Co > 87
+      return get(c, '88', 'NONE')
+    else
+      return get(c, '16', 'NONE')
+    endif
+  endif
+endfunction
+
+function! Colours(d)
+  let a:d['gui']   = function('s:get_gui')
+  let a:d['cterm'] = function('s:get_cterm')
+  return a:d
+endfunction
+
+let s:colours = Colours({
+  \   'b0':          { 'gui': "#0a0f30", '16': 'NONE', 'comment': 'background'           }
+  \ , 'b1':          { 'gui': "#2a233b", '16': '0',    'comment': '0;30 (black)'         }
+  \ , 'b2':          { 'gui': "#657090", '16': '8',    'comment': '1;30 (bright black)'  }
+  \ , 'b3':          { 'gui': "#b7c6e0", '16': '7',    'comment': '0;37 (white)'         }
+  \ , 'b4':          { 'gui': "#f0f9ff", '16': '15',   'comment': '1;37 (bright white)'  }
+  \ , 'magenta':     { 'gui': "#ff9ab0", '16': '1',    'comment': '0;31 (red)'           }
+  \ , 'green':       { 'gui': "#30ff70", '16': '2',    'comment': '0;32 (green)'         }
+  \ , 'yellow':      { 'gui': "#a9ff25", '16': '3',    'comment': '0;33 (yellow)'        }
+  \ , 'blue':        { 'gui': "#60c0ff", '16': '4',    'comment': '0;34 (blue)'          }
+  \ , 'purple':      { 'gui': "#e08aff", '16': '5',    'comment': '0;35 (magenta)'       }
+  \ , 'cyan':        { 'gui': "#70ffb6", '16': '6',    'comment': '0;36 (cyan)'          }
+  \ , 'pmagenta':    { 'gui': "#ffd0e8", '16': '9',    'comment': '1;31 (bright red)'    }
+  \ , 'pgreen':      { 'gui': "#bcffd3", '16': '10',   'comment': '1;32 (bright green)'  }
+  \ , 'pyellow':     { 'gui': "#d0ff80", '16': '11',   'comment': '1;33 (bright yellow)' }
+  \ , 'pblue':       { 'gui': "#c5d0ff", '16': '12',   'comment': '1;34 (bright blue)'   }
+  \ , 'ppurple':     { 'gui': "#e7baff", '16': '13',   'comment': '1;35 (bright purple)' }
+  \ , 'pcyan':       { 'gui': "#b4ffe4", '16': '14',   'comment': '1;36 (bright cyan)'   }
+  \
+  \ , 'dgreen':      { 'gui': "#357958", '16': '2',    'comment': 'dark green for diff'  }
+  \ , 'dblue':       { 'gui': "#455FB0", '16': '4',    'comment': 'dark blue for diff'   }
+  \ , 'dmagenta':    { 'gui': "#8C3B85", '16': '1',    'comment': 'dark magenta for diff'}
+  \ , 'dpurple':     { 'gui': "#5838A8", '16': '5',    'comment': 'dark purple for diff'}
+  \ })
+
 " }}}
-" {{{ Colour variables
+" quick command {{{
 
-" base colours
-let s:bg = "#0a0f30"  " background
-let s:b0 = "#2a233b"  " 0;30 (black)
-let s:b1 = "#657090"  " 1;30 (bright black)
-let s:b2 = "#b7c6e0"  " 0;37 (white)
-let s:b3 = "#f0f9ff"  " 1;37 (bright white)
+command! -nargs=+ -complete=highlight -bar -bang Hi call <sid>HiLite("<bang>", <f-args>)
+" HiLite Comment fg=magenta bg=NONE attr=undercurl sp=magenta font=Monaco:h14
+function! s:HiLite(bang, ...)
+  let groups = []
+  let cmd = []
 
-" highlights
-let s:magenta = "#ff9ab0"   " 0;31 (red)
-let s:green   = "#30ff70"   " 0;32 (green)
-let s:yellow  = "#a9ff25"   " 0;33 (yellow)
-let s:blue    = "#60c0ff"   " 0;34 (blue)
-let s:purple  = "#e08aff"   " 0;35 (magenta)
-let s:cyan    = "#70ffb6"   " 0;36 (cyan)
+  for arg in a:000
+    let parts = split(arg, '=')
+    if len(parts) > 1
+      let [k, v] = [parts[0], join(parts[1:], '=')]
+      if k ==? 'fg' || k ==? 'bg'
+        call add(cmd, 'gui'.k.'='.s:colours.gui(v))
+        if !(v ==? 'fg' || v ==? 'bg') ||
+              \ synIDattr(synIDtrans(hlID('Normal')), v, 'cterm') != -1
+          call add(cmd, 'cterm'.k.'='.s:colours.cterm(v))
+        endif
+      elseif k ==? 'sp'
+        call add(cmd, 'gui'.k.'='.s:colours.gui(v))
+      elseif k ==? 'attr'
+        call add(cmd, 'gui='.v)
+        call add(cmd, 'cterm='.v)
+        call add(cmd, 'term='.v)
+      else
+        call add(cmd, arg)
+      endif
+    else
+      call add(groups, arg)
+    endif
+  endfor
 
-" pale colours
-let s:p_magenta = "#ffd0e8" " 1;31 (bright red)
-let s:p_green   = "#bcffd3" " 1;32 (bright green)
-let s:p_yellow  = "#d0ff80" " 1;33 (bright yellow)
-let s:p_blue    = "#c5d0ff" " 1;34 (bright blue)
-let s:p_purple  = "#e7baff" " 1;35 (bright purple)
-let s:p_cyan    = "#b4ffe4" " 1;36 (bright cyan)
+  if empty(groups)
+    return
+  endif
+
+  exec "hi".a:bang." ".groups[0]." ".join(cmd, " ")
+
+  for group in groups[1:]
+    exec "hi".a:bang." ".group." ".join(cmd, " ")
+  endfor
+endfunction
 
 " }}}
 " {{{ General colors
 
-exec "hi Normal           guifg=".s:b3."        guibg=".s:bg."        gui=NONE"
+Hi Normal fg=b3 bg=b0
+Hi NonText fg=b1
+hi! link SpecialKey NonText
 
-exec "hi NonText          guifg=".s:b1."        guibg=NONE            gui=NONE"
+Hi Cursor fg=b1 bg=b4 attr=bold
 
-exec "hi Cursor           guifg=".s:b0."        guibg=".s:b3."        gui=bold"
-exec "hi LineNr           guifg=".s:b1."        guibg=".s:b0."        gui=NONE"
+Hi GalaxyFrame fg=b2 bg=b1
+Hi GalaxyFrameItalic fg=b2 bg=b1 attr=italic
 
-exec "hi VertSplit        guifg=".s:b1."        guibg=".s:b0."        gui=NONE"
-exec "hi StatusLine       guifg=".s:b2."        guibg=".s:b0."        gui=bold"
-exec "hi StatusLineNC     guifg=".s:b1."        guibg=".s:b0."        gui=NONE"
+hi! link LineNr GalaxyFrame
+hi! link SignColumn GalaxyFrame
+hi! link FoldColumn GalaxyFrameItalic
+hi! link Folded FoldColumn
 
-exec "hi Folded           guifg=".s:b1."        guibg=".s:b0."        gui=italic"
-exec "hi FoldColumn       guifg=".s:b1."        guibg=".s:b0."        gui=italic"
-exec "hi Title            guifg=".s:p_green."   guibg=NONE            gui=italic"
-exec "hi Visual           guifg=".s:b0."        guibg=".s:p_purple."  gui=bold"
+hi! link VertSplit GalaxyFrame
 
-exec "hi SpecialKey       guifg=".s:b1."        guibg=NONE            gui=bold"
+hi! link StatusLineNC GalaxyFrame
+Hi StatusLine fg=b3 bg=b1 attr=bold
 
-exec "hi WildMenu         guifg=".s:green."     guibg=".s:b0."        gui=NONE"
-exec "hi Ignore           guifg=".s:b0."        guibg=NONE            gui=NONE"
+Hi Title fg=pgreen attr=italic
+Hi Visual fg=b1 bg=ppurple attr=bold
 
-exec "hi Error            guifg=NONE            guibg=NONE            gui=undercurl guisp=".s:magenta
-exec "hi ErrorMsg         guifg=".s:b0."        guibg=".s:magenta."   gui=bold"
-exec "hi WarningMsg       guifg=".s:b3."        guibg=".s:purple."    gui=NONE"
+Hi WildMenu fg=green bg=b1
+Hi Ignore fg=b1
 
-exec "hi ModeMsg          guifg=".s:p_green."   guibg=NONE            gui=BOLD"
+Hi Error fg=pmagenta bg=b0 attr=undercurl,bold sp=magenta
+Hi ErrorMsg fg=b4 bg=dmagenta attr=bold
+Hi WarningMsg fg=b4 bg=dpurple
 
-exec "hi Directory        guifg=".s:blue."      guibg=NONE            gui=BOLD"
-exec "hi Question         guifg=".s:green."     guibg=NONE            gui=BOLD"
-exec "hi MoreMsg          guifg=".s:p_green."     guibg=NONE            gui=italic"
+Hi ModeMsg fg=pgreen attr=bold
 
-exec "hi SpellBad         gui=undercurl guisp=".s:magenta
-exec "hi SpellCap         gui=undercurl guisp=".s:blue
-exec "hi SpellRare        gui=undercurl guisp=".s:purple
-exec "hi SpellLocal       gui=undercurl guisp=".s:cyan
+Hi Directory fg=blue attr=bold
+Hi Question fg=green attr=bold
+Hi MoreMsg fg=pgreen attr=italic
 
-if version >= 700 " Vim 7.x specific colors
-  exec "hi CursorLine     guifg=NONE            guibg=".s:b0."        gui=NONE"
-  exec "hi CursorColumn   guifg=NONE            guibg=".s:b0."        gui=NONE"
-  exec "hi ColorColumn    guifg=NONE            guibg=".s:b0."        gui=NONE"
-  exec "hi MatchParen     guifg=".s:magenta."   guibg=NONE            gui=BOLD"
-  exec "hi Pmenu          guifg=".s:b3."        guibg=".s:b0."        gui=NONE"
-  exec "hi PmenuSel       guifg=".s:yellow."    guibg=".s:b0."        gui=bold"
-  exec "hi PmenuSbar      guifg=".s:b3."        guibg=".s:b2."        gui=NONE"
-  exec "hi Search         guifg=".s:b3."        guibg=".s:b0."        gui=bold,italic"
-  exec "hi IncSearch      guifg=".s:b3."        guibg=".s:b0."        gui=bold,italic"
-endif
+Hi SpellBad attr=undercurl sp=magenta
+Hi SpellCap attr=undercurl sp=blue
+Hi SpellRare attr=undercurl sp=purple
+Hi SpellLocal attr=undercurl sp=cyan
+
+Hi CursorLine bg=b1
+Hi CursorColumn bg=b1
+Hi ColorColumn bg=b1
+Hi MatchParen fg=b4 bg=dblue attr=bold
+Hi Pmenu fg=b4 bg=b1
+Hi PmenuSel fg=yellow bg=b1 attr=bold
+Hi PmenuSbar fg=b4 bg=b2
+Hi Search fg=b4 bg=b1 attr=bold,italic
+Hi IncSearch fg=b4 bg=b1 attr=bold,italic
+
 " }}}
 " {{{ General Syntax highlighting
-exec "hi Comment          guifg=".s:b1."        guibg=NONE            gui=italic"
-exec "hi String           guifg=".s:p_green."   guibg=NONE            gui=NONE"
-exec "hi Number           guifg=".s:p_purple."  guibg=NONE            gui=NONE"
+Hi Comment fg=b2 attr=italic
 
-exec "hi Statement        guifg=".s:p_blue."    guibg=NONE            gui=bold"
+Hi String fg=pgreen
+Hi Number fg=ppurple
 
-exec "hi PreProc          guifg=".s:p_blue."    guibg=NONE            gui=NONE"
+Hi Statement fg=pblue attr=bold
+Hi PreProc fg=pblue
 
 " TODO:
-exec "hi Todo             guifg=".s:magenta."   guibg=".s:b0."        gui=NONE"
+Hi Todo fg=b4 bg=b1
 
-exec "hi Constant         guifg=".s:p_purple."  guibg=NONE            gui=NONE"
-exec "hi Function         guifg=".s:p_purple."        guibg=NONE            gui=NONE"
+Hi Constant fg=ppurple
+Hi Function fg=ppurple
 
-exec "hi Identifier       guifg=".s:blue."      guibg=NONE            gui=NONE"
-exec "hi Type             guifg=".s:p_magenta." guibg=NONE            gui=NONE"
+Hi Identifier fg=blue
+Hi Type fg=pmagenta
 
-exec "hi Special          guifg=".s:green."    guibg=NONE             gui=NONE"
-exec "hi Delimiter        guifg=".s:cyan."      guibg=NONE            gui=NONE"
-exec "hi Operator         guifg=".s:b3."w       guibg=NONE            gui=NONE"
+Hi Special fg=green
+Hi Delimiter fg=cyan
+Hi Operator fg=b4
 
 hi link Character       Constant
 hi link Boolean         Constant
@@ -148,34 +230,38 @@ hi link Tag             Special
 hi link SpecialChar     Special
 hi link SpecialComment  Special
 hi link Debug           Special
+
 " }}}
 " {{{ Diff Colours
-exec "hi DiffAdd          guifg=".s:b0."    guibg=".s:blue."      gui=NONE"
-exec "hi DiffChange       guifg=".s:b0."    guibg=".s:purple."    gui=NONE"
-exec "hi DiffDelete       guifg=".s:b3."    guibg=".s:magenta."   gui=NONE"
+
+Hi DiffAdd fg=fg bg=dgreen attr=bold
+Hi DiffChange fg=fg bg=dblue attr=bold
+Hi DiffDelete fg=fg bg=dmagenta attr=bold
+Hi DiffText fg=fg bg=dpurple attr=bold
+
 " }}}
 " {{{ Special for Ruby
-"hi rubyRegexp                  guifg=#B18A3D      guibg=NONE      gui=NONE      ctermfg=brown          ctermbg=NONE      cterm=NONE
-"hi rubyRegexpDelimiter         guifg=#FF8000      guibg=NONE      gui=NONE      ctermfg=brown          ctermbg=NONE      cterm=NONE
-exec "hi rubyRegexpSpecial      guifg=".s:p_magenta."    guibg=NONE       gui=NONE"
-"hi rubyEscape                  guifg=white        guibg=NONE      gui=NONE      ctermfg=cyan           ctermbg=NONE      cterm=NONE
-exec "hi rubyInterpolation          guifg=".s:p_green."    guibg=NONE  gui=italic"
-exec "hi rubyInterpolationDelimiter guifg=".s:p_magenta."      guibg=NONE  gui=NONE"
-exec "hi rubyControl                guifg=".s:p_blue."    guibg=NONE  gui=NONE"
-exec "hi rubyConditional            guifg=".s:p_blue."    guibg=NONE  gui=NONE"
-exec "hi rubyGlobalVariable         guifg=".s:magenta."   guibg=NONE  gui=NONE"
-exec "hi rubyStringDelimiter        guifg=".s:cyan."      guibg=NONE  gui=NONE"
-exec "hi rubyBlockParameterList     guifg=".s:p_magenta." guibg=NONE  gui=NONE"
-exec "hi rubyBlockParameter         guifg=".s:b3."        guibg=NONE  gui=NONE"
-exec "hi rubyDelimiter              guifg=".s:cyan."      guibg=NONE  gui=NONE"
-exec "hi rubyLocalVariableOrMethod  guifg=".s:b3."        guibg=NONE  gui=NONE"
-exec "hi rubySymbol                 guifg=".s:magenta."  guibg=NONE  gui=NONE"
-exec "hi rubyPredefinedIdentifier   guifg=".s:p_magenta."    guibg=NONE  gui=NONE"
-exec "hi rubyPseudoVariable         guifg=".s:p_magenta."        guibg=NONE  gui=italic"
-exec "hi rubyInclude                guifg=".s:p_magenta." guibg=NONE  gui=italic"
-exec "hi rubyFunction               guifg=".s:b3."        guibg=NONE  gui=NONE"
 
-""rubyInclude
+Hi rubyRegexp fg=purple
+Hi rubyRegexpDelimiter fg=pmagenta
+Hi rubyRegexpSpecial fg=pmagenta
+Hi rubyEscape fg=b4
+Hi rubyInterpolation fg=pgreen attr=italic
+Hi rubyInterpolationDelimiter fg=pmagenta
+Hi rubyControl fg=pblue
+hi link rubyConditional rubyControl
+Hi rubyGlobalVariable fg=magenta
+Hi rubyStringDelimiter fg=cyan
+Hi rubyBlockParameterList fg=pmagenta
+Hi rubyBlockParameter fg=b4
+Hi rubyDelimiter fg=b4
+Hi rubyLocalVariableOrMethod fg=b4
+Hi rubySymbol fg=magenta
+Hi rubyPredefinedIdentifier fg=pmagenta
+Hi rubyPseudoVariable fg=pmagenta attr=italic
+Hi rubyInclude fg=pmagenta
+Hi rubyFunction fg=b4
+
 ""rubySharpBang
 ""rubyAccess
 ""rubyPredefinedVariable
@@ -200,24 +286,33 @@ hi link rubyMethodDeclaration rubyFunction
 hi link rubyArrayDelimiter    rubyDelimiter
 hi link rubyDefine            rubyClass
 hi link rubyModule            rubyClass
+
 " }}}
 " {{{ Python
-exec "hi pythonPrecondit            guifg=".s:p_magenta." guibg=NONE  gui=italic"
+
+Hi pythonPrecondit fg=pmagenta attr=italic
+
 " }}}
 " {{{ XML and HTML
+
 hi link xmlTag          Keyword 
 hi link xmlTagName      Conditional 
 hi link xmlEndTag       Identifier 
 hi link htmlTag         xmlTag
 hi link htmlTagName     xmlTagName
 hi link htmlEndTag      xmlEndTag
+
 " }}}
 " {{{ JS
+
 hi link javaScriptNumber      Number 
+
 " }}}
 " {{{ EasyMotion
-exec "hi EasyMotionTarget guifg=".s:magenta."   guibg=NONE            gui=bold"
-exec "hi EasyMotionShade  guifg=".s:b1."        guibg=NONE            gui=bold"
+
+Hi EasyMotionTarget fg=pmagenta
+Hi EasyMotionShade fg=b0 bg=#000000
+
 " }}}
 " {{{ Indent Guides
 exec "hi IndentGuidesOdd  guibg=#040729"

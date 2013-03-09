@@ -81,6 +81,8 @@ let g:mapleader="\\"
 " local cd to current file's dir
 nnoremap <leader>c :lcd %:p:h<cr>
 
+nnoremap Q q:
+
 " }}}
 " :::: movement {{{2
 
@@ -167,7 +169,6 @@ nnoremap <silent> <leader>P "_P
 
 " make window movement a lot easier
 noremap q <c-w>
-noremap Q <c-w><c-w>
 " don't like accidently quitting windows with qq
 noremap qq <c-w><c-w>
 " relegate recording to leader mapping
@@ -274,9 +275,7 @@ nnoremap <silent> L :bn<cr>
 nnoremap <silent> <backspace> :bd<cr>
 
 function! FlipIfListed()
-  if empty(expand("#")) || buflisted(expand("#"))
-    exe "normal! \<c-^>"
-  endif
+  if buflisted(bufnr("#")) | exe "normal! \<c-^>" | endif
 endfunction
 nnoremap <silent> ` :call FlipIfListed()<cr>
 
@@ -286,19 +285,21 @@ nnoremap <silent> ` :call FlipIfListed()<cr>
 " quick edit files
 nnoremap <leader>ev <esc>:e ~/.vimrc<cr>
 nnoremap <leader>eg <esc>:e ~/.gvimrc<cr>
+nnoremap <leader>ec <esc>:exec "e ".<sid>ColourFile()<cr>
 
-" todo: there's an autocmd you can use triggered on colorscheme load
-" maybe to be more specific about location
-fun! EditColourFile()
-  for p in split(&runtimepath, ',')
-    let f = p."/colors/".g:colors_name.".vim"
-    if filereadable(f)
-      exe "e ".f
-    endif
-  endfor
+nnoremap <leader>.v <esc>:so ~/.vimrc<cr>
+nnoremap <leader>.g <esc>:so ~/.gvimrc<cr>
+nnoremap <leader>.c <esc>:exec "so ".<sid>ColourFile()<cr>
+
+fun! s:ColourFile()
+  if exists('g:colors_name')
+    for p in split(&runtimepath, ',')
+      let f = p."/colors/".g:colors_name.".vim"
+      if filereadable(f) | return f | endif
+    endfor
+  endif
 endf
 
-nnoremap <leader>ec <esc>:call EditColourFile()<cr>
 
 " }}}
 " :::: timestamps {{{2
@@ -389,7 +390,6 @@ Bundle 'sjbach/lusty'
   nnoremap <silent> <leader>O :LustyFilesystemExplorerFromHere<cr>
   let g:LustyJugglerSuppressRubyWarning = 1
 Bundle 'ack.vim'
-  nnoremap <leader>a <esc>:Ack 
 Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
   augroup sparkup_types
     autocmd!
@@ -423,9 +423,45 @@ Bundle 'jcf/vim-latex'
   set grepprg=grep\ -nH\ $*
   let g:tex_flavor='latex'
 Bundle 'matthias-guenther/hammer.vim'
-Bundle 'file:///Users/vaz/src/vim/gitgutter'
+Bundle 'vaz/vim-gitgutter'
 Bundle 'Lokaltog/vim-powerline'
   let g:Powerline_symbols = 'fancy'
+  let g:Powerline_stl_path_style = 'short'
+Bundle 'godlygeek/tabular'
+  noremap <silent> <leader>a= :Tabularize /=<cr>
+  noremap <silent> <leader>a: :Tabularize /:\zs<cr>
+  noremap <silent> <leader>aw :Tabularize /\w\+<cr>
+  noremap <silent> <leader>aW :Tabularize /\S\+<cr>
+  noremap <silent> <leader>a1 :Tabularize /^\s*\S\+\zs<cr>
+  noremap <silent> <leader>a2 :Tabularize /^\s*\(\S\+\s*\)\{2\}\zs<cr>
+  noremap <silent> <leader>a3 :Tabularize /^\s*\(\S\+\s*\)\{3\}\zs<cr>
+
+  " from https://gist.github.com/tpope/287147
+  inoremap <silent> <Bar> <Bar><Esc>:call <SID>align_table()<CR>a
+
+  function! s:align_table()
+    let p = '^\s*|\s.*\s|\s*$'
+    if exists(':Tabularize') && getline('.') =~# '^\s*|' &&
+          \ (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+      let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+      let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+      Tabularize/|/l1
+      normal! 0
+      call search(repeat('[^|]*|',column).'\s\{-\}'.
+            \ repeat('.',position),'ce',line('.'))
+    endif
+  endfunction
+
+  "inoremap <silent> <s-tab> <esc>:call <sid>live_align()<cr>a
+  "function!  s:live_align()
+  "  " grab the WORD we're on or just after
+  "  normal! mTlB"TyE
+  "
+  "  let target = getreg('T')
+  "
+  "
+  "endfunction
+
 " ::bundle tail::
 
 " :: Syntax and colours ::"{{{1
@@ -437,6 +473,7 @@ endif
 if &t_Co > 2 
   syntax on
   colorscheme molokai
+  let g:colors_loaded = 1
   hi Normal ctermbg=none
   hi CursorLine guibg=#232526
   hi CursorColumn guibg=#232526
@@ -446,6 +483,7 @@ if &t_Co > 2
   hi DiffChange ctermfg=181 ctermbg=18 guifg=#89807D guibg=#2C1735
 endif
 
+"
 " :: Autocommands ::{{{1
 
 " Enable file type detection.
@@ -498,7 +536,9 @@ augroup vimrc
   au FileType php set expandtab tabstop=8 softtabstop=2 shiftwidth=2
 
   " reload vimrc when we save it
-  au BufWritePost .vimrc so ~/.vimrc | normal! zv
+  " for some reason powerline loses its colours when we do this in an autocmd
+  " even though it doesn't if we just source it manually
+  au BufWritePost .vimrc so ~/.vimrc | PowerlineReloadColorscheme
 
   " A mapping to source vim files
   " And a mapping to start automatically sourcing the current vim file
