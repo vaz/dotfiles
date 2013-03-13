@@ -27,7 +27,7 @@ endfunction
 
 function! s:rgb2xyz(rgb)
   " from http://www.cs.rit.edu/~ncs/color/t_convert.html#RGB%20to%20XYZ%20&%20XYZ%20to%20RGB
-  let [r, g, b] = a:rgb
+  let [r, g, b] = map(a:rgb, "v:val / 255.0")
   let x = 0.412453 * r + 0.357580 * g + 0.180423 * b
   let y = 0.212671 * r + 0.715160 * g + 0.072169 * b
   let z = 0.019334 * r + 0.119193 * g + 0.950227 * b
@@ -36,7 +36,7 @@ endfunction
 
 function! s:xyz2256(xyz)
   let [x, y, z] = a:xyz
-  return 16 + (x * 36) + (y * 6) + z
+  return float2nr(16 + (x * 36) + (y * 6) + z)
 endfunction
 
 function! s:get_gui(key) dict
@@ -52,7 +52,7 @@ function! s:get_cterm(key) dict
       if has_key(c, '256')
         return c['256']
       elseif has_key(c, 'gui')
-        return xyz2256(rgb2xyz(hex2rgb(c.gui)))
+        return "" . s:xyz2256(s:rgb2xyz(s:hex2rgb(c.gui)))
       endif
     elseif &t_Co > 87
       return get(c, '88', 'NONE')
@@ -97,7 +97,6 @@ let s:colours = Colours({
 " quick command {{{
 
 command! -nargs=+ -complete=highlight -bar -bang Hi call <sid>HiLite("<bang>", <f-args>)
-" HiLite Comment fg=magenta bg=NONE attr=undercurl sp=magenta font=Monaco:h14
 function! s:HiLite(bang, ...)
   let groups = []
   let cmd = []
@@ -141,7 +140,7 @@ endfunction
 " {{{ General colors
 
 Hi Normal fg=b3 bg=b0
-Hi NonText fg=b1
+Hi NonText fg=b2
 hi! link SpecialKey NonText
 
 Hi Cursor fg=b1 bg=b4 attr=bold
