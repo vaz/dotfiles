@@ -118,7 +118,8 @@ end
 task :bash => :git do
   pkginstall 'bash-completion'
   dotfiles 'bash',  "bashrc" => '.bashrc',
-                    "lib" => '.sh'
+                    "lib" => '.sh',
+                    "inputrc" => '.inputrc'
   dotfiles 'bash',  "profile" => '.profile' if mac?
 end
 

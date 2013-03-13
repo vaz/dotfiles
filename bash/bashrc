@@ -26,7 +26,6 @@ done
 
 umask 002
 
-set -o vi                       # vi mode!
 set -o notify                   # notify immediately when jobs complete
 shopt -s cdspell                # fix typo'd args to cd
 shopt -s checkwinsize           # check window size after each cmd
