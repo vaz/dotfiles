@@ -130,7 +130,7 @@ __cd () {
   otherwise builtin cd "$@"
   _z --add $(pwd -P 2>/dev/null) 2>/dev/null
 }
-alias cd='__cd '
+alias cd='__cd'
 
 # activate $1, a virtualenv (python)
 activate () { . "$1/bin/activate"; }
