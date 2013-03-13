@@ -19,6 +19,7 @@ for f in /usr/local/etc/bash_completion /etc/bash_completion; do
 done
 [ -f ~/.bashrc.local ]      && . ~/.bashrc.local        # local bashrc
 [ -f ~/bin/z.sh ]           && . ~/bin/z.sh
+[ -f ~/bin/m.sh ]           && . ~/bin/m.sh
 
 
 ###############################################################################

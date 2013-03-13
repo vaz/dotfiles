@@ -131,7 +131,8 @@ end
 
 directory "#{HOME}/bin"
 task :bin => "#{HOME}/bin" do
-  dotfiles 'bin', 'z.sh' => 'bin/z.sh'
+  dotfiles 'bin', 'z.sh' => 'bin/z.sh',
+                  'm.sh' => 'bin/m.sh'
 end
 
 task :hg do
