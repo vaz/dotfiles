@@ -124,7 +124,7 @@ task :bash => :git do
 end
 
 task :ack => :brew do
-  pkginstall 'ack'
+  pkginstall 'ack-grep', 'ack'
   dotfiles 'ack', 'ackrc' => '.ackrc'
 end
 
