@@ -48,9 +48,9 @@ __git_prompt () {
 
 
 __prompt_char () {
-  git branch >/dev/null 2>&1 && echo '± ' && return
-  __hgdir    >/dev/null 2>&1 && echo '☿ ' && return
-  echo '$ '
+  git branch >/dev/null 2>&1 && echo '±' && return
+  __hgdir    >/dev/null 2>&1 && echo '☿' && return
+  echo '$'
   # Ȣ ȣ  ʢʡ  μ  ☿
 }
 
