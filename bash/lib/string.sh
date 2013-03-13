@@ -29,16 +29,16 @@ includes? () { quietly indexof "$@"; }
 # :: colours :: {{{
 
 # bold
-@s () { echo -n $(tput bold); }
+@s () { [ -n "$TERM" ] && echo -n $(tput bold); }
 
 # underline
-@u () { echo -n $(tput smul); }
+@u () { [ -n "$TERM" ] && echo -n $(tput smul); }
 
 # underline off
-@U () { echo -n $(tput rmul); }
+@U () { [ -n "$TERM" ] && echo -n $(tput rmul); }
 
 # reset
-@x () { echo -n $(tput sgr0); }
+@x () { [ -n "$TERM" ] && echo -n $(tput sgr0); }
 
 _colour () {
   esc "[$1;$2m"; shift 2
