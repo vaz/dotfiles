@@ -147,6 +147,7 @@ vundle-get () {
   vundle-upgrade
 }
 
+full-env () { comm -3 <(declare | sort) <(declare -f | sort); }
 
 
 # start mongod in the context of virtualenv $1 (python)
