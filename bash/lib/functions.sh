@@ -135,6 +135,10 @@ alias cd='__cd'
 # activate $1, a virtualenv (python)
 activate () { . "$1/bin/activate"; }
 
+# TODO: vundle should really have a CLI client, and maybe have its own file
+# that is included by vimrc, added to automatically by the cli client and
+# can contain the per-plugin settings.  Or a directory with one file per
+# plugin.
 
 vundle-upgrade () { vim +BundleInstall! +BundleClean +q +q /dev/zero; }
 
