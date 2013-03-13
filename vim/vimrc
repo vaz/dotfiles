@@ -1,4 +1,4 @@
-" vim: ft=vim:fdm=marker:fen:fdl=0:
+" vim: ft=vim:fdm=marker:fen:
 " ䷀ ䷁ ䷂ ䷃ ䷄ ䷅ ䷆ ䷇ ䷈ ䷉ ䷊ ䷋ ䷌ ䷍ ䷎ ䷏ ䷐ ䷑ ䷒ ䷓ ䷔ ䷕ ䷖ ䷗ ䷘ ䷙ ䷚ ䷛ ䷜ ䷝ ䷞ ䷟ •
 " •
 " ䷣   ——Vaz•縷々
@@ -14,9 +14,10 @@
 " :: Settings {{{1
 " :::: general {{{2
 set nocompatible                  " thanks for everything, vi
-set dir=~/.vim/swap,.             " keep swap files in home dir
-set writebackup bdir=~/.vim/tmp/  " use backup when writing a file
 set backup                        " keep backup after writing
+set writebackup                   " use backup when writing a file
+set backupdir=~/.vim/tmp/backup,.
+set dir=~/.vim/tmp/swap,.         " swap file locations
 set history=500                   " remember 500 ex commands
 set clipboard+=unnamed            " unnamed register = os clipboard
 set viminfo='20,h                 " remember marks in 'files, not hlsearch
@@ -98,10 +99,10 @@ noremap - <c-o>
 noremap = <c-i>
 
 " make up and down keys useful
-noremap <up> <c-u>
-noremap <down> <c-d>
-noremap <left> ^
-noremap <right> $
+"noremap <up> <c-u>
+"noremap <down> <c-d>
+"noremap <left> ^
+"noremap <right> $
 nnoremap <space>h ^
 nnoremap <space>l $l
 
@@ -109,6 +110,55 @@ nnoremap <space>l $l
 nnoremap <c-e> 5<c-e>
 nnoremap <c-y> 5<c-y>
 
+" apple HIG style movements
+" map meta + arrows in terminal
+
+no   <D-Left>       <Home>
+no!  <D-Left>       <Home>
+no   <M-Left>       <C-Left>
+no!  <M-Left>       <C-Left>
+
+no   <D-Right>      <End>
+no!  <D-Right>      <End>
+no   <M-Right>      <C-Right>
+no!  <M-Right>      <C-Right>
+
+no   <D-Up>         <C-Home>
+ino  <D-Up>         <C-Home>
+no   <m-up>         {
+imap <M-Up>         <C-o>{
+
+no   <D-Down>       <C-End>
+ino  <D-Down>       <C-End>
+no   <m-down>       }
+imap <M-Down>       <C-o>}
+
+imap <M-BS>         <C-w>
+inoremap <D-BS>     <esc>ld0i
+
+" }}}
+" :::: editing {{{2
+
+" make R in visual mode do what I would expect it to
+vnoremap R r R
+
+" pressing return in normal mode opens a line above
+nnoremap <cr> mOO<esc>`O
+" pressing shift-return in normal mode opens line below
+" this only works in gui vim
+nnoremap <s-cr> mOo<esc>`O
+
+" easy underlining/overlining
+nnoremap <leader>uo= yyPVr=jyypVr=
+nnoremap <leader>uo* yyPVr*jyypVr*
+nnoremap <leader>u=  yypVr=
+nnoremap <leader>u-  yypVr-
+
+" dragging lines
+nnoremap <silent> ∆ :m+<cr>
+nnoremap <silent> ˚ :m-2<cr>
+vnoremap ∆ :m'>+<cr>gv
+vnoremap ˚ :m-2<cr>gv
 
 " }}}
 " :::: search {{{2
@@ -222,30 +272,6 @@ nnoremap <leader>8 <esc>:set expandtab tabstop=8 softtabstop=8 shiftwidth=8<cr>
 nnoremap <leader><leader>2 <esc>:set noexpandtab tabstop=2 softtabstop=2 shiftwidth=2<cr>
 nnoremap <leader><leader>4 <esc>:set noexpandtab tabstop=4 softtabstop=4 shiftwidth=4<cr>
 nnoremap <leader><leader>8 <esc>:set noexpandtab tabstop=8 softtabstop=8 shiftwidth=8<cr>
-
-" }}}
-" :::: editing {{{2
-
-" make R in visual mode do what I would expect it to
-vnoremap R r R
-
-" pressing return in normal mode opens a line above
-nnoremap <cr> mOO<esc>`O
-" pressing shift-return in normal mode opens line below
-" this only works in gui vim
-nnoremap <s-cr> mOo<esc>`O
-
-" easy underlining/overlining
-nnoremap <leader>uo= yyPVr=jyypVr=
-nnoremap <leader>uo* yyPVr*jyypVr*
-nnoremap <leader>u=  yypVr=
-nnoremap <leader>u-  yypVr-
-
-" dragging lines
-nnoremap <silent> ∆ :m+<cr>
-nnoremap <silent> ˚ :m-2<cr>
-vnoremap ∆ :m'>+<cr>gv
-vnoremap ˚ :m-2<cr>gv
 
 " }}}
 " :::: text objects {{{2
