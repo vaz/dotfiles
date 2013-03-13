@@ -31,18 +31,10 @@
     set visible-stats on
 # }}}
 
-# history {{{
-    # try to keep cursor position when navigating history
-    set history-preserve-point on
-# }}}
-
 
 #set menu-complete-display-prefix on
 
 set editing-mode vi
-
-# custom mappings with \ as leader
-#"\\r": re-read-init-file
 
 "\e[A": history-search-backward
 "\e[B": history-search-forward
@@ -50,6 +42,7 @@ set editing-mode vi
 set keymap vi-command
 "\\u": upcase-word
 "\\d": downcase-word
+"\\r": re-read-init-file
 
 set keymap vi-insert
 "\eOH": beginning-of-line
