@@ -166,7 +166,7 @@ task :vim => [:hg, :ruby] do
                   'vimhome' => '.vim'
 
   unless /\+ruby/ =~ `vim --version`
-    %w(libncurses5-dev libxml2-dev libxslt1-dev ruby1.8-dev).map |pkg| do
+    %w(libncurses5-dev libxml2-dev libxslt1-dev ruby1.8-dev).map do |pkg|
       pkginstall pkg
     end if linux?
     puts "Compiling a vim that doesn't suck..."
