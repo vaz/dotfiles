@@ -34,6 +34,10 @@ shopt -s cmdhist                # history saves multi-line cmd as one entry
 shopt -s extglob                # extended pathname expansion
 shopt -s lithist                # multi-line hist preserves newlines
 export HISTCONTROL=ignoreboth   # no dups in history
+HISTIGNORE=" *:&:ls:[bf]g:exit" # don't put these commands in history
+export HISTIGNORE               # & means dups, ' *' is a trick for not
+                                # storing any command starting with a space
+export auto_resume=exact        # typing the ARGV[0] of a stopped job resumes it
 
 # make less show info for archives, pics, ...
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -81,6 +85,10 @@ darwin && {
   export VISUAL='mvim -f'
   export LANG='en_CA.UTF-8'
 
-  export VIDIR_EDITOR='mvim -v'
-  export VIDIR_EDITOR_ARGS='-c :set nolist | :set ft=vidir-ls'
+  export VIDIR_EDITOR='vim'
+  export VIDIR_EDITOR_ARGS='-c :set nolist | set ft=vidir-ls'
+
+  # so that homebrew's fontforge installation can be accessed by
+  # non-homebrew python extension
+  export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
 }
