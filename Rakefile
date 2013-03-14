@@ -37,7 +37,7 @@ def invoke task; Rake::Task[task].invoke end
 
 mac? or linux? or abort "since when do you use #{PLATFORM}? peace out."
 
-def has?     cmd; system "which -s #{cmd}" end
+def has?     cmd; system "which #{cmd} >/dev/null 2>&1" end
 def missing? cmd; not has?(cmd) end
 
 def quietly  cmd; system "#{cmd} >/dev/null 2>&1" end
@@ -125,6 +125,7 @@ end
 
 task :ack => :brew do
   pkginstall 'ack-grep', 'ack'
+  `which ack-grep && ( ag=$(which ack-grep); sudo ln -s $ag ${ag%-grep}; )`
   dotfiles 'ack', 'ackrc' => '.ackrc'
 end
 
@@ -149,12 +150,17 @@ task :hg do
 end
 
 task :ruby => :git do
-  dotfiles 'ruby',  'irbrc'     => '.irbrc',
-                    'pryrc'     => '.pryrc',
-                    'bundle'    => '.bundle'
+  dotfiles 'ruby', 'bundle'    => '.bundle'
 
   puts "Installing ruby with rbenv..."
   system "#{DOTFILES}/ruby/install-ruby.sh"
+end
+
+task :irb => :ruby do
+  dotfiles 'ruby',  'irbrc'     => '.irbrc',
+                    'pryrc'     => '.pryrc'
+  puts "Installing gems for irb and pry..."
+  system "gem install wirble whats_up interactive_editor ruby-terminfo irb_rocket --no-ri --no-rdoc"
 end
 
 task :screen do

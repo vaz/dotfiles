@@ -14,7 +14,7 @@ au BufNewFile,BufRead [rR]antfile,*.rant		set filetype=ruby
 au BufNewFile,BufRead .irbrc,irbrc			set filetype=ruby
 
 " Pry config
-au BufNewFile,BufRead .pryrc				set filetype=ruby
+au BufNewFile,BufRead .pryrc,pryrc			set filetype=ruby
 
 " Rackup
 au BufNewFile,BufRead *.ru				set filetype=ruby

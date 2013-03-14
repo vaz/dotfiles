@@ -34,23 +34,34 @@
 
 #set menu-complete-display-prefix on
 
+
+$if ruby
+  "\ea": "ruby"
+$else
+
 set editing-mode vi
 
-"\e[A": history-search-backward
-"\e[B": history-search-forward
 
 set keymap vi-command
 "\\u": upcase-word
 "\\d": downcase-word
-"\\r": re-read-init-file
+"\C-r": re-read-init-file
+"\C-p": history-search-backward
+"\C-n": history-search-forward
 
 set keymap vi-insert
 "\eOH": beginning-of-line
 "\eOF": end-of-line
 "\e[1;9D": backward-word
 "\e[1;9C": forward-word
-space: magic-space
+"\C-p": history-search-backward
+"\C-n": history-search-forward
 
-#$if Bash
+$if bash
+  set keymap vi-insert
+  "\ea": "bash"
+  space: magic-space
 
-#$endif
+$endif
+
+$endif

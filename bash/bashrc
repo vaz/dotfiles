@@ -73,14 +73,14 @@ fi
 ###############################################################################
 ## program-specific setup
 
-which -s rbenv && eval "$(rbenv init -)"
+which rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
 
 export EDITOR='vim'
 
 darwin && {
   # emacs
   emacs_exec=/Applications/Emacs.app/Contents/MacOS/Emacs
-  which -s $emacs_exec && alias emacs="$emacs_exec -nw"
+  which $emacs_exec >/dev/null 2>&1 && alias emacs="$emacs_exec -nw"
 
   export VISUAL='mvim -f'
   export LANG='en_CA.UTF-8'

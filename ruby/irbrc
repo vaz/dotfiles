@@ -1,12 +1,14 @@
 # vaz .irbrc 
 
 require 'rubygems'
-require 'wirble'
 require 'ostruct'
-require 'color'
 require 'open-uri'
-require 'map_by_method'
-require 'what_methods'
+require 'irb/completion'
+
+require 'wirble'
+require 'irb_rocket'
+require 'whats_up'
+require 'whats_up/classic'
 require 'interactive_editor'
 
 # Examples:
@@ -23,24 +25,22 @@ require 'interactive_editor'
 # end                                     # => arf
 # Dog.new.bark                            # => NoMethodError
 
-# h = { :cat => "gatorade" }              # => {:cat=>"gatorade"}
-# h/:cat                                  # => "gatorade"
-# Wait what is the good of that?
-
 begin # irb config and wirble
   ARGV << %w( --readline --prompt xmp )
 
-  Wirble.init
-  Wirble.colorize
+  #Wirble.init
+  #Wirble.colorize
 
   # IRB.conf[:AUTO_INDENT] = true
 
-  IRB.conf[:PROMPT][:XMP][:RETURN] = "                                \# => %s\n"
+  #IRB.conf[:PROMPT][:XMP][:RETURN] = "                                \# => %s\n"
   IRB.conf[:PROMPT][:XMP][:PROMPT_I] = "> "
   IRB.conf[:PROMPT][:XMP][:PROMPT_N] = "  "
   IRB.conf[:PROMPT][:XMP][:PROMPT_S] = nil
   IRB.conf[:PROMPT][:XMP][:PROMPT_C] = nil
   IRB.conf[:PROMPT_MODE] = :XMP
+rescue
+  puts "failed configuring prompt"
 end
 
 begin # Inline colorized ri (override wirble's)
@@ -76,6 +76,8 @@ begin # Inline colorized ri (override wirble's)
       less { MyStupidRiDriver.ri(*topics) }
     end
   end
+rescue
+  puts "failed ri helper"
 end
 
 begin # Copious output helper
@@ -92,12 +94,14 @@ begin # Copious output helper
     $stdout, sout = StringIO.new, $stdout
     yield
     $stdout, str_io = sout, $stdout
-     IO.popen(spool_cmd, 'w') do |f|
-       f.write str_io.string
-       f.flush
-       f.close_write
-     end
+    IO.popen(spool_cmd, 'w') do |f|
+      f.write str_io.string
+      f.flush
+      f.close_write
+    end
   end
+rescue
+  puts "failed less output helper"
 end
 
 begin
@@ -121,17 +125,9 @@ begin
 end
 
 begin # editor helpers
-  # Textmate helper
-  def mate *args
-    flattened_args = args.map {|arg| "\"#{arg.to_s}\""}.join ' '
-    `mate #{flattened_args}`
-    nil
-  end
-
-  # Vi helper
-  def vim *args
+  def mvim *args
     flattened_args = args.map { |arg| "\"#{arg.to_s}\""}.join ' '
-    `vim #{flattened_args}`
+    `mvim #{flattened_args}`
     nil
   end  
 end
@@ -160,11 +156,6 @@ begin # hack standard objects
       end
     end
   end
-
-  class Hash
-    def /(key)
-      self[key]
-    end
-  end
+rescue
+  puts "failed mocker thing"
 end
-
