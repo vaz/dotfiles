@@ -180,6 +180,12 @@ task :vim => [:hg, :ruby] do
     puts r unless $? == 0
   end
 
+  vundle_dir = "#{DOTFILES}/vim/vimhome/bundle/vundle"
+  unless File.directory? "#{vundle_dir}/.git"
+    r = `git clone https://github.com/gmarik/vundle.git #{vundle_dir}`
+    puts r unless $? == 0
+  end
+
   system "vim +BundleInstall! +BundleClean +q +q /dev/zero"
   system "cd #{HOME}/.vim/bundle/command-t && bundle install && rake make"
   system "source #{HOME}/.bashrc"
