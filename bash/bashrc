@@ -91,4 +91,4 @@ darwin && {
   # so that homebrew's fontforge installation can be accessed by
   # non-homebrew python extension
   export PYTHONPATH="/usr/local/lib/python2.7/site-packages:$PYTHONPATH"
-}
+} || true
