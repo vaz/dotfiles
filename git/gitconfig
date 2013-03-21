@@ -17,7 +17,8 @@
   decorate = short
 [alias]
   co = checkout
-  st = status
+  s  = status --short --branch
+  st = status --short --branch
   ci = commit
   br = branch
   dif = diff
