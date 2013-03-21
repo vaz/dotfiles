@@ -37,7 +37,7 @@ export HISTCONTROL=ignoreboth   # no dups in history
 HISTIGNORE=" *:&:ls:[bf]g:exit" # don't put these commands in history
 export HISTIGNORE               # & means dups, ' *' is a trick for not
                                 # storing any command starting with a space
-export auto_resume=exact        # typing the ARGV[0] of a stopped job resumes it
+export auto_resume=substring    # type part of job's ARGV to resume
 
 # make less show info for archives, pics, ...
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -49,7 +49,7 @@ darwin && export LSCOLORS='ExfxcxdxCxegedabagacad'
 
 export PROMPT_COMMAND='if [ $? = 0 ]; then okclr="`@G`"; else okclr="`@r`"; fi'
 export PS1="
-`@M`\u`@m`@\h`@x` `@g`\w`@k`"'$(__git_prompt)$(__hg_prompt)
+`@B`\u`@b`@\h`@x` `@G`\w"'$(__git_prompt)$(__hg_prompt)
 \[`echo -ne $okclr`\]$(__prompt_char)\['`@x`'\] '
 
 

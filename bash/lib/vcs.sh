@@ -29,21 +29,25 @@ __hg_prompt () {
   [ -f "$hgdir"/bookmarks.current ] && {
     bookmark=$(cat "$hgdir"/bookmarks.current)
   }
-  echo -ne "`@x` on `@m`$branch`@x`"
-  [ -n "$bookmark" ] && echo -ne "`@x` on `@b`$bookmark`@x`"
+  echo -ne "`@b` on `@B`$branch`@x`"
+  [ -n "$bookmark" ] && echo -ne "`@b` at `@B`$bookmark`@x`"
 }
 
 # display branch and status char for git in prompt
 __git_prompt () {
-  local st="$(git status 2>/dev/null)"
-  test -z "$st" && return
+  local st="$(git status --porcelain 2>/dev/null)"
+
+  local x="$(echo "$st" | cut -b1)"
+  local y="$(echo "$st" | cut -b2)"
 
   local chr=''
-  [[ "$st" =~ "Changes to be committed:" ]] && chr='!'
-  test -z "$chr" && [[ "$st" =~ Change.*not.(updated|staged) ]] && chr='*'
-  test -z "$chr" && [[ "$st" =~ "Untracked files:" ]] && chr='?'
+  local az='[A-Z]' q='\?'
 
-  __git_ps1 "\e[0m on \e[0;35m%s\e[0;32m${chr}\e[0m"
+  [[ "$x" =~ $q  ]] && chr+='?'
+  [[ "$x" =~ $az ]] && chr+='!'
+  [[ "$y" =~ $az ]] && chr+='*'
+
+  __git_ps1 "\e[0;34m on \e[1;34m%s\e[0;32m${chr}\e[0m"
 }
 
 
