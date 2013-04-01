@@ -52,7 +52,7 @@ export GIT_PS1_SHOWSTASHSTATE=1
 export GIT_PS1_SHOWUNTRACKEDFILES=1
 export GIT_PS1_SHOWUPSTREAM='auto git'
 
-export PROMPT_COMMAND='if [ $? = 0 ]; then okclr="`@G`"; else okclr="`@r`"; fi'
+export PROMPT_COMMAND='if [ $? = 0 ]; then okclr="`@ +G`"; else okclr="`@ +r`"; fi'
 export PS1="
 `@s;@B`\u`@x;@b`@\h`@x` `@ +G`\w`@x`"'$(__git_ps1 " `@b`on `@ +B`%s`@x`")$(__hg_prompt)
 \[`echo -ne $okclr`\]$(__prompt_char)\['`@x`'\] '
