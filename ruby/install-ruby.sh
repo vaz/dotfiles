@@ -20,14 +20,19 @@ echo "Installing ruby versions from $versionsfile..."
 
 for version in $(cat "$(dirname "$0")/ruby-versions"); do
   echo "Installing ruby-$version..."
-  rbenv versions | grep "$version" || rbenv install "$version"
+  rbenv versions | grep "$version" || {
+    rbenv install "$version"
+    export RBENV_VERSION="$version"
+    rbenv version
+    rbenv rehash
+    gem install bundler --no-ri --no-rdoc
+    gem install noexec --no-ri --no-rdoc
+    rbenv rehash
+  }
 done
-rbenv global "$globalversion"
-echo "Using ruby-$(rbenv version)."
-rbenv rehash
 
+echo "$globalversion" > "$HOME/.rbenv/version"
 echo
-gem install bundler --no-ri --no-rdoc
-gem install noexec --no-ri --no-rdoc
-rbenv rehash
+echo "global ruby: $globalversion"
+
 
