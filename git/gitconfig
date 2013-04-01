@@ -33,11 +33,11 @@
   # git ff [opts] origin/master -> git merge --ff-only origin/master
   ff = "!f(){ \
     if test -z \"$1\"; then \
-      r=\"origin/$(git symbolic-ref HEAD 2>/dev/null | cut -d/ -f3-)\" \
+      r=\"origin/$(git symbolic-ref HEAD 2>/dev/null | cut -d/ -f3-)\"; \
     else \
-      r=\"$1\" \
-    fi \
-    git merge --ff-only \"$r\" \
+      r=\"$1\"; \
+    fi; \
+    git merge --ff-only \"$r\"; \
     }; f"
   unstage = reset HEAD --
   l  =  log --pretty=format:'%Cgreen%h%Creset -%C(yellow)%d%Creset %s \
