@@ -115,7 +115,12 @@ task :git => :brew do
                   'gitignore' => '.gitignore'
 end
 
-task :bash => :git do
+task :readline do
+  pkginstall "readline-common", "readline"
+  dotfiles 'readline', 'inputrc' => '.inputrc'
+end
+
+task :bash => [:git, :readline] do
   pkginstall 'bash-completion'
   dotfiles 'bash',  "bashrc" => '.bashrc',
                     "lib" => '.sh',

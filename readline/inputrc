@@ -1,6 +1,6 @@
 # general {{{
     set bell-style none
-    set horizontal-scroll-mode on
+    #set horizontal-scroll-mode on
 # }}}
 
 # completion behaviour {{{
