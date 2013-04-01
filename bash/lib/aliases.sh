@@ -3,10 +3,10 @@
 if [ "`uname`" = "Darwin" ]; then
     alias ls='ls -Gp'
     which wget >/dev/null 2>&1 || alias wget='curl -O'
-    alias p='ps -eh -o user,pid,ppid,%cpu,%mem,command'
+    alias pp='ps -eh -o user,pid,ppid,%cpu,%mem,command'
 else
     alias ls='ls --color=auto -p'
-    alias p='ps -eH --headers -o user,pid,%cpu,%mem,command'
+    alias pp='ps -eH --headers -o user,pid,%cpu,%mem,command'
 fi
 
 # ls
