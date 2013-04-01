@@ -7,8 +7,8 @@ require 'irb/completion'
 
 require 'wirble'
 require 'irb_rocket'
-require 'whats_up'
-require 'whats_up/classic'
+#require 'whats_up'
+#require 'whats_up/classic'
 require 'interactive_editor'
 
 # Examples:
