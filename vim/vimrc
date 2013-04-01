@@ -388,17 +388,17 @@ Bundle 'nathanaelkane/vim-indent-guides'
 Bundle 'vimoutliner/vimoutliner'
 Bundle 'scrooloose/nerdtree'
   nnoremap <leader>t :NERDTreeToggle<cr>
-Bundle 'ervandew/supertab'
-  let g:SuperTabDefaultCompletionType = "context"
-  let g:SuperTabContextDefaultCompletionType = "<c-n>"
-  let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
-  let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&keywordfunc', '&completefunc']
-  let g:SuperTabDefaultCompletionTypeDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>", '&keywordfunc:<c-n>']
-  let g:SuperTabRetainCompletionDuration = 'completion'
-  let g:SuperTabLongestEnhanced = 1
-  augroup supertab
-    au FileType css let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
-  augroup END
+" Bundle 'ervandew/supertab'
+"   let g:SuperTabDefaultCompletionType = "context"
+"   let g:SuperTabContextDefaultCompletionType = "<c-n>"
+"   let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
+"   let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&keywordfunc', '&completefunc']
+"   let g:SuperTabDefaultCompletionTypeDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>", '&keywordfunc:<c-n>']
+"   let g:SuperTabRetainCompletionDuration = 'completion'
+"   let g:SuperTabLongestEnhanced = 1
+"   augroup supertab
+"     au FileType css let g:SuperTabDefaultCompletionType = '<c-x><c-o>'
+"   augroup END
 Bundle 'altercation/vim-colors-solarized'
   let g:solarized_termcolors=256
   let g:solarized_hitrail=1    "default value is 0
@@ -453,6 +453,7 @@ Bundle 'vaz/vim-gitgutter'
 Bundle 'Lokaltog/vim-powerline'
   let g:Powerline_symbols = 'fancy'
   let g:Powerline_stl_path_style = 'short'
+  set noshowmode
 Bundle 'godlygeek/tabular'
   noremap <silent> <leader>a= :Tabularize /=<cr>
   noremap <silent> <leader>a: :Tabularize /:\zs<cr>
@@ -487,6 +488,7 @@ Bundle 'godlygeek/tabular'
   "
   "
   "endfunction
+Bundle 'Valloric/YouCompleteMe'
 
 " ::bundle tail::
 
