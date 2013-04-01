@@ -120,17 +120,21 @@ forfiles () {
 /ir () { pcregrep --colour -ir $*; }
 
 
-alias back='quietly popd'
-alias fd='quietly pushd'
-
-__cd () {
-  [ -z "$1" ] && { [ "$PWD" = "$HOME" ] || silently pushd "$HOME"; return; }
-  silently pushd "$@"
-  otherwise try _z "$@"
-  otherwise builtin cd "$@"
-  _z --add $(pwd -P 2>/dev/null) 2>/dev/null
-}
-alias cd='__cd'
+#alias back='quietly popd'
+#alias fd='quietly pushd'
+#
+#__cd () {
+#  [ -z "$1" ] && { [ "$PWD" = "$HOME" ] || silently pushd "$HOME"; return; }
+#  silently pushd "$@" && _z --add $(pwd -P 2>/dev/null) 2>/dev/null
+#  otherwise try _z "$@"
+#  otherwise builtin cd "$@" && _z --add $(pwd -P 2>/dev/null) 2>/dev/null
+#}
+#alias cd='__cd'
+#
+#zr () {
+#  local reporoot=$(git rev-parse --show-toplevel 2>/dev/null)
+#  z $reporoot $@
+#}
 
 # activate $1, a virtualenv (python)
 activate () { . "$1/bin/activate"; }
