@@ -24,6 +24,7 @@ set viminfo='20,h                 " remember marks in 'files, not hlsearch
 set viminfo+=<50,s10              " remember registers: <Lines sSize-in-Kb
 set viminfo+=%                    " remember buflist if invoked w/o args
 set cryptmethod=blowfish          " use actually secure crypto with :X
+set switchbuf=useopen             " switch to existing buffer in another window
 
 " :::: control {{{2
 set mouse=a                       " enable mouse (scrolling is nice)
@@ -60,16 +61,25 @@ set list                " show control characters, line endings etc.
 silent! set listchars=tab:→\ ,trail:␣,extends:…,precedes:…,nbsp:·,eol:¬
 silent! set showbreak=↪
 if version >= 703 | set rnu | else | set nu | endif
-set noerrorbells visualbell t_vb= " error bells are annoying
+set noerrorbells visualbell
+set t_vb="\<Esc>]Plffbbbb\<Esc>\\"
 silent! set conceallevel=2 " conceal shows replacements
 silent! set concealcursor=nc " and always conceal in normal mode and search
+set dict+=/usr/share/dict/words
+" could use yubnub to get live values for thesaurus and dictionary maybe
 set completeopt=menuone,longest,preview
 set foldenable foldlevel=1000 foldmethod=marker
 set display=lastline  " show as much as possible from last (long) line
+set ttimeoutlen=500   " shorter timeout for keycodes (like esc)
+set ttyscroll=500     " just redraw if there's that much to scroll
+if !empty($SSH_CONNECTION)
+  set ttyscroll=10
+endif
 
 set wildmode=longest,list " tab autocomplete like bash
-set wildignore=*.pyc,*.o,.git,.hg,.svn,.cvs " ignore these files in wildcard
 
+set wildignore+=*.orig,*.rej,*~,#*#,.*.s[a-w][a-z],.DS_Store,._*,.Trash
+set wildignore+=*.py[co],*.o,*.so,*.so.*,*.dll,*.a,*.dylib,*.exe,*.bin,*.out
 
 " :: Keymappings and commands ::{{{1
 
@@ -105,6 +115,51 @@ noremap = <c-i>
 "noremap <right> $
 nnoremap <space>h ^
 nnoremap <space>l $l
+
+" make repeating f/t commands ignore linebreaks
+
+" noremap  f @=FfTt( 1, 0)<cr>
+" noremap  <expr> F FfTt(-1, 0)
+" noremap  <expr> t FfTt( 1, 1)
+" noremap  <expr> T FfTt(-1, 1)
+" onoremap <expr> f FfTt( 1, 0, 1)
+" onoremap <expr> F FfTt(-1, 0, 1)
+" onoremap <expr> t FfTt( 1, 1, 1)
+" onoremap <expr> T FfTt(-1, 1, 1)
+
+" noremap  <expr> ; FfTtAgain()
+" noremap  <expr> , FfTtAgain(1)
+" onoremap <expr> ; FfTtAgain(0, 1)
+" onoremap <expr> , FfTtAgain(1, 1)
+
+" command! -count=N FfTt :
+
+" char is the character to search for
+" dir should be 1 (forward, like f/t) or -1 (backward, like F/T)
+" excl should be 0 (inclusive, like f/F) or 1 (exclusive, like t/T)
+function! s:FfTtSearch(char, dir, excl, omap)
+  let [l:line, l:col] = searchpos(a:char, (a:dir>0?'':'b'))
+  let l:col = l:col + a:omap - (a:dir * a:excl)
+  return ":call cursor(".l:line.", ".l:col.")\<cr>"
+endfunction
+
+function! FfTt(...)
+  let l:char = nr2char(getchar())
+  let l:dir  = a:0 >= 1 ? a:1 : (exists(s:fftt_ldir)  ? s:fftt_ldir  : 1)
+  let l:excl = a:0 >= 2 ? a:2 : (exists(s:fftt_lexcl) ? s:fftt_lexcl : 0)
+  let l:omap = a:0 >= 3 ? a:3 : 0
+  let [s:fftt_lchar, s:fftt_ldir, s:fftt_lexcl] = [l:char, l:dir, l:excl]
+  return s:FfTtSearch(l:char, l:dir, l:excl, l:omap)
+endfunction
+
+function! FfTtAgain(...)
+  if exists(s:fftt_lchar)
+    let l:dir  = a:0 >= 1 ? a:1 : s:fftt_ldir
+    let l:omap = a:0 >= 2 ? a:2 : 0
+    return s:FfTtSearch(s:fftt_lchar, l:dir, s:fftt_lexcl, l:omap)
+  endif
+endfunction
+
 
 " scroll viewport faster
 nnoremap <c-e> 5<c-e>
@@ -143,10 +198,11 @@ inoremap <D-BS>     <esc>ld0i
 vnoremap R r R
 
 " pressing return in normal mode opens a line above
-nnoremap <cr> mOO<esc>`O
+" hijacking the key for ctrlp
+" nnoremap <cr> mOO<esc>`O
 " pressing shift-return in normal mode opens line below
 " this only works in gui vim
-nnoremap <s-cr> mOo<esc>`O
+" nnoremap <s-cr> mOo<esc>`O
 
 " easy underlining/overlining
 nnoremap <leader>uo= yyPVr=jyypVr=
@@ -164,8 +220,8 @@ vnoremap ˚ :m-2<cr>gv
 " :::: search {{{2
 
 " good regexes in search, clear old highlighting
-noremap <silent> / :set hls<cr>/\v
-onoremap <silent> / /\v
+noremap <silent> / :set hls<cr>/
+ounmap /
 
 " turn on search highlighting for n/n and */#
 noremap <silent> n nzv:set hls<cr>
@@ -186,6 +242,10 @@ nnoremap <leader>do :diffoff<cr>
 nnoremap <leader>do :diffoff!<cr>
 nnoremap <leader>ds :vert diffsplit<cr>
 
+" }}}
+" :::: spelling {{{
+command! English set spell spelllang=en
+command! French set spell spelllang=fr
 " }}}
 " :::: GPG encryption {{{2
 
@@ -299,6 +359,7 @@ endfunc
 nnoremap <silent> H :bp<cr>
 nnoremap <silent> L :bn<cr>
 nnoremap <silent> <backspace> :bd<cr>
+nnoremap <silent> <leader><backspace> :BD<cr>
 
 function! FlipIfListed()
   if buflisted(bufnr("#")) | exe "normal! \<c-^>" | endif
@@ -341,9 +402,6 @@ iab <expr> ~~z strftime("%a %d %b %Y %H:%M:%S")
 iab <expr> ~~L strftime("%A %d %B %Y")
 iab <expr> ~~Z strftime("%A %d %B %Y %H:%M:%S")
 
-nnoremap ,it i~~t 
-nnoremap ,id i~~d
-nnoremap ,is i~~s
 
 " }}}
 " :::: visual mode {{{2
@@ -402,13 +460,13 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'altercation/vim-colors-solarized'
   let g:solarized_termcolors=256
   let g:solarized_hitrail=1    "default value is 0
-Bundle 'git://git.wincent.com/command-t.git'
-  nnoremap <silent> <leader><space> :CommandT<cr>
-  let g:CommandTMaxFiles = 50000
-  let g:CommandTMaxHeight = 20
-  let g:CommandTMinHeight = 20
-  let g:CommandTMatchWindowReverse = 1
-  let g:CommandTCancelMap = ['<C-c>', '<esc>']
+" Bundle 'git://git.wincent.com/command-t.git'
+"   nnoremap <silent> <leader><space> :CommandT<cr>
+"   let g:CommandTMaxFiles = 50000
+"   let g:CommandTMaxHeight = 20
+"   let g:CommandTMinHeight = 20
+"   let g:CommandTMatchWindowReverse = 1
+"   let g:CommandTCancelMap = ['<C-c>', '<esc>']
 Bundle 'sjbach/lusty'
   nnoremap <silent> <tab> :LustyJuggler<cr>
   nnoremap <silent> <s-tab> :LustyBufferExplorer<cr>
@@ -489,14 +547,71 @@ Bundle 'godlygeek/tabular'
   "
   "endfunction
 Bundle 'Valloric/YouCompleteMe'
+Bundle 'derekwyatt/vim-scala'
+Bundle 'sophacles/vim-bundle-mako'
+Bundle 'kien/ctrlp.vim'
+  let g:ctrlp_map = '<cr>'
+  let g:ctrlp_match_window_bottom = 1
+  let g:ctrlp_max_height = 30
+  " if file is already open in a window somewhere, just switch to it:
+  let g:ctrlp_switch_buffer = 'E'
+  " 'r': repo root; that is, nearest ancestor with a .git, .hg, .svn, ...
+  " otherwise:
+  " 'a': %:h unless % is in a dir below vim's cwd
+  " 'w': modifies 'r' to start looking from vim's actual cwd instead of %:h
+  let g:ctrlp_working_path_mode = 'ra'
+  " show dotfiles/dotdirs?  would be nice to be able to toggle this easily
+  let g:ctrlp_show_hidden = 0
+  let g:ctrlp_max_files = 5000
+  let g:ctrlp_follow_symlinks = 1
+  " let g:ctrlp_custom_ignore = {
 
+
+
+
+"set wildignore=.git,.hg,.svn,.cvs,.bazaar
+"set wildignore+=*.zip,*.tar,*.tar,*.rar,*.7z,*.gz,*.bzip,*.bz2,*.iso,*.dmg
+"set wildignore+=*.class,*.[jwe]ar,*.apk,*.ap_,
+"set wildignore+=node_modules
+"set wildignore+=.rbenv-version,.bundle,*.gem
+"set wildignore+=*.egg-info,.Python,.ipython,.pip,.python-eggs,*.egg
+"set wildignore+=*.mo,*.rpm,*.deb,*.xpi
+Bundle 'chrisbra/Recover.vim'
+Bundle 'digitaltoad/vim-jade'
+Bundle 'tpope/vim-git'
+Bundle 'vim-scripts/bufkill.vim'
+Bundle 'mhinz/vim-startify'
 " ::bundle tail::
+"
 
-" :: Syntax and colours ::"{{{1
+command! -nargs=1 -bar BundleGet call BundleGet(<f-args>)
+function! BundleGet(bundle)
+  edit ~/.vimrc
+  0/^\" ::bundle tail::$/ s/^/\=printf("Bundle '%s'", a:bundle)
+  BundleInstall
+  close
+  write
+endfunction
+
+command! -nargs=1 -bar BundleConfig call BundleConfig(<f-args>)
+function! BundleConfig(bundle)
+  edit ~/.vimrc
+  exe "0/^Bundle '.*".a:bundle.".*'$"
+endfunction
+
+
+" :: Syntax, colours and terminal-specific stuff ::"{{{1
 
 if &term =~ "256color"
   set t_Co=256
 endif
+
+" Change cursor shape in insert mode
+if $TERM_PROGRAM =~? "iterm"
+  let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+  let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+endif
+
 
 if &t_Co > 2 
   syntax on
@@ -534,7 +649,7 @@ augroup vimrc
   " au CursorHoldI * stopinsert   " nope this is pretty annoying.
 
   " Turn off search highlighting when moving
-  au CursorMoved,InsertEnter * set nohls
+  "au CursorMoved,InsertEnter * set nohls
 
   " when editing a file, always jump to the last known cursor position.
   " Don't do it when the position is invalid or when inside an event handler
@@ -546,9 +661,6 @@ augroup vimrc
 
   " resize splits when window is resized
   au VimResized * :wincmd =
-
-  " auto-detect git commit message files for syntax highlighting
-  au BufNewFile,BufRead COMMIT_EDITMSG set filetype=gitcommit
 
   au BufNewFile,BufRead * if &syntax == '' | set foldmethod=indent | endif
 
@@ -562,11 +674,6 @@ augroup vimrc
 
 
   au FileType php set expandtab tabstop=8 softtabstop=2 shiftwidth=2
-
-  " reload vimrc when we save it
-  " for some reason powerline loses its colours when we do this in an autocmd
-  " even though it doesn't if we just source it manually
-  au BufWritePost .vimrc so ~/.vimrc | PowerlineReloadColorscheme
 
   " A mapping to source vim files
   " And a mapping to start automatically sourcing the current vim file
@@ -587,14 +694,31 @@ augroup vimrc
   au FileType haskell,lhaskell syntax match Operator "-<" conceal cchar=⤛
   au VimEnter * hi! link Conceal Statement
 
-  au FileType help nnoremap <silent> <cr> <c-]>
+  au FileType help nnoremap <silent> <buffer> <cr> <c-]>
 
   " always show where we are, foldwise
   au BufReadPost * normal! zv
+
+  " better cursors when wrapping
+  au FileType * if &wrap |
+        \ map <buffer> <up>     gk |
+        \ map <buffer> <down>   gj |
+        \ map <buffer> <right>  gl |
+        \ map <buffer> <left>   gh
+
+  "au FileType '' set filetype=text
 augroup END
 
 augroup lines
   au!
   au WinLeave,InsertEnter * set nocursorline | set nocursorcolumn
   au WinEnter,InsertLeave * set cursorline | set cursorcolumn
+augroup END
+
+augroup reloadvimrc
+  au!
+  " reload vimrc when we save it
+  " for some reason powerline loses its colours when we do this in an autocmd
+  " even though it doesn't if we just source it manually
+  au BufWritePost .vimrc so ~/.vimrc | PowerlineReloadColorscheme
 augroup END
