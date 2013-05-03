@@ -9,7 +9,6 @@
 ###############################################################################
 ## includes
 
-. ~/.sh/aliases.sh
 . ~/.sh/vcs.sh
 . ~/.sh/string.sh
 . ~/.sh/functions.sh
@@ -19,7 +18,7 @@ for f in /usr/local/etc/bash_completion /etc/bash_completion; do
 done
 [ -f ~/.bashrc.local ]      && . ~/.bashrc.local        # local bashrc
 [ -f ~/bin/z.sh ]           && . ~/bin/z.sh
-[ -f ~/bin/m.sh ]           && . ~/bin/m.sh
+# [ -f ~/bin/m.sh ]           && . ~/bin/m.sh
 
 
 ###############################################################################
@@ -52,17 +51,35 @@ export GIT_PS1_SHOWSTASHSTATE=1
 export GIT_PS1_SHOWUNTRACKEDFILES=1
 export GIT_PS1_SHOWUPSTREAM='auto git'
 
-export PROMPT_COMMAND='if [ $? = 0 ]; then okclr="`@ +G`"; else okclr="`@ +r`"; fi'
+PROMPT_COMMAND=
+
+__virtualenv_ps1 () { [ -n "$VIRTUAL_ENV" ] && echo "{$(basename $VIRTUAL_ENV)}"; }
+__git_aware_dir () {
+  if [ "$(git rev-parse --is-inside-work-tree 2>&-)" = true ]; then
+    local repo=$(git rev-parse --show-toplevel 2>&-)
+    repo="$(builtin cd "$repo"; dirs -p | head -1)"
+    local prefix=$(git rev-parse --show-prefix 2>&-)
+    echo "`@ +G`$repo`@;@G`:$prefix`@`"
+  else
+    echo "`@ +G`$(dirs -p | head -1)`@`"
+  fi
+}
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 export PS1="
-`@s;@B`\u`@x;@b`@\h`@x` `@ +G`\w`@x`"'$(__git_ps1 " `@b`on `@ +B`%s`@x`")$(__hg_prompt)
-\[`echo -ne $okclr`\]$(__prompt_char)\['`@x`'\] '
+`@ +B`\u`@;@ b`@\h`@G`"'$(__virtualenv_ps1) $(__git_aware_dir)$(__git_ps1 " `@ b`on `@ +B`%s`@`")$(__hg_prompt)
+\[`echo -ne $okclr`\]$(__prompt_char)\['`@`'\] '
 
 
 ###############################################################################
 ## PATH
 
-# private bin, rbenv and /usr/local before /usr
-PATH=$HOME/bin:$HOME/.rbenv/bin:/usr/local/bin:/usr/local/sbin:$PATH
+# homebrew should put these in /etc/paths.d
+
+PATH=/usr/local/opt/ruby/bin:/usr/local/share/python:$PATH
+PATH=/usr/local/share/npm/bin:$PATH
+
+PATH=$HOME/.rbenv/bin:$PATH
+PATH=$HOME/bin:$PATH
 
 export PATH
 
@@ -78,9 +95,52 @@ fi
 ###############################################################################
 ## program-specific setup
 
-which rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
+newer? () {
+  [ ! -e "$1" -o "$(cat "$1" | tr -d ' ')" == "" ] && return 1
+  [ ! -e "$2" -o "$(cat "$2" | tr -d ' ')" == "" ] && return 0
+  darwin && [[ $(stat -f "%m" "$1") > $(stat -f "%m" "$1") ]]\
+         || [ "$1" -nt "$2" ]
+}
+
+init-prg () {
+  local cachef cached="$HOME/.sh/init-cache"
+  mkdir -p "$cached"
+
+  case "$1" in
+    --clear|-c)
+      rm -f "$cached/*"; return 0 ;;
+    --refresh|-r) shift
+      ( cd "$cached" 
+        [ $# == 0 ] && set -- $(find ./?* | xargs)
+        for cachef; do rm -f $(basename "$cachef"); done ) ;;
+    --list|-l)
+      ( cd "$cached"; command ls -1 )
+  esac
+
+  [ -n "$NO_INITPRG_CACHE" ] && { eval "$($@)"; return; }
+  local prg="$1"; shift
+  cachef="$cached/$prg.$(echo "$*" | tr -Cs '[:alnum:]' - \
+                                   | sed 's/^-*//;s/-*$//')"
+  prg=$(type -P "$prg") 2>&- && {
+    local cmd="$prg $@"
+    newer? "$prg" "$cachef" && { cat <(echo "# $cmd") <(eval "$cmd") > "$cachef"; }
+    . "$cachef"
+  }
+}
+
+init-prg rbenv init -
+init-prg npm completion
+init-prg bower completion
+init-prg grunt --completion bash
+init-prg fasd --init auto
+
+export PROMPT_COMMAND='[ $? = 0 ] && it2_palette cc 99ffa8 || it2_palette cc ff88aa;'"$PROMPT_COMMAND"
+
+. ~/.sh/aliases.sh
+
 
 export EDITOR='vim'
+[ -x "$(type -P vimpager 2>&-)" ] && export PAGER=vimpager
 
 darwin && {
   # emacs

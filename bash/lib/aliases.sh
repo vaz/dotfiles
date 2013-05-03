@@ -14,6 +14,12 @@ alias ll='ls -lh'
 alias la='ls -A'
 alias l='ls -lha'
 
+# fasd stuff
+alias v='f -t -e vim -b viminfo'
+alias m='f -t -e mvim -b viminfo'
+_fasd_bash_hook_cmd_complete v m
+
+
 # screen
 alias screen='screen -U'
 alias sr='screen -r'

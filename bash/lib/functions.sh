@@ -199,3 +199,43 @@ if [ "`uname`" = "Darwin" ]; then
     killall Finder
   }
 fi
+
+
+# iTerm2 custom control sequences:
+
+# set the tab's background colour
+it2_settabbg () {
+  local fmt=$'\033]6;1;bg;%s;brightness;%d\a'
+  printf "$fmt$fmt$fmt" red $1 green $2 blue $3
+}
+
+it2_palette () {
+  local fmt=$'\033]P%c%s\033\\'
+
+  local ts="
+  g foreground fg
+  h background bg
+  i bold
+  j selection sbg sb
+  k selected-text selected sfg sf
+  l cursor cc
+  m cursor-text ct
+"
+  (( $# < 2 )) || case "$1" in -h|--help)
+    echo "$0 target ffffff"; (IFS=; echo $ts) ;; esac
+
+  while (( $# )); do
+    (( $# >= 2 )) || { echo "Missing colour argument for $1"; break; }
+    local t="$1" c="$2"; shift 2
+
+    # convert decimal to hex if it's a number
+    if (( "$t" )); then
+      t=$(printf "%x" $t)
+    else
+      t=$((IFS=; echo $ts) | perl -ne '/\b(\w)\b.*\b'"$t"'\b/ and print $1')
+    fi
+
+    printf "$fmt" $t "$c"
+  done
+}
+

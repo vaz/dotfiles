@@ -1,9 +1,8 @@
 
 # fastest one :)
 __hgdir () {
-  unset cd # in case there's some expensive function instead.
   (
-    [ -z "$1" ] && builtin cd "$1"
+    [ -n "$1" ] && builtin cd "$1"
     builtin cd "$(pwd -P)"
     until false; do
       [ -d .hg ] && {

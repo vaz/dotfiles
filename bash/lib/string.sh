@@ -28,52 +28,25 @@ includes? () { quietly indexof "$@"; }
 # }}}
 # :: colours :: {{{
 
-# bold
-@s () { [ -n "$TERM" ] && echo -n $(tput bold); }
-
-# reverse
-@S () { [ -n "$TERM" ] && echo -n $(tput rev); }
-
-# underline
-@u () { [ -n "$TERM" ] && echo -n $(tput smul); }
-
-# underline off
-@U () { [ -n "$TERM" ] && echo -n $(tput rmul); }
-
-# reset
-@x () { [ -n "$TERM" ] && echo -n $(tput sgr0); }
-
-# TODO: use setaf/setab/etc;  see 'man terminfo'
-_colour () {
-  esc "[${1}m"; shift
-  (( $# )) && {
-    echo -n "$@"
-    @x
-  }
-}
-
+# TODO: use pipes so there's only one tput call
 @ () {
+  (( $# )) || { echo -n $(tput sgr0); return; }
+
   [[ $1 = [sSuUx] ]] && { eval "@$1 $@"; return; }
   local codes='krgybmcwKRGYBMCW' c="${1:0:1}"
   local s="$1"; c="${s:0:1}"
   local f=setaf out=''
   shift
 
-  while [[ "$c" = [+_~-] ]]; do
-    [ "$c" = '+' ] && { out+="$(tput bold)"; }
-    [ "$c" = '-' ] && { f=setab; }
-    [ "$c" = '_' ] && { out+="$(tput smul)"; }
-    [ "$c" = '~' ] && { out+="$(tput rev)"; }
-    s="${s:1}"; c="${s:0:1}"
-  done
+  while [ "$c" ]; do case "$c" in
+    [$codes]) out+="$(tput $f $(indexof "$c" "$codes"))" ;;
+    +) out+="$(tput bold)" ;;
+    -) f=setab ;;
+    _) out+="$(tput smul)" ;;
+    \~) out+="$(tput rev)" ;;
+  esac; s="${s:1}"; c="${s:0:1}"; done
 
-  debug $c
-  local i=$(indexof "$c" "$codes")
-
-  #debug $b $((i+30)) "$@"
-  out+="$(tput $f $i)"
   echo -n "$out"
-  #_colour $b\;$((i+30)) "$@"
 }
 
 # todo: permutations of + - _ ~
@@ -84,7 +57,14 @@ unset _c _C
 
 listcolours () {
   for ((i=0; i<=7; i++)); do
-    echo -e "\033[0;3${i}m0;3$i \033[0;9${i}m0;9$i \033[1;3${i}m1;3$i \033[1;9${i}m1;9$i \033[0;4${i}m0;4$i\033[0m \033[1;4${i}m1;4$i\033[0m \033[0;10${i}m0;10$i\033[0m \033[1;10${i}m1;10$i\033[0m \033[3;3${i}m3;3${i}\033[0m \033[3;9${i}m3;9$i\033[0m \033[1;3;3${i}m1;3;3$i\033[0m \033[1;3;9${i}m1;3;9$i\033[0m \033[4;3${i}m4;3$i\033[0m \033[4;9${i}m4;9$i\033[0m \033[1;4;3${i}m1;4;3$i\033[0m"
+    echo -ne "\033[0;3${i}m0;3$i\033[0;9${i}m0;9$i"
+    echo -ne "\033[1;3${i}m1;3$i\033[1;9${i}m1;9$i"
+    echo -ne "\033[0;4${i}m0;4$i\033[0m\033[1;4${i}m1;4$i\033[0m"
+    echo -ne "\033[0;10${i}m0;10$i\033[0m\033[1;10${i}m1;10$i\033[0m"
+    echo -ne "\033[7;3${i}m3;3${i}\033[0m\033[7;9${i}m3;9$i\033[0m"
+    echo -ne "\033[1;7;3${i}m1;3;3$i\033[0m\033[1;7;9${i}m1;3;9$i\033[0m"
+    echo -ne "\033[4;3${i}m4;3$i\033[0m\033[4;9${i}m4;9$i\033[0m"
+    echo -e  "\033[1;4;3${i}m1;4;3$i\033[1;4;9${i}m1;4;9$i\033[0m"
   done
 }
 
