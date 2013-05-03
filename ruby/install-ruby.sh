@@ -9,6 +9,10 @@ clone-or-pull "$HOME/.rbenv" 'git://github.com/sstephenson/rbenv.git'
 mkdir -p "$HOME/.rbenv/plugins"
 clone-or-pull "$HOME/.rbenv/plugins/ruby-build" \
               'git://github.com/sstephenson/ruby-build.git'
+clone-or-pull "$HOME/.rbenv/plugins/rbenv-gem-rehash" \
+              'git://github.com/sstephenson/rbenv-gem-rehash.git'
+clone-or-pull "$HOME/.rbenv/plugins/rbenv-binstubs" \
+              'git://github.com/ianheggie/rbenv-binstubs'
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 

@@ -4,6 +4,8 @@
 [core]
   editor = vim
   excludesfile = ~/.gitignore
+[color]
+  ui = auto
 [push]
   default = current
 [merge]
@@ -14,15 +16,19 @@
   keepBackups = false
 [log]
   abbrevCommit = true
-  decorate = short
+[diff]
+  algorithm = histogram
+[rerere]
+  enabled = 1
 [alias]
   co = checkout
   s  = status --short --branch
   st = status --short --branch
   ci = commit
-  br = branch
-  dif = diff
+  b  = "!f(){ test -z \"$1\" && git branch -av || git branch \"$@\"; }; f"
+  br = "!f(){ test -z \"$1\" && git branch -av || git branch \"$@\"; }; f"
   d = diff
+  dif = diff
   dp = diff --patience
   dc = diff --cached
   mt = mergetool
@@ -41,14 +47,11 @@
     }; f"
   unstage = reset HEAD --
   l  =  log --pretty=format:'%Cgreen%h%Creset -%C(yellow)%d%Creset %s \
-        %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' \
-        --abbrev-commit --date=relative
+        %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset'
   gl =  log --pretty=format:'%Cgreen%h%Creset -%C(yellow)%d%Creset %s \
-        %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' \
-        --abbrev-commit --date=relative --graph
+        %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --graph
   g  =  log --pretty=format:'%Cgreen%h%Creset -%C(yellow)%d%Creset %s \
-        %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' \
-        --abbrev-commit --date=relative --graph --all
+        %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --graph --all
   glog = log --graph
   lp = log -p
   wc = whatchanged
@@ -62,7 +65,3 @@
   up = merge --ff-only
   todo = grep -n TODO
   xxx = grep -n XXX
-[color]
-  ui = auto
-[rerere]
-  enabled = 1
