@@ -22,7 +22,7 @@ set history=500                   " remember 500 ex commands
 set clipboard+=unnamed            " unnamed register = os clipboard
 set viminfo='20,h                 " remember marks in 'files, not hlsearch
 set viminfo+=<50,s10              " remember registers: <Lines sSize-in-Kb
-set viminfo+=%                    " remember buflist if invoked w/o args
+" set viminfo+=%                    " remember buflist if invoked w/o args
 set cryptmethod=blowfish          " use actually secure crypto with :X
 set switchbuf=useopen             " switch to existing buffer in another window
 
@@ -75,19 +75,21 @@ set ttyscroll=500     " just redraw if there's that much to scroll
 if !empty($SSH_CONNECTION)
   set ttyscroll=10
 endif
-
 set wildmode=longest,list " tab autocomplete like bash
-
 set wildignore+=*.orig,*.rej,*~,#*#,.*.s[a-w][a-z],.DS_Store,._*,.Trash
 set wildignore+=*.py[co],*.o,*.so,*.so.*,*.dll,*.a,*.dylib,*.exe,*.bin,*.out
+set keywordprg="open dash://"
 
 " :: Keymappings and commands ::{{{1
 
 " :::: general {{{2
 
 " set mapleader
-let mapleader="\\"
-let g:mapleader="\\"
+" ; be illin' on the home-boy row.
+let mapleader=";"
+let g:mapleader=";"
+
+noremap \ ;
 
 " local cd to current file's dir
 nnoremap <leader>c :lcd %:p:h<cr>
@@ -97,7 +99,8 @@ nnoremap Q q:
 " }}}
 " :::: movement {{{2
 
-" swap ` for ' because ' is closer and ` is more useful.
+" I only ever use the column-aware version and ' is closer
+" ` is put to use for buffer changing probably
 noremap ' `
 
 " navigate changelist with _ and +, jumplist with - and =
@@ -113,53 +116,54 @@ noremap = <c-i>
 "noremap <down> <c-d>
 "noremap <left> ^
 "noremap <right> $
-nnoremap <space>h ^
-nnoremap <space>l $l
+"
+" regular movement / wrap aware movement
+" horizontal-like movement:
+"   w W e E b B ge gE
+"
+" sentences/paragraphs/sections:
+"   ( )  { }  ]]  ][  [[  []
+"
+" plain hjkl
+" gh gj gk gl
+" sh sj sk sl
 
-" make repeating f/t commands ignore linebreaks
+noremap    H   ^
+noremap    L   $
 
-" noremap  f @=FfTt( 1, 0)<cr>
-" noremap  <expr> F FfTt(-1, 0)
-" noremap  <expr> t FfTt( 1, 1)
-" noremap  <expr> T FfTt(-1, 1)
-" onoremap <expr> f FfTt( 1, 0, 1)
-" onoremap <expr> F FfTt(-1, 0, 1)
-" onoremap <expr> t FfTt( 1, 1, 1)
-" onoremap <expr> T FfTt(-1, 1, 1)
+noremap j gj
+ounmap j
+noremap k gk
+ounmap k
 
-" noremap  <expr> ; FfTtAgain()
-" noremap  <expr> , FfTtAgain(1)
-" onoremap <expr> ; FfTtAgain(0, 1)
-" onoremap <expr> , FfTtAgain(1, 1)
+noremap gj j
+noremap gk k
 
-" command! -count=N FfTt :
+noremap    sh   :call        EasyMotion#WB(0,1)<cr>
+vnoremap   sh   :<c-u>call   EasyMotion#WB(1,1)<cr>
+noremap    sl   :call        EasyMotion#WB(0,0)<cr>
+vnoremap   sl   :<c-u>call   EasyMotion#WB(1,0)<cr>
+noremap    sH   :call        EasyMotion#WBW(0,1)<cr>
+vnoremap   sH   :<c-u>call   EasyMotion#WBW(1,1)<cr>
+noremap    sL   :call        EasyMotion#WBW(0,0)<cr>
+vnoremap   sL   :<c-u>call   EasyMotion#WBW(1,0)<cr>
+noremap    sj   :call        EasyMotion#JK(0,0)<cr>
+vnoremap   sj   :<c-u>call   EasyMotion#JK(1,0)<cr>
+noremap    sk   :call        EasyMotion#JK(0,1)<cr>
+vnoremap   sk   :<c-u>call   EasyMotion#JK(1,1)<cr>
 
-" char is the character to search for
-" dir should be 1 (forward, like f/t) or -1 (backward, like F/T)
-" excl should be 0 (inclusive, like f/F) or 1 (exclusive, like t/T)
-function! s:FfTtSearch(char, dir, excl, omap)
-  let [l:line, l:col] = searchpos(a:char, (a:dir>0?'':'b'))
-  let l:col = l:col + a:omap - (a:dir * a:excl)
-  return ":call cursor(".l:line.", ".l:col.")\<cr>"
-endfunction
 
-function! FfTt(...)
-  let l:char = nr2char(getchar())
-  let l:dir  = a:0 >= 1 ? a:1 : (exists(s:fftt_ldir)  ? s:fftt_ldir  : 1)
-  let l:excl = a:0 >= 2 ? a:2 : (exists(s:fftt_lexcl) ? s:fftt_lexcl : 0)
-  let l:omap = a:0 >= 3 ? a:3 : 0
-  let [s:fftt_lchar, s:fftt_ldir, s:fftt_lexcl] = [l:char, l:dir, l:excl]
-  return s:FfTtSearch(l:char, l:dir, l:excl, l:omap)
-endfunction
+noremap sf :call EasyMotion#F(0,0)<cr>
+vnoremap sf :call EasyMotion#F(1,0)<cr>
+noremap sF :call EasyMotion#F(0,1)<cr>
+vnoremap sF :call EasyMotion#F(1,1)<cr>
+noremap st :call EasyMotion#T(0,0)<cr>
+vnoremap st :call EasyMotion#F(1,0)<cr>
+noremap sT :call EasyMotion#F(0,1)<cr>
+vnoremap sT :call EasyMotion#F(1,1)<cr>
 
-function! FfTtAgain(...)
-  if exists(s:fftt_lchar)
-    let l:dir  = a:0 >= 1 ? a:1 : s:fftt_ldir
-    let l:omap = a:0 >= 2 ? a:2 : 0
-    return s:FfTtSearch(s:fftt_lchar, l:dir, s:fftt_lexcl, l:omap)
-  endif
-endfunction
-
+noremap ss s
+noremap s <nop>
 
 " scroll viewport faster
 nnoremap <c-e> 5<c-e>
@@ -326,12 +330,12 @@ endfunc
 nnoremap <silent> <leader>n :call NumberToggle()<cr>
 
 " switch tabbing style
-nnoremap <leader>2 <esc>:set expandtab tabstop=2 softtabstop=2 shiftwidth=2<cr>
-nnoremap <leader>4 <esc>:set expandtab tabstop=4 softtabstop=4 shiftwidth=4<cr>
-nnoremap <leader>8 <esc>:set expandtab tabstop=8 softtabstop=8 shiftwidth=8<cr>
-nnoremap <leader><leader>2 <esc>:set noexpandtab tabstop=2 softtabstop=2 shiftwidth=2<cr>
-nnoremap <leader><leader>4 <esc>:set noexpandtab tabstop=4 softtabstop=4 shiftwidth=4<cr>
-nnoremap <leader><leader>8 <esc>:set noexpandtab tabstop=8 softtabstop=8 shiftwidth=8<cr>
+nnoremap <leader>2 <esc>:setlocal expandtab tabstop=2 softtabstop=2 shiftwidth=2<cr>
+nnoremap <leader>4 <esc>:setlocal expandtab tabstop=4 softtabstop=4 shiftwidth=4<cr>
+nnoremap <leader>8 <esc>:setlocal expandtab tabstop=8 softtabstop=8 shiftwidth=8<cr>
+nnoremap <leader><leader>2 <esc>:setlocal noexpandtab tabstop=2 softtabstop=2 shiftwidth=2<cr>
+nnoremap <leader><leader>4 <esc>:setlocal noexpandtab tabstop=4 softtabstop=4 shiftwidth=4<cr>
+nnoremap <leader><leader>8 <esc>:setlocal noexpandtab tabstop=8 softtabstop=8 shiftwidth=8<cr>
 
 " }}}
 " :::: text objects {{{2
@@ -352,14 +356,16 @@ function! <SID>SynStack()
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
 
+command! ColourTest :so $VIMRUNTIME/syntax/hitest.vim
+
 " }}}
 " :::: buffers {{{2
 
 " easier switching buffers, opening files
-nnoremap <silent> H :bp<cr>
-nnoremap <silent> L :bn<cr>
-nnoremap <silent> <backspace> :bd<cr>
-nnoremap <silent> <leader><backspace> :BD<cr>
+nnoremap <silent> g, :bp<cr>
+nnoremap <silent> g. :bn<cr>
+nnoremap <silent> <backspace> :BD<cr>
+nnoremap <silent> <del> <c-w>c
 
 function! FlipIfListed()
   if buflisted(bufnr("#")) | exe "normal! \<c-^>" | endif
@@ -377,6 +383,14 @@ nnoremap <leader>ec <esc>:exec "e ".<sid>ColourFile()<cr>
 nnoremap <leader>.v <esc>:so ~/.vimrc<cr>
 nnoremap <leader>.g <esc>:so ~/.gvimrc<cr>
 nnoremap <leader>.c <esc>:exec "so ".<sid>ColourFile()<cr>
+
+" yet another aborted experiment
+" fun! FindScript(pattern, ...)
+"   let skip = a:0 > 0 ? a:1 : 0
+"   let paths = split(&runtimepath, ',')
+"   let i = match(l:paths, a:pattern, 0, l:skip)
+"   return i == -1 ? 0 : l:paths[i]
+" endfunction
 
 fun! s:ColourFile()
   if exists('g:colors_name')
@@ -407,7 +421,7 @@ iab <expr> ~~Z strftime("%A %d %B %Y %H:%M:%S")
 " :::: visual mode {{{2
 
 " select last put text
-nnoremap <expr> gl '`[' . strpart(getregtype(), 0, 1) . '`]'
+nnoremap <expr> gV '`[' . strpart(getregtype(), 0, 1) . '`]'
 
 " }}}
 " :::: opening and saving {{{2
@@ -439,7 +453,7 @@ Bundle 'tpope/vim-commentary'
   " autocmd FileType whatever set commentstring=#\ %s
 Bundle 'vim-scripts/TailMinusF'
 Bundle 'Lokaltog/vim-easymotion'
-  let g:EasyMotion_leader_key = '<space>'
+  let g:EasyMotion_leader_key = 's'
 Bundle 'nathanaelkane/vim-indent-guides'
   let g:indent_guides_auto_colors = 0
   let g:indent_guides_enable_on_vim_startup = 1
@@ -460,13 +474,6 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'altercation/vim-colors-solarized'
   let g:solarized_termcolors=256
   let g:solarized_hitrail=1    "default value is 0
-" Bundle 'git://git.wincent.com/command-t.git'
-"   nnoremap <silent> <leader><space> :CommandT<cr>
-"   let g:CommandTMaxFiles = 50000
-"   let g:CommandTMaxHeight = 20
-"   let g:CommandTMinHeight = 20
-"   let g:CommandTMatchWindowReverse = 1
-"   let g:CommandTCancelMap = ['<C-c>', '<esc>']
 Bundle 'sjbach/lusty'
   nnoremap <silent> <tab> :LustyJuggler<cr>
   nnoremap <silent> <s-tab> :LustyBufferExplorer<cr>
@@ -477,7 +484,7 @@ Bundle 'ack.vim'
 Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
   augroup sparkup_types
     autocmd!
-    autocmd FileType mustache,php,htmldjango runtime! ftplugin/html/sparkup.vim
+    autocmd FileType mustache,php,htmldjango,mako,pt runtime! ftplugin/html/sparkup.vim
     let g:sparkupExecuteMapping = '<c-l>'
   augroup END
 Bundle 'tpope/vim-rails.git'
@@ -493,7 +500,13 @@ Bundle 'hsitz/VimOrganizer'
 Bundle 'tomasr/molokai'
 Bundle 'trapd00r/vim-syntax-vidir-ls'
 Bundle 'kchmck/vim-coffee-script'
-Bundle 'vim-scripts/matchit.zip'
+Bundle 'othree/html5.vim'
+Bundle 'sophacles/vim-bundle-mako'
+Bundle 'tmhedberg/matchit'
+  augroup matchit_types
+    au!
+    autocmd FileType mustache,php,htmldjango,mako,pt runtime! ftplugin/html.vim
+  augroup END
 Bundle 'vim-scripts/ruby-matchit'
 Bundle 'jamessan/vim-gnupg'
   let s:GPGext='\(gpg\|asc\|pgp\)'
@@ -538,7 +551,7 @@ Bundle 'godlygeek/tabular'
   endfunction
 
   "inoremap <silent> <s-tab> <esc>:call <sid>live_align()<cr>a
-  "function!  s:live_align()
+   "function!  s:live_align()
   "  " grab the WORD we're on or just after
   "  normal! mTlB"TyE
   "
@@ -548,7 +561,6 @@ Bundle 'godlygeek/tabular'
   "endfunction
 Bundle 'Valloric/YouCompleteMe'
 Bundle 'derekwyatt/vim-scala'
-Bundle 'sophacles/vim-bundle-mako'
 Bundle 'kien/ctrlp.vim'
   let g:ctrlp_map = '<cr>'
   let g:ctrlp_match_window_bottom = 1
@@ -563,24 +575,28 @@ Bundle 'kien/ctrlp.vim'
   " show dotfiles/dotdirs?  would be nice to be able to toggle this easily
   let g:ctrlp_show_hidden = 0
   let g:ctrlp_max_files = 5000
+  let g:ctrlp_max_depth = 15
   let g:ctrlp_follow_symlinks = 1
-  " let g:ctrlp_custom_ignore = {
-
-
-
-
-"set wildignore=.git,.hg,.svn,.cvs,.bazaar
-"set wildignore+=*.zip,*.tar,*.tar,*.rar,*.7z,*.gz,*.bzip,*.bz2,*.iso,*.dmg
-"set wildignore+=*.class,*.[jwe]ar,*.apk,*.ap_,
-"set wildignore+=node_modules
-"set wildignore+=.rbenv-version,.bundle,*.gem
-"set wildignore+=*.egg-info,.Python,.ipython,.pip,.python-eggs,*.egg
-"set wildignore+=*.mo,*.rpm,*.deb,*.xpi
+  unlet! g:ctrlp_custom_ignore
+  let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\v[\/](\.(git|hg|svn|cvs|bzr)|_darcs|node_modules|.bundle|.*\.egg-info|.*\.gem|.*\.egg)$',
+    \ 'file': '\v\.(zip|tar|gz|rar|7z|bz(ip|2)|iso|dmg|img|class|[jew]ar|ap[k_]|Python|mo|s?o|py[co])$',
+    \ 'link': '\v\.Python',
+    \ }
+  unlet! g:ctrlp_user_command
+  let g:ctrlp_user_command = {
+    \ 'types': {
+      \ 1: ['.git', 'cd %s && git ls-files . -co --exclude-standard'],
+      \ 2: ['.hg',  'hg --cwd %s status -numac -I . $(hg root)'],
+    \ }}
 Bundle 'chrisbra/Recover.vim'
 Bundle 'digitaltoad/vim-jade'
 Bundle 'tpope/vim-git'
 Bundle 'vim-scripts/bufkill.vim'
 Bundle 'mhinz/vim-startify'
+Bundle 'rizzatti/funcoo.vim'
+Bundle 'rizzatti/dash.vim'
+" install vimscript 273 later, taglist
 " ::bundle tail::
 "
 
@@ -624,6 +640,8 @@ if &t_Co > 2
   hi Search ctermfg=253 ctermbg=233
   hi DiffText cterm=bold ctermbg=17 guibg=#4C2755 gui=bold,italic
   hi DiffChange ctermfg=181 ctermbg=18 guifg=#89807D guibg=#2C1735
+  hi EasyMotionShade ctermfg=61 guifg=#5f5faf
+  hi EasyMotionTarget ctermfg=154 guifg=#afff00
 endif
 
 "
@@ -673,7 +691,11 @@ augroup vimrc
                    \ nnoremap <leader>r <esc>:!python %<cr>
 
 
-  au FileType php set expandtab tabstop=8 softtabstop=2 shiftwidth=2
+  au FileType php setlocal expandtab tabstop=8 softtabstop=2 shiftwidth=2
+
+  au FileType less setlocal sts=2 sw=2
+
+  au FileType mako setlocal sts=4 sw=4
 
   " A mapping to source vim files
   " And a mapping to start automatically sourcing the current vim file
@@ -701,10 +723,8 @@ augroup vimrc
 
   " better cursors when wrapping
   au FileType * if &wrap |
-        \ map <buffer> <up>     gk |
-        \ map <buffer> <down>   gj |
-        \ map <buffer> <right>  gl |
-        \ map <buffer> <left>   gh
+        \ map <buffer> <up>     gk|
+        \ map <buffer> <down>   gj
 
   "au FileType '' set filetype=text
 augroup END
