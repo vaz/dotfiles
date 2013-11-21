@@ -148,6 +148,7 @@ Hi Cursor fg=b1 bg=b4 attr=bold
 Hi GalaxyFrame fg=b2 bg=b1
 Hi GalaxyFrameItalic fg=b2 bg=b1 attr=italic
 
+Hi CursorLineNr fg=b1 bg=b1
 hi! link LineNr GalaxyFrame
 hi! link SignColumn GalaxyFrame
 hi! link FoldColumn GalaxyFrameItalic
@@ -309,8 +310,10 @@ hi link javaScriptNumber      Number
 " }}}
 " {{{ EasyMotion
 
-Hi EasyMotionTarget fg=pmagenta
-Hi EasyMotionShade fg=b0 bg=#000000
+" Hi EasyMotionTarget fg=pmagenta
+" Hi EasyMotionShade fg=b0 bg=#000000
+hi EasyMotionShade ctermbg=61 guifg=#5f5faf
+hi EasyMotionTarget ctermfg=154 guifg=#afff00
 
 " }}}
 " {{{ Indent Guides
