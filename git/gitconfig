@@ -4,6 +4,7 @@
 [core]
   editor = vim
   excludesfile = ~/.gitignore
+  pager = less
 [color]
   ui = auto
 [push]
@@ -16,17 +17,23 @@
   keepBackups = false
 [log]
   abbrevCommit = true
+  decorate = true
 [diff]
   algorithm = histogram
 [rerere]
   enabled = 1
+[grep]
+  extendedRegexp = true
+[pretty]
+  vaz = "tformat:%Cgreen%h%Creset -%C(yellow)%d%Creset %s \
+                %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset"
 [alias]
   co = checkout
-  s  = status --short --branch
-  st = status --short --branch
+  s = shun status --branch
+  st = shun status --branch
   ci = commit
-  b  = "!f(){ test -z \"$1\" && git branch -av || git branch \"$@\"; }; f"
-  br = "!f(){ test -z \"$1\" && git branch -av || git branch \"$@\"; }; f"
+  bs = branch -avv
+  br = branch
   d = diff
   dif = diff
   dp = diff --patience
@@ -35,30 +42,25 @@
   mr = merge
   mp = merge -X patience
   rp = rebase -m -X patience
-  # git ff [opts] -> git merge --ff-only [opts] origin/<branch>
-  # git ff [opts] origin/master -> git merge --ff-only origin/master
-  ff = "!f(){ \
-    if test -z \"$1\"; then \
-      r=\"origin/$(git symbolic-ref HEAD 2>/dev/null | cut -d/ -f3-)\"; \
-    else \
-      r=\"$1\"; \
-    fi; \
-    git merge --ff-only \"$r\"; \
-    }; f"
+  ff = merge --ff-only
   unstage = reset HEAD --
-  l  =  log --pretty=format:'%Cgreen%h%Creset -%C(yellow)%d%Creset %s \
-        %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset'
-  gl =  log --pretty=format:'%Cgreen%h%Creset -%C(yellow)%d%Creset %s \
-        %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --graph
-  g  =  log --pretty=format:'%Cgreen%h%Creset -%C(yellow)%d%Creset %s \
-        %Cgreen(%cr)%Creset %C(bold blue)<%an>%Creset' --graph --all
-  glog = log --graph
-  lp = log -p
+  l  =  log --pretty=vaz --graph
+  g  =  log --pretty=vaz --graph --all
+  graph = log --graph
+  pr = remote prune
+  pro = remote prune origin
+  p  = whatchanged -p
   wc = whatchanged
-  in = "!f(){ test -z \"$1\" && r=origin || r=\"$1\"; git whatchanged ..$r/$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f 3-); }; f"
-  out = "!f(){ test -z \"$1\" && r=origin || r=\"$1\"; git whatchanged $r/$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f 3-)..; }; f"
-  inp = "!f(){ test -z \"$1\" && r=origin || r=\"$1\"; git log -p ..$r/$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f 3-); }; f"
-  outp = "!f(){ test -z \"$1\" && r=origin || r=\"$1\"; git log -p $r/$(git symbolic-ref HEAD 2>/dev/null | cut -d'/' -f 3-)..; }; f"
+  in = "!f(){\
+    case \"$1\" in -p|--patch) shift; p='-p' ;; esac;\
+    r=origin; test \"$1\" && r=\"$1\";\
+    git whatchanged $p ..$r/$(git symbolic-ref HEAD 2>/dev/null |cut -d'/' -f 3-);\
+    }; f"
+  out = "!f(){\
+    case \"$1\" in -p|--patch) shift; p='-p' ;; esac;\
+    r=origin; test \"$1\" && r=\"$1\";\
+    git whatchanged $p $r/$(git symbolic-ref HEAD 2>/dev/null |cut -d'/' -f 3-)..;\
+    }; f"
   showlocal = "!f(){ fn=\"$1\"; git diff \":1:${fn}\" \":2:${fn}\"; }; f"
   showremote = "!f(){ fn=\"$1\"; git diff \":1:${fn}\" \":3:${fn}\"; }; f"
   last = show HEAD

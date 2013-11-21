@@ -27,3 +27,7 @@ thumbs.db
 
 # other stuff
 *.orig
+
+# my ignore file
+.shun
+tags

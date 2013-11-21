@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+
+trap "rm -f .git/tags.$$" EXIT
+
+type -t ctags &>- || {
+  echo "Install ctags if you want tags, or delete these hooks."
+  exit
+}
+
+ctags --tag-relative -Rf.git/tags.$$ --exclude=.git --languages=-sql
+mv .git/tags.$$ .git/tags
+
