@@ -30,29 +30,40 @@ try () { "$@" 2>/dev/null; }
 # otherwise allows for some more readable constructions
 otherwise () { [ $? = 0 ] || "$@"; }
 
-# eval $1 as the body of an anonymous function, and invoke it
-# passing the remaining arguments
+# eval args or stdin as the body of an anonymous utility and return the
+# utility
 proc () {
-  : ${1?"Usage: $FUNCNAME functionbody [args...]"}
-  local __f
-  eval '__f(){' "$1" '; }'
-  __f "${@:2}"
+  local body
+  [[ $# > 0 && "$1" != '-' ]] && body="$*" || body="$(cat -)"
+  local sum="$(echo "$body" | shasum | cut -d' ' -f1)"
+  mkdir -p /tmp/_fproc_cache
+  local f=/tmp/_fproc_cache/proc-$sum
+  [ -e $f ] && { echo $f; return; }
+  echo "$body" > "$f"
+  chmod u+x $f
+  echo "$f"
 }
 
 each () {
-  local cmd="$1"; shift
-  for arg; do
-    "$1" "$arg"
-  done
+  xargs -I{} -L1 "$@"
+}
+
+enum () { for arg; do echo "$arg"; done; }
+
+repeat () { seq 1 $1 | each "${@:2}"; }
+
+cycle () {
+  if [[ $# = 0 || $1 = - ]]; then
+    set -- $(IFS=; while read arg; do echo -n "$arg "; done)
+  fi
+  yes "enum \"$@\"" | $BASH
 }
 
 all? () {
-  local f="$1"; shift
-  for arg; do proc "$f" "$arg" || return 1; done
+  each $(proc "$*") {} || return 1
   return 0
 }
 
-# 
 not-all? () {
   local f="$1"; shift
   for arg; do proc "$f" "$arg" || return 0; done

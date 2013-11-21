@@ -1,10 +1,12 @@
 # :: string utils :: {{{
 
+# :::: case :: {{{
 isupper () { [[ "$1" =~ ^[[:upper:]] ]]; }
 islower () { [[ "$1" =~ ^[[:lower:]] ]]; }
 
 downcase () { echo -ne "$@" | tr '[:upper:]' '[:lower:]'; }
 upcase () { echo -ne "$@" | tr '[:lower:]' '[:upper:]'; }
+# }}}
 
 esc () { echo -ne '\033'"$@"; }
 

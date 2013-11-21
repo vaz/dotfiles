@@ -2,12 +2,14 @@
 
 if [ "`uname`" = "Darwin" ]; then
     alias ls='ls -Gp'
-    which wget >/dev/null 2>&1 || alias wget='curl -O'
-    alias pp='ps -eh -o user,pid,ppid,%cpu,%mem,command'
+    type -t wget >&- 2>&- || alias wget='curl -O'
+    pcmd='ps -eh -o user,pid,ppid,%cpu,%mem,command'
 else
     alias ls='ls --color=auto -p'
-    alias pp='ps -eH --headers -o user,pid,%cpu,%mem,command'
+    pcmd='ps -eH --headers -o user,pid,%cpu,%mem,command'
 fi
+alias pp="$pcmd"
+alias pf="$pcmd | grep"
 
 # ls
 alias ll='ls -lh'
@@ -15,17 +17,26 @@ alias la='ls -A'
 alias l='ls -lha'
 
 # fasd stuff
-alias v='f -t -e vim -b viminfo'
-alias m='f -t -e mvim -b viminfo'
+alias v='f -t -e vim -B viminfo'
+alias m='f -t -e mvim -B viminfo'
 _fasd_bash_hook_cmd_complete v m
 
+# dash (not the shell)
+alias -- '-'=dash_
+alias marked='open -a marked'
 
 # screen
 alias screen='screen -U'
 alias sr='screen -r'
 
+# terminal clock
+alias clock='watch --no-title --interval=1 date'
+
 # working dir
 alias cpwd="pwd | pbcopy"
+
+# flip between directories
+alias b='cd $OLDPWD'
 
 # history search
 alias hgrep='history|grep '

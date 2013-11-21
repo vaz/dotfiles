@@ -13,12 +13,24 @@
 . ~/.sh/string.sh
 . ~/.sh/functions.sh
 
-for f in /usr/local/etc/bash_completion /etc/bash_completion; do
-  [ -f "$f" ] && { . "$f"; break; }
-done
-[ -f ~/.bashrc.local ]      && . ~/.bashrc.local        # local bashrc
-[ -f ~/bin/z.sh ]           && . ~/bin/z.sh
-# [ -f ~/bin/m.sh ]           && . ~/bin/m.sh
+# pos is a way of finding files in posix-arranged filesystems
+# and optionally executing a command on it
+pos () {
+  { local suf="$1" cmd="${@:2}"
+    local prefix path; }
+  for prefix in $(IFS=:; echo $PATH | xargs -n1 dirname ); do
+    path=$(echo "$prefix/$suf"| tr -s /)
+    [ -e "$path" ] &&
+      [[ "${cmd+_}" ]] && {
+        { $cmd "$path"; } ||
+        { echo "$path"; }
+        return 0;
+        }; done; return; }
+
+pos etc/bash_completion .
+try . ~/.bashrc.local        # local bashrc
+# try . ~/bin/z.sh
+# try . ~/bin/m.sh
 
 
 ###############################################################################
@@ -40,8 +52,6 @@ export auto_resume=substring    # type part of job's ARGV to resume
 
 # make less show info for archives, pics, ...
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
-darwin && export LSCOLORS='ExfxcxdxCxegedabagacad'
 
 ###############################################################################
 ## prompt
@@ -66,7 +76,7 @@ __git_aware_dir () {
 }
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 export PS1="
-`@ +B`\u`@;@ b`@\h`@G`"'$(__virtualenv_ps1) $(__git_aware_dir)$(__git_ps1 " `@ b`on `@ +B`%s`@`")$(__hg_prompt)
+`@ +B`\u`@;@ b`@\h`@G`"'$(__virtualenv_ps1) $(__git_aware_dir)$(__git_ps1 " `@ b` ⭠ `@ +B`%s`@`")$(__hg_prompt)
 \[`echo -ne $okclr`\]$(__prompt_char)\['`@`'\] '
 
 
@@ -134,7 +144,7 @@ init-prg bower completion
 init-prg grunt --completion bash
 init-prg fasd --init auto
 
-export PROMPT_COMMAND='[ $? = 0 ] && it2_palette cc 99ffa8 || it2_palette cc ff88aa;'"$PROMPT_COMMAND"
+export PROMPT_COMMAND=' [ $? = 0 ] && it2_palette cc 99ffa8 || it2_palette cc ff88aa;'"$PROMPT_COMMAND"
 
 . ~/.sh/aliases.sh
 
@@ -152,6 +162,9 @@ darwin && {
 
   export VIDIR_EDITOR='vim'
   export VIDIR_EDITOR_ARGS='-c :set nolist | set ft=vidir-ls'
+
+  export LSCOLORS='ExfxcxdxCxegedabagacad'
+
 
   # source homebrew's completion
   . `brew --prefix`/Library/Contributions/brew_bash_completion.sh
