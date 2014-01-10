@@ -66,4 +66,4 @@ alias lol='echo Hahaha.'
 alias haha='echo Hahaha.'
 alias no='echo NO.'
 alias ugh='echo UGH.'
-
+alias wtf='echo what the fuck.'
