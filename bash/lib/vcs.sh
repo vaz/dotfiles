@@ -28,8 +28,8 @@ __hg_prompt () {
   [ -f "$hgdir"/bookmarks.current ] && {
     bookmark=$(cat "$hgdir"/bookmarks.current)
   }
-  echo -ne "`@b` on `@B`$branch`@x`"
-  [ -n "$bookmark" ] && echo -ne "`@b` at `@B`$bookmark`@x`"
+  echo -ne "`@b` on `@B`$branch`@`"
+  [ -n "$bookmark" ] && echo -ne "`@b` at `@B`$bookmark`@`"
 }
 
 # display branch and status char for git in prompt

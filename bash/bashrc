@@ -28,7 +28,6 @@ pos () {
         }; done; return; }
 
 pos etc/bash_completion .
-try . ~/.bashrc.local        # local bashrc
 # try . ~/bin/z.sh
 # try . ~/bin/m.sh
 
@@ -144,7 +143,9 @@ init-prg bower completion
 init-prg grunt --completion bash
 init-prg fasd --init auto
 
-export PROMPT_COMMAND=' [ $? = 0 ] && it2_palette cc 99ffa8 || it2_palette cc ff88aa;'"$PROMPT_COMMAND"
+darwin && {
+  export PROMPT_COMMAND=' [ $? = 0 ] && it2_palette cc 99ffa8 || it2_palette cc ff88aa;'"$PROMPT_COMMAND"
+}
 
 . ~/.sh/aliases.sh
 
@@ -169,3 +170,5 @@ darwin && {
   # source homebrew's completion
   . `brew --prefix`/Library/Contributions/brew_bash_completion.sh
 } || true
+
+try . ~/.bashrc.local        # local bashrc

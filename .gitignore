@@ -2,6 +2,7 @@
 *.pyc
 *~
 .DS_Store
+bash/lib/init-cache
 vim/vimhome/bundle
 vim/vimhome/undo
 ruby/bundle

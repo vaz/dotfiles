@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# update this, this is a good resource:
+# https://github.com/Valloric/YouCompleteMe/wiki/Building-Vim-from-source
+
+
 VIM_PREFIX=/usr/local
 
 dir="/tmp/dotfiles/vim-$(date| shasum| cut -d' ' -f1)"

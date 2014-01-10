@@ -5,7 +5,7 @@ if [ "`uname`" = "Darwin" ]; then
     type -t wget >&- 2>&- || alias wget='curl -O'
     pcmd='ps -eh -o user,pid,ppid,%cpu,%mem,command'
 else
-    alias ls='ls --color=auto -p'
+    alias ls='ls --color=auto -p --group-directories-first'
     pcmd='ps -eH --headers -o user,pid,%cpu,%mem,command'
 fi
 alias pp="$pcmd"
@@ -65,3 +65,5 @@ alias hmm='echo Hmmm.'
 alias lol='echo Hahaha.'
 alias haha='echo Hahaha.'
 alias no='echo NO.'
+alias ugh='echo UGH.'
+

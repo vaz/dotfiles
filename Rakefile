@@ -74,7 +74,7 @@ def dotfiles type, mapping={}
         puts "delete:  #{dst}"
         File.directory?(dst) ? rm_rf(dst) : File.delete(dst)
       else
-        bak = File.join(bak_dir, basename(dst))
+        bak = File.join(bak_dir, File.basename(dst))
         puts "backup:  #{dst} to #{bak}"
         File.rename dst, bak
       end

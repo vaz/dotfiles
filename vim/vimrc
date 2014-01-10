@@ -70,7 +70,7 @@ set dict+=/usr/share/dict/words
 set completeopt=menuone,longest,preview
 set foldenable foldlevel=1000 foldmethod=marker
 set display=lastline  " show as much as possible from last (long) line
-set ttimeoutlen=500   " shorter timeout for keycodes (like esc)
+set ttimeoutlen=200   " shorter timeout for keycodes (like esc)
 set ttyscroll=500     " just redraw if there's that much to scroll
 if !empty($SSH_CONNECTION)
   set ttyscroll=10
