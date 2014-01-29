@@ -18,6 +18,8 @@ set backup                        " keep backup after writing
 set writebackup                   " use backup when writing a file
 set backupdir=~/.vim/tmp/backup,.
 set dir=~/.vim/tmp/swap,.         " swap file locations
+set undodir=~/.vim/tmp/undo
+set undofile
 set history=500                   " remember 500 ex commands
 set clipboard+=unnamed            " unnamed register = os clipboard
 set viminfo='20,h                 " remember marks in 'files, not hlsearch
@@ -223,7 +225,7 @@ vnoremap ˚ :m-2<cr>gv
 " }}}
 " :::: search {{{2
 
-" good regexes in search, clear old highlighting
+" clear old highlighting
 noremap <silent> / :set hls<cr>/
 ounmap /
 
@@ -232,7 +234,8 @@ noremap <silent> n nzv:set hls<cr>
 noremap <silent> N Nzv:set hls<cr>
 ounmap n
 ounmap N
-noremap <silent> * *zv:set hls<cr>
+" for *, leave the cursor where it is, we can skip ahead with n
+noremap <silent> * *<c-o>zv:set hls<cr>
 noremap <silent> # #zv:set hls<cr>
 ounmap *
 ounmap #
@@ -446,6 +449,7 @@ call vundle#rc()
 " Let Vundle manage Vundle!
 Bundle 'gmarik/vundle'
 
+Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
 Bundle 'tpope/vim-abolish'
@@ -487,7 +491,9 @@ Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
     autocmd FileType mustache,php,htmldjango,mako,pt runtime! ftplugin/html/sparkup.vim
     let g:sparkupExecuteMapping = '<c-l>'
   augroup END
-Bundle 'tpope/vim-rails.git'
+Bundle 'tpope/vim-rails'
+Bundle 'tpope/vim-rake'
+Bundle 'tpope/vim-bundler'
 Bundle 'tpope/vim-fugitive'
 Bundle 'groenewege/vim-less'
 Bundle 'timcharper/textile.vim'
@@ -597,6 +603,10 @@ Bundle 'mhinz/vim-startify'
 Bundle 'rizzatti/funcoo.vim'
 Bundle 'rizzatti/dash.vim'
 " install vimscript 273 later, taglist
+Bundle 'tpope/vim-endwise'
+Bundle 'tommcdo/vim-exchange'
+Bundle 'mbbill/undotree'
+  nnoremap <leader>u <cr>:UndotreeToggle<cr>
 " ::bundle tail::
 "
 
