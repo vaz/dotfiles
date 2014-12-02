@@ -21,6 +21,9 @@ alias v='f -t -e vim -B viminfo'
 alias m='f -t -e mvim -B viminfo'
 _fasd_bash_hook_cmd_complete v m
 
+# vimcat
+which vimcat >/dev/null 2>&1 && alias vat=vimcat
+
 # dash (not the shell)
 alias -- '-'=dash_
 alias marked='open -a marked'
