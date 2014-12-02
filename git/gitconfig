@@ -72,3 +72,5 @@
   up = merge --ff-only
   todo = grep -n TODO
   xxx = grep -n XXX
+[credential]
+  helper = cache --timeout=3600
