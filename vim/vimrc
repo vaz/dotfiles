@@ -1,7 +1,7 @@
 " vim: ft=vim:fdm=marker:fen:
 " ䷀ ䷁ ䷂ ䷃ ䷄ ䷅ ䷆ ䷇ ䷈ ䷉ ䷊ ䷋ ䷌ ䷍ ䷎ ䷏ ䷐ ䷑ ䷒ ䷓ ䷔ ䷕ ䷖ ䷗ ䷘ ䷙ ䷚ ䷛ ䷜ ䷝ ䷞ ䷟ •
 " •
-" ䷣   ——Vaz•縷々
+" ䷣   ——V•縷々
 " •
 " ䷠ ䷡ ䷢ ䷣ ䷤ ䷥ ䷦ ䷧ ䷨ ䷩ ䷪ ䷫ ䷬ ䷭ ䷮ ䷯ ䷰ ䷱ ䷲ ䷳ ䷴ ䷵ ䷶ ䷷ ䷸ ䷹ ䷺ ䷻ ䷼ ䷽ ䷾ ䷿ •
 "
@@ -82,7 +82,7 @@ set wildignore+=*.orig,*.rej,*~,#*#,.*.s[a-w][a-z],.DS_Store,._*,.Trash
 set wildignore+=*.py[co],*.o,*.so,*.so.*,*.dll,*.a,*.dylib,*.exe,*.bin,*.out
 set keywordprg="open dash://"
 
-" :: Keymappings and commands ::{{{1
+" :: Keymappings and commands {{{1
 
 " :::: general {{{2
 
@@ -440,7 +440,7 @@ nnoremap <leader>m :silent !open -a Marked.app '%:p'<cr>
 
 " }}}
 
-" :: Plugins ::{{{1
+" :: Plugins {{{1
 
 " Vundle
 set rtp+=~/.vim/bundle/vundle/
@@ -626,7 +626,7 @@ function! BundleConfig(bundle)
 endfunction
 
 
-" :: Syntax, colours and terminal-specific stuff ::"{{{1
+" :: Syntax, colours and terminal-specific stuff "{{{1
 
 if &term =~ "256color"
   set t_Co=256
@@ -655,7 +655,7 @@ if &t_Co > 2
 endif
 
 "
-" :: Autocommands ::{{{1
+" :: Autocommands {{{1
 
 " Enable file type detection.
 filetype plugin indent on
