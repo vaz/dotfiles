@@ -371,7 +371,7 @@ nnoremap <silent> <backspace> :BD<cr>
 nnoremap <silent> <del> <c-w>c
 
 function! FlipIfListed()
-  if buflisted(bufnr("#")) | exe "normal! \<c-^>" | endif
+  if buflisted(bufnr("#")) | exe "normal! \<c-^>" | else | exe "bp" | endif
 endfunction
 nnoremap <silent> ` :call FlipIfListed()<cr>
 
