@@ -28,6 +28,11 @@ thumbs.db
 # other stuff
 *.orig
 
+# build/run products
+tmp/
+var/
+bin/
+
 # my ignore file
 .shun
 tags
