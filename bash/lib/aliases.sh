@@ -7,6 +7,9 @@ if [ "`uname`" = "Darwin" ]; then
 
   # public key
   alias pk='cat "${HOME}/.ssh/id_rsa.pub" | pbcopy'
+
+  # flush dns cache
+  alias flushdns='sudo killall -HUP mDNSResponder'
 else
   alias ls='ls --color=auto -p --group-directories-first'
   pcmd='ps -eH -o user,pid,%cpu,%mem,command'
