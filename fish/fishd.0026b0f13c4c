@@ -2,7 +2,13 @@
 # Do NOT edit it directly, your changes will be overwritten.
 SET EDITOR:nvim
 SET PATH:/Users/vaz/local/bin\x1e/usr/local/bin\x1e/usr/bin\x1e/bin\x1e/usr/sbin\x1e/sbin
+SET ___fish_git_prompt_showdirtystate:yes
+SET ___fish_git_prompt_showstashstate:yes
 SET __fish_classic_git_prompt_initialized:\x1d
+SET __fish_git_prompt_show_informative_status:1
+SET __fish_git_prompt_showcolorhints:yes
+SET __fish_git_prompt_showuntrackedfiles:yes
+SET __fish_git_prompt_showupstream:yes
 SET __fish_init_1_50_0:\x1d
 SET __fish_init_2_3_0:\x1d
 SET fish_color_autosuggestion:969896
