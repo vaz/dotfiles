@@ -47,6 +47,7 @@
     nno <silent> qq <c-w>w
     nno <silent> qQ <c-w>W
 
+    nno <silent> q <c-w>
     nno <silent> Q <c-w>p
 
     nno <silent> <tab> :bn<cr>
