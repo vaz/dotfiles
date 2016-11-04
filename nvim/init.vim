@@ -452,6 +452,7 @@
       " }}}
     aug end
   " }}}
+  Plug 'slim-template/vim-slim'
 " }}}
 
 " TODO: neomake instead of syntastic
