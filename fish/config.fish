@@ -10,7 +10,14 @@ bind -M insert \e\[1\;5B history-search-forward
 bind -M insert \cp history-search-backward
 bind -M insert \cn history-search-forward
 
-alias :e="$EDITOR"
+set -gx EDITOR nvim
+
+alias :e='eval $EDITOR'
+alias ipinfo='curl ipinfo'
+
+if whether hub
+  alias git=hub
+end
 
 status --is-interactive; and . (rbenv init -|psub)
 
@@ -25,3 +32,5 @@ function -e fish_prompt __cursor_status
   end
   return $last_status
 end
+
+test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
