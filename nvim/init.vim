@@ -119,7 +119,7 @@
     vno R r R
 
     " ^L for nohl/diffup
-    nno <silent> <c-l> :nohl<bar>diffup!<cr>
+    nno <silent> <c-l> :nohl<bar>match<bar>2match<bar>diffup!<cr>
   " }}}
   " - insert mode mappings {{{
     inoremap <C-X>^ <C-R>=substitute(&commentstring,' \=%s\>'," -*- ".&ft." -*- vim:set ft=".&ft." ".(&et?"et":"noet")." sw=".&sw." sts=".&sts.':','')<CR>
