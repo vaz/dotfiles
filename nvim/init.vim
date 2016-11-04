@@ -488,7 +488,7 @@ aug vimrc " autocommands {{{
   " when editing a file, always jump to the last known cursor position.
   au BufReadPost *
     \ if line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal g`\"" |
+    \   exe "normal! g`\"" |
     \ endif
 
   " don't always center the cursor in screen when switching buffers
