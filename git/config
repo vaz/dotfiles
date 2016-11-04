@@ -1,0 +1,101 @@
+[user]
+	name = vaz
+	email = v@tryptid.com
+[core]
+	editor = nvim
+	excludesfile = ~/.gitignore
+[advice]
+	statusHints = false
+[color]
+	ui = auto
+[diff]
+	mnemonicPrefix = true
+	; experimental, hunks should be easier to read:
+	compactionHeuristic = true
+[merge]
+	tool = nvimfugitive
+	defaultToUpstream = true
+	conflictstyle = diff3
+[mergetool "nvimfugitive"]
+	cmd = nvim -f -c \"Gdiff\" \"$MERGED\"
+	keepBackups = false
+[rebase]
+	missingCommitsCheck = warn
+	autosquash = true
+[push]
+	default = current
+	followTags = true
+[grep]
+	extendedRegexp = true
+[rerere]
+	enabled = 1
+[credential]
+  helper = cache --timeout=3600
+[alias]
+	co = checkout
+	st = status --branch --short
+	ci = commit
+	br = branch
+	dc = diff --cached
+	mt = mergetool
+	mr = merge
+	ff = merge --ff-only
+	unstage = reset HEAD --
+	l  =  log --pretty=onelineish --graph
+	g  =  log --pretty=twoline90 --graph --all
+	wc = whatchanged
+	in = "!f(){\
+case \"$1\" in -p|--patch) shift; p='-p' ;; esac;\
+r=origin; test \"$1\" && r=\"$1\";\
+git whatchanged $p ..$r/$(git symbolic-ref HEAD 2>/dev/null |cut -d'/' -f 3-);\
+}; f"
+	out = "!f(){\
+case \"$1\" in -p|--patch) shift; p='-p' ;; esac;\
+r=origin; test \"$1\" && r=\"$1\";\
+git whatchanged $p $r/$(git symbolic-ref HEAD 2>/dev/null |cut -d'/' -f 3-)..;\
+}; f"
+	showlocal = "!f(){ fn=\"$1\"; git diff \":1:${fn}\" \":2:${fn}\"; }; f"
+	showremote = "!f(){ fn=\"$1\"; git diff \":1:${fn}\" \":3:${fn}\"; }; f"
+	last = show HEAD
+	up = merge --ff-only
+	todo = grep -n TODO
+	xxx = grep -n XXX
+[log]
+	abbrevCommit = true
+	decorate = true
+	graph = true
+[format]
+	pretty = twoline90
+[pretty]
+	onelineish = "tformat:\
+%C(auto,bold white)%m\
+%C(auto,green)%h \
+%C(auto,blue)%<|(30,trunc)%an\
+%C(auto)%d\
+%C(reset)%<|(108,trunc)% s\
+%C(auto,magenta)%<|(120,trunc)% cr\
+"
+	twoline = "tformat:\
+%C(auto,green)%h\
+%C(reset)%C(auto,red)% gd\
+%C(auto,bold blue)%<(20)% an \
+%C(auto)%>|(80,trunc)%d\
+%n        \
+%C(auto,white)%<|(68,trunc)%s\
+%C(auto,magenta)%<|(78,trunc)% cr\
+"
+	twoline90 = "tformat:\
+%C(auto,green)%h\
+%C(reset)%C(auto,red)% gd\
+%C(auto,bold blue)% an\
+%C(reset) %C(auto,magenta)<%ae> \
+%C(auto)%>|(90,trunc)%d\
+%n        \
+%C(auto,white)%<|(78,trunc)%s\
+%C(auto,magenta)%<|(88,trunc)% cr\
+"
+
+
+# vim:set ts=4 sts=4 sw=4 noet:
+[hub]
+	protocol = ssh

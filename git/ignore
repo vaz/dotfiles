@@ -1,0 +1,57 @@
+# compiled stuff
+*.o
+*.pyc
+*.class
+*.so
+*.a
+
+# OS crap
+.DS_Store
+.DS_Store?
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.DocumentRevisions-V100
+.fseventsd
+.TemporaryItems
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.Trashes
+Icon?
+ehthumbs.db
+thumbs.db
+
+# editor crap
+*.sw[g-p]
+Session.vim
+.netrwhist
+tags
+*~
+\#*\#
+.\#*
+*.elc
+.org-id-locations
+*_archive
+*_flymake.*
+/eshell/history
+/eshell/lastdir
+/elpa/
+*.rel
+
+# other repos
+.hg*
+.svn*
+.cvs*
+
+# other stuff
+*.orig
+*.bak
+
+# build/run products
+tmp/
+var/
+bin/
+
+# rbenv, add it explicitly if you want
+.ruby-version

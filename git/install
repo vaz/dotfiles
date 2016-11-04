@@ -1,0 +1,24 @@
+#!/bin/bash
+
+here="$(dirname $0)"
+
+if [[ "$1" = '-f' ]]; then
+  flag=f
+else
+  flag=i
+fi
+
+set -u
+
+function _ln {
+  ln -s$flag "$(abspath "${here}/$1")" "$2" && printf "symlink %s -> %s\n" "$2" "$1"
+}
+
+. "${here}/../_lib/helpers.bash"
+
+
+_ln config "${HOME}/.gitconfig"
+_ln ignore "${HOME}/.gitignore"
+
+set +u
+
