@@ -153,10 +153,10 @@
 
     " navigate changelist with _ and +, jumplist with - and =
     no g= =
-    no _  g;
-    no +  g,
-    no -  <c-o>
-    no =  <c-i>
+    no _  g;zx
+    no +  g,zx
+    no -  <c-o>zx
+    no =  <c-i>zx
 
     " paste with blackhole register to preserve current register contents
     " XXX:
