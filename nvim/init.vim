@@ -323,8 +323,11 @@
       let g:unite_source_grep_recursive_opt = ''
     endif
     let g:unite_source_history_yank_enable = 1
-    autocmd! FileType unite call s:unite_settings()
-    autocmd! VimEnter * call s:on_unite_source()
+    aug vimrc_unite
+      au!
+      autocmd! FileType unite call s:unite_settings()
+      autocmd! VimEnter * call s:on_unite_source()
+    aug end
     nnoremap [-unite] <nop>
     nmap <space> [-unite]
     nnoremap <silent> [-unite]<space>  :Unite -buffer-name=files     -no-split -auto-preview -vertical-preview buffer file_rec<cr>
