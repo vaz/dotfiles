@@ -131,6 +131,9 @@
     " }}}
     inoremap <C-X>^ <C-R>=substitute(&commentstring,' \=%s\>'," -*- ".&ft." -*- vim:set ft=".&ft." ".(&et?"et":"noet")." sw=".&sw." sts=".&sts.':','')<CR>
   " }}}
+  " - abbrevs {{{
+    iabbrev ...~ …
+  " }}}
   " - text objects {{{
 
     " r for [ text obj
