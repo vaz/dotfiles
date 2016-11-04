@@ -469,11 +469,11 @@
     aug end
   " }}}
   Plug 'Xuyuanp/nerdtree-git-plugin'
+  "__plugintail__
+
+  " TODO: neomake instead of syntastic
+  call plug#end()
 " }}}
-
-" TODO: neomake instead of syntastic
-
-call plug#end()
 
 filetype plugin indent on
 " }}}
