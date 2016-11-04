@@ -190,9 +190,15 @@
     ino <D-BS>      <esc>ld0i
 
   " }}}
-  " - source this / source init file {{{
+  " - edit/source this / init file {{{
+    nno <leader>ev :e $MYVIMRC<cr>
+    nno <leader>ef :ef ~/.config/fish/config.fish<cr>
+    nno <leader>eg :eg ~/.gitconfig<cr>
     nno <leader>ss :so %<cr>
-    nno <leader>sc :so ~/.config/nvim/init.vim<cr>
+    nno <leader>sv :so $MYVIMRC<cr>
+    nno <leader>sp :PlugInstall<cr>
+    nno <leader>sf :so ~/.config/fish/config.fish<cr>
+    nno <leader>eg :sg ~/.gitconfig<cr>
   " }}}
 " }}}
 " plugins {{{
