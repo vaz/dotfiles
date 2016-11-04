@@ -97,6 +97,24 @@
     " start new change for insert mode ^U
     ino <C-U> <C-G>u<C-U>
 
+    " ds<bs> delete surrounding whatever encloses the word
+    nno <silent> <Plug>Dsurround<bs> gew:exe 'normal ds'.getline('.')[col('.')-2]<cr>
+    " insert mode version, <m-bs>
+    imap <silent> <m-bs> <c-\><c-o>ds<bs><cr>
+
+    " insert pairs of things
+    imap <m-'> <c-g>s'
+    imap <m-"> <c-g>s"
+    imap <m-`> <c-g>s`
+    imap <m-(> <c-g>s(
+    imap <m-b> <c-g>sb
+    imap <m-[> <c-g>s[
+    imap <m-r> <c-g>sr
+    imap <m-{> <c-g>s{
+    imap <m-c> <c-g>sc
+    imap <m-<> <c-g>s<
+    imap <m-a> <c-g>sa
+
     " make R in visual mode do what I would expect it to
     vno R r R
 
