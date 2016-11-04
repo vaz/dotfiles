@@ -364,6 +364,19 @@
       nno <buffer> <silent> S :Cycle<cr>
     " }}}
   " }}}
+  fun! BuildVimJSCC(info)
+    if a:info.status != 'unchanged' || a:info.force
+      !npm install --update && (cd rplugin/node; npm install --update)
+      UpdateRemotePlugins
+    endif
+  endfun
+  Plug 'bigfish/vim-js-context-coloring', { 'branch': 'neovim', 'do': function('BuildVimJSCC') } " {{{
+    let g:js_context_colors_enabled = 0
+    let g:js_context_colors_usemaps = 0
+    " let g:js_context_colors_highlight_function_names = 1
+    let g:js_context_colors_jsx = 1
+    au FileType javascript :noremap <buffer> <localleader>c :<c-u>JSContextColorToggle<cr>
+  " }}}
   Plug 'tpope/vim-markdown' " {{{
     " XXX doesn't work?
     let g:markdown_fenced_languages = ['html', 'rb=ruby', 'js=javascript', 'clj=clojure']
