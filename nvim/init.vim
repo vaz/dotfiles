@@ -399,7 +399,20 @@
       Plug 'djjcast/mirodark'
       Plug 'jonathanfilip/vim-lucius'
       Plug 'sonjapeterson/1989.vim' " {{{
-        au Colours ColorScheme 1989 :hi Todo cterm=bold gui=bold ctermfg=229 ctermbg=yellow guifg=#111223 guibg=#ffffaf
+        au Colours ColorScheme 1989 :hi Comment cterm=italic gui=italic
+        au Colours ColorScheme 1989 :hi Todo ctermfg=233 ctermbg=229 cterm=bold guifg=#121212 guibg=#ffffaf gui=bold
+        au Colours ColorScheme 1989 :hi Visual ctermfg=158 ctermbg=none cterm=reverse guifg=#afffd7 guibg=none gui=reverse
+        au Colours ColorScheme 1989 :hi Search guifg=#d7ff87 guibg=#1c1c1c gui=none
+        au Colours ColorScheme 1989 :hi IncSearch guifg=#d7ffaf guibg=#080808 gui=underline,bold
+        au Colours ColorScheme 1989 :hi EndOfBuffer ctermbg=NONE guibg=NONE guifg=#1c1c1c
+        au Colours ColorScheme 1989 :hi Folded guibg=#303030 guifg=#d7ffe0 gui=italic
+        au Colours ColorScheme 1989 :hi SignColumn guibg=#303030 guifg=cyan gui=italic
+        au Colours ColorScheme 1989 :hi EndOfBuffer ctermbg=NONE guibg=NONE guifg=#1c301c
+        au Colours ColorScheme 1989 :hi DiffAdd gui=NONE guifg=#e0e0e0 guibg=#00875f
+        au Colours ColorScheme 1989 :hi DiffChange guibg=#305787
+        au Colours ColorScheme 1989 :hi DiffDelete guibg=#a73057 guifg=#e0e0e0
+        au Colours ColorScheme 1989 :hi MatchParen guibg=#003057
+
       " }}}
 
       au VimEnter,Colorscheme * :call colours#clearbg()
