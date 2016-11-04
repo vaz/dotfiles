@@ -1,0 +1,67 @@
+# general {{{
+    set bell-style none
+    #set horizontal-scroll-mode on
+# }}}
+
+# completion behaviour {{{
+    set expand-tilde off
+
+    # ignore case and treat - and _ as equivalent when completing
+    set completion-ignore-case on
+    set completion-map-case on
+
+    # complete mid-word without duplicating:
+    set skip-completed-text on
+
+    # don't have to tab twice:
+    set show-all-if-ambiguous on
+    set show-all-if-unmodified on
+# }}}
+
+# completion display {{{
+    # append slash to completed dirs:
+    set mark-directories on
+    set mark-symlinked-directories on
+
+    # only ask before showing really long lists, and don't page them
+    set page-completions off
+    set completion-query-items 500
+
+    # append a character showing file type
+    set visible-stats on
+# }}}
+
+
+#set menu-complete-display-prefix on
+
+
+$if ruby
+  "\ea": "ruby"
+$else
+
+set editing-mode vi
+
+
+set keymap vi-command
+"\\u": upcase-word
+"\\d": downcase-word
+"\C-r": re-read-init-file
+"\C-p": history-search-backward
+"\C-n": history-search-forward
+
+set keymap vi-insert
+"\eOH": beginning-of-line
+"\eOF": end-of-line
+"\e[1;9D": backward-word
+"\e[1;9C": forward-word
+"\C-p": history-search-backward
+"\C-n": history-search-forward
+
+$if bash
+  set keymap vi-insert
+  "\ea": "bash"
+  space: magic-space
+
+$endif
+
+$endif
