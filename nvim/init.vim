@@ -412,9 +412,15 @@
         au Colours ColorScheme 1989 :hi DiffChange guibg=#305787
         au Colours ColorScheme 1989 :hi DiffDelete guibg=#a73057 guifg=#e0e0e0
         au Colours ColorScheme 1989 :hi MatchParen guibg=#003057
-
       " }}}
+      let g:colours#definitions = {
+            \ 'lucius': 'set bg=dark | colors lucius | exe "LuciusDark"',
+            \ 'lucius-hi': 'set bg=dark | colors lucius | exe "LuciusDarkHighContrast"',
+            \ '1989':   'set bg=dark | colors 1989',
+            \ 'galaxy': 'colors galaxy',
+            \ }
 
+      nmap <leader>C <Plug>coloursCycle
       au VimEnter,Colorscheme * :call colours#clearbg()
     " }}}
 
@@ -455,16 +461,6 @@ call plug#end()
 filetype plugin indent on
 " }}}
 " colours {{{
-
-  let g:colours#definitions = {
-        \ 'lucius': 'set bg=dark | colors lucius | exe "LuciusDark"',
-        \ 'lucius-hi': 'set bg=dark | colors lucius | exe "LuciusDarkHighContrast"',
-        \ '1989':   'set bg=dark | colors 1989',
-        \ 'galaxy': 'colors galaxy',
-        \ }
-
-  nmap <leader>C <Plug>coloursCycle
-
   if !exists('s:coloured')
     let s:coloured = 1
     call colours#activate('1989')
