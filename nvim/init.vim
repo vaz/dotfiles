@@ -238,6 +238,8 @@
     map T <Plug>Sneak_T
   " }}}
   Plug 'tommcdo/vim-lion'
+  Plug 'mattn/emmet-vim' " <c-y>, {{{
+  " }}}
   Plug 'terryma/vim-multiple-cursors'
   Plug 'vim-airline/vim-airline' "{{{
     let g:airline_mode_map = {
