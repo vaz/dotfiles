@@ -240,7 +240,11 @@
   Plug 'tommcdo/vim-lion'
   Plug 'mattn/emmet-vim' " <c-y>, {{{
   " }}}
-  Plug 'terryma/vim-multiple-cursors'
+  Plug 'terryma/vim-multiple-cursors' " {{{
+    " default mapping: ^N
+    let g:multi_cursor_exit_from_visual_mode = 0 " esc to Normal, then esc out
+    let g:multi_cursor_exit_from_insert_mode = 0 " same
+  " }}}
   Plug 'vim-airline/vim-airline' "{{{
     let g:airline_mode_map = {
         \ '__' : '-',
