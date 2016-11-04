@@ -122,6 +122,13 @@
     nno <silent> <c-l> :nohl<bar>match<bar>2match<bar>diffup!<cr>
   " }}}
   " - insert mode mappings {{{
+    " better mapping for indent/dedent {{{
+      " frees up ^t ^d
+      inoremap <c-t> <noop>
+      inoremap <c-d> <noop>
+      inoremap <m-.> <c-t>
+      inoremap <m-,> <c-d>
+    " }}}
     inoremap <C-X>^ <C-R>=substitute(&commentstring,' \=%s\>'," -*- ".&ft." -*- vim:set ft=".&ft." ".(&et?"et":"noet")." sw=".&sw." sts=".&sts.':','')<CR>
   " }}}
   " - text objects {{{
