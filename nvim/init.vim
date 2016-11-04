@@ -227,6 +227,9 @@
     let g:EditorConfig_exclude_patterns = ['fugitive://.*']
   " }}}
   Plug 'tpope/vim-scriptease', { 'for': 'vim' }
+  Plug 'kergoth/vim-hilinks' " {{{
+    nore <silent> <leader>hi :HLTX!<cr>
+  " }}}
   Plug 'qpkorr/vim-bufkill'
   Plug 'justinmk/vim-sneak' " {{{
     let g:sneak#s_next = 1
