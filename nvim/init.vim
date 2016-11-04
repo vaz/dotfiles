@@ -291,6 +291,15 @@
     let g:airline_theme = 'term'
      " i wanna use ∴∵ ∴∵ ∴∵
   " }}}
+  " node-host {{{
+    fun! BuildNodeHost(info)
+      if a:info.status != 'unchanged' || a:info.force
+        !npm install
+        UpdateRemotePlugins
+      endif
+    endfun
+    Plug 'neovim/node-host', { 'do': function('BuildNodeHost') }
+  " }}}
   Plug 'Shougo/deoplete.nvim', { 'do': 'UpdateRemotePlugins' } " {{{
     let g:deoplete#enable_at_startup = 1
     " https://github.com/clojure-vim/async-clj-omni
