@@ -1,31 +1,46 @@
 " V's init.nvim 2016+
-"
+
 " settings {{{
 
-  set hid ve=onemore,block bs=2 mouse=a cb+=unnamed sb spr ar " editor sanity
+  " - basic sanity {{{
+  set hid ve=onemore,block bs=2 mouse=a cb& cb+=unnamed sb spr ar " edit sanity
   set ts=8 sts=2 sw=2 ai si et sta " indent sanity
-  set shortmess=atToOI ls=2 showcmd so=1 siso=5 ru dy=lastline nu noeb vb
-  set history=1000 viminfo=!,'20,h,<50,s10
+  " }}}
+  " - UI {{{
+  set shm& shm+=aI ls=2 sc so=6 siso=6 ru dy=lastline,uhex nu eb vb swb=useopen
   set ttimeout ttimeoutlen=100
-  set complete-=i completeopt=menuone,longest,preview
+  set cpt& cpt+=i completeopt=menuone,longest,preview
   set wildmenu wildmode=longest,list
-  set wildignore+=*.orig,*.rej,*~,#*#,.*.s[a-w][a-z],.DS_Store,._*,.Trash
-  set wildignore+=*.py[co],*.o,*.so,*.so.*,*.dll,*.a,*.dylib,*.exe,*.bin,*.out
-  set switchbuf=useopen
+  set wig& wig+=*.orig,*.rej,*~,#*#,.*.s[a-w][a-z],.DS_Store,._*,.Trash
+  set wig+=*.py[co],*.o,*.so,*.so.*,*.dll,*.a,*.dylib,*.exe,*.bin,*.out
+  set diffopt& diffopt+=vertical
   set incsearch ignorecase smartcase
-  set diffopt+=vertical sessionoptions-=options
-  set foldenable foldmethod=syntax foldlevel=999
-  sil! set formatoptions+=j
-  sil! set lcs=tab:→\ ,trail:␣,extends:…,precedes:…,nbsp:·, list sbr=↪  "eol:¬
+  set foldenable foldlevelstart=999
+  sil! set lcs=tab:⇥\ ,trail:␣,extends:…,precedes:…,nbsp:·, list "eol:¬
   set termguicolors
-  set nobackup writebackup undofile
-
-  " because WHAT WOULD HAPPEN???
+  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1 " Change cursor shape in insert mode
+  " }}}
+  " - text formatting / wrapping {{{
+  " textwidth is normally annoying, but with fo-=t it will only do comments.
+  " default fo is tcqj
+  sil! set tw=78 fo& fo-=t
+  let &sbr='↪ '
+  set nolbr bri briopt=shift:0 cpo+=n
+  aug vimrc_formatting
+    au!
+    " Don't auto-insert comment leaders when using o/O in normal mode
+    au FileType * sil! setl fo-=o briopt=shift:0
+    au FileType text,markdown,textile sil! setl lbr fo-=c briopt=shift:0,sbr tw=0
+  aug end
+  " }}}
+  " -- history {{{
+  set history=1000 viminfo=!,'20,<50,s10,h
+  set nobackup writebackup undofile sessionoptions& sessionoptions-=options
+  " }}}
+  " - shell {{{
+  " because WHAT WOULD HAPPEN??? (no really I'm not sure)
   if &shell =~# 'fish$' | set shell=/bin/bash | endif
-
-  " Change cursor shape in insert mode
-  let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-
+  " }}}
 " }}}
 " mappings {{{
   " most very plugin-specific mappings appear where the plugin is declared
