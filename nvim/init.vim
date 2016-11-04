@@ -505,7 +505,7 @@ aug vimrc " autocommands {{{
   au FileType help nnoremap <silent> <buffer> <cr> <c-]>
 
   " always show where we are, foldwise
-  au BufReadPost * normal! zv
+  au BufWinEnter * normal! zx
 
 augroup end " }}}
 
