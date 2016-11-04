@@ -392,6 +392,7 @@
   " }}}
   " colours {{{
     aug Colours
+      au!
 
     " colour schemes {{{
       Plug '29decibel/codeschool-vim-theme'
