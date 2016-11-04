@@ -245,19 +245,23 @@
     let g:multi_cursor_exit_from_visual_mode = 0 " esc to Normal, then esc out
     let g:multi_cursor_exit_from_insert_mode = 0 " same
   " }}}
-  Plug 'vim-airline/vim-airline' "{{{
+  " airline {{{
+    Plug 'vim-airline/vim-airline'
+    Plug 'vim-airline/vim-airline-themes'
+    set noshowmode
     let g:airline_mode_map = {
         \ '__' : '-',
-        \ 'n'  : 'N',
-        \ 'i'  : 'I',
-        \ 'R'  : 'R',
-        \ 'c'  : 'C',
-        \ 'v'  : 'V',
-        \ 'V'  : 'V',
-        \ '' : 'V',
-        \ 's'  : 'S',
-        \ 'S'  : 'S',
-        \ '' : 'S',
+        \ 'n'  : '🄽 ',
+        \ 'i'  : '🄸 ',
+        \ 'R'  : '🅁 ',
+        \ 'c'  : '🄲 ',
+        \ 'v'  : '🅅 ',
+        \ 'V'  : '🆅 ',
+        \ '' : '🅥 ',
+        \ 's'  : '🅂 ',
+        \ 'S'  : '🆂 ',
+        \ '' : '🅢 ',
+        \ 't'  : '🅃 '
         \ }
     if !exists('g:airline_symbols')
       let g:airline_symbols = {}
@@ -269,16 +273,23 @@
     let g:airline_right_alt_sep = ''
     " let g:airline_symbols.branch = '⎇'
     let g:airline_symbols.branch = ''
-    let g:airline_symbols.readonly = ''
-    let g:airline_symbols.linenr = ''
+    let g:airline_symbols.readonly = 'ᴿᴼ'
+    " let g:airline_symbols.linenr = ''
+    let g:airline_symbols.linenr = '㏑'
     let g:airline_symbols.maxlinenr = '☰'
-    let g:airline_symbols.crypt = '🔒'
-    let g:airline_symbols.paste = 'ρ'
+    let g:airline_symbols.crypt = ''
+    let g:airline_symbols.paste = 'ᴾ'
     let g:airline_symbols.notexists = '∄'
-    let g:airline_symbols.whitespace = 'Ξ'
+    let g:airline_symbols.whitespace = '⎵'
     let g:airline#extensions#tabline#enabled = 1
     let g:airline#extensions#tabline#left_sep = ''
-    let g:airline#extensions#tabline#left_alt_sep = ''
+    let g:airline#extensions#tabline#left_alt_sep = ' '
+    let g:airline#extensions#tabline#buffers_label = 'buf'
+    let g:airline#extensions#tabline#tabs_label = 'tab'
+    let g:airline#extensions#tabline#buffer_nr_show = 1
+    let g:airline#extensions#tabline#buffer_nr_format = '%s› '
+    let g:airline_theme = 'term'
+     " i wanna use ∴∵ ∴∵ ∴∵
   " }}}
   Plug 'Shougo/deoplete.nvim', { 'do': 'UpdateRemotePlugins' } " {{{
     let g:deoplete#enable_at_startup = 1
