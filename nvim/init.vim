@@ -381,6 +381,7 @@
     " XXX doesn't work?
     let g:markdown_fenced_languages = ['html', 'rb=ruby', 'js=javascript', 'clj=clojure']
   " }}}
+  Plug 'vito-c/jq.vim'
   " clojure plugins {{{
     Plug 'tpope/vim-fireplace'
     Plug 'tpope/vim-salve' " {{{
