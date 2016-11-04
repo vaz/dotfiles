@@ -1,0 +1,175 @@
+##
+## vaz's .bashrc
+##
+###############################################################################
+
+[ -z "$PS1" ] && return
+
+
+###############################################################################
+## includes
+
+. ~/.sh/vcs.sh
+. ~/.sh/string.sh
+. ~/.sh/functions.sh
+
+# pos is a way of finding files in posix-arranged filesystems
+# and optionally executing a command on it
+pos () {
+  { local suf="$1" cmd="${@:2}"
+    local prefix path; }
+  for prefix in $(IFS=:; echo $PATH | xargs -n1 dirname ); do
+    path=$(echo "$prefix/$suf"| tr -s /)
+    [ -e "$path" ] &&
+      [[ "${cmd+_}" ]] && {
+        { $cmd "$path"; } ||
+        { echo "$path"; }
+        return 0;
+        }; done; return; }
+
+pos etc/bash_completion .
+# try . ~/bin/z.sh
+# try . ~/bin/m.sh
+
+
+###############################################################################
+## shell options
+
+umask 002
+
+set -o notify                   # notify immediately when jobs complete
+shopt -s cdspell                # fix typo'd args to cd
+shopt -s checkwinsize           # check window size after each cmd
+shopt -s cmdhist                # history saves multi-line cmd as one entry
+shopt -s extglob                # extended pathname expansion
+shopt -s lithist                # multi-line hist preserves newlines
+export HISTCONTROL=ignoreboth   # no dups in history
+HISTIGNORE=" *:&:ls:[bf]g:exit" # don't put these commands in history
+export HISTIGNORE               # & means dups, ' *' is a trick for not
+                                # storing any command starting with a space
+export auto_resume=substring    # type part of job's ARGV to resume
+
+# make less show info for archives, pics, ...
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+###############################################################################
+## prompt
+
+export GIT_PS1_SHOWDIRTYSTATE=1
+export GIT_PS1_SHOWSTASHSTATE=1
+export GIT_PS1_SHOWUNTRACKEDFILES=1
+export GIT_PS1_SHOWUPSTREAM='auto git'
+
+PROMPT_COMMAND=
+
+__virtualenv_ps1 () { [ -n "$VIRTUAL_ENV" ] && echo "{$(basename $VIRTUAL_ENV)}"; }
+__git_aware_dir () {
+  if [ "$(git rev-parse --is-inside-work-tree 2>&-)" = true ]; then
+    local repo=$(git rev-parse --show-toplevel 2>&-)
+    repo="$(builtin cd "$repo"; dirs -p | head -1)"
+    local prefix=$(git rev-parse --show-prefix 2>&-)
+    echo "`@ +G`$repo`@;@G`:$prefix`@`"
+  else
+    echo "`@ +G`$(dirs -p | head -1)`@`"
+  fi
+}
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+export PS1="
+`@ +B`\u`@;@ b`@\h`@G`"'$(__virtualenv_ps1) $(__git_aware_dir)$(__git_ps1 " `@ b` ⭠ `@ +B`%s`@`")$(__hg_prompt)
+\[`echo -ne $okclr`\]$(__prompt_char)\['`@`'\] '
+
+
+###############################################################################
+## PATH
+
+# homebrew should put these in /etc/paths.d
+
+PATH=/usr/local/opt/ruby/bin:$PATH
+PATH=/usr/local/share/npm/bin:$PATH
+
+PATH=$HOME/.rbenv/bin:$PATH
+PATH=$HOME/bin:$PATH
+
+export PATH
+
+
+###############################################################################
+## automatic screen
+
+if [ -n "$SSH_CLIENT" -a `expr "$TERM" : screen` -eq 0 ]; then
+  screen -S vaz -rd || screen -S vaz
+fi
+
+
+###############################################################################
+## program-specific setup
+
+newer? () {
+  [ ! -e "$1" -o "$(cat "$1" | tr -d ' ')" == "" ] && return 1
+  [ ! -e "$2" -o "$(cat "$2" | tr -d ' ')" == "" ] && return 0
+  darwin && [[ $(stat -f "%m" "$1") > $(stat -f "%m" "$1") ]]\
+         || [ "$1" -nt "$2" ]
+}
+
+init-prg () {
+  local cachef cached="$HOME/.sh/init-cache"
+  mkdir -p "$cached"
+
+  case "$1" in
+    --clear|-c)
+      rm -f "$cached/*"; return 0 ;;
+    --refresh|-r) shift
+      ( cd "$cached" 
+        [ $# == 0 ] && set -- $(find ./?* | xargs)
+        for cachef; do rm -f $(basename "$cachef"); done ) ;;
+    --list|-l)
+      ( cd "$cached"; command ls -1 )
+  esac
+
+  [ -n "$NO_INITPRG_CACHE" ] && { eval "$($@)"; return; }
+  local prg="$1"; shift
+  cachef="$cached/$prg.$(echo "$*" | tr -Cs '[:alnum:]' - \
+                                   | sed 's/^-*//;s/-*$//')"
+  prg=$(type -P "$prg") 2>&- && {
+    local cmd="$prg $@"
+    newer? "$prg" "$cachef" && { cat <(echo "# $cmd") <(eval "$cmd") > "$cachef"; }
+    . "$cachef"
+  }
+}
+
+init-prg rbenv init -
+init-prg npm completion
+init-prg bower completion
+init-prg grunt --completion bash
+init-prg fasd --init auto
+
+darwin && {
+  # make cursor turn red after failed command, green after success
+  export PROMPT_COMMAND=' [ $? = 0 ] && it2_palette cc 99ffa8 || it2_palette cc ff88aa;'"$PROMPT_COMMAND"
+}
+
+. ~/.sh/aliases.sh
+
+
+export EDITOR='vim'
+[ -x "$(type -P vimpager 2>&-)" ] && export PAGER=vimpager
+
+darwin && {
+  # emacs
+  emacs_exec=/Applications/Emacs.app/Contents/MacOS/Emacs
+  which $emacs_exec >/dev/null 2>&1 && alias emacs="$emacs_exec -nw"
+
+  export VISUAL='mvim -f'
+  export LANG='en_CA.UTF-8'
+
+  export VIDIR_EDITOR='vim'
+  export VIDIR_EDITOR_ARGS='-c :set nolist | set ft=vidir-ls'
+
+  export LSCOLORS='ExfxcxdxCxegedabagacad'
+
+
+  # source homebrew's completion
+  . `brew --prefix`/Library/Contributions/brew_bash_completion.sh
+} || true
+
+try . ~/.bashrc.local        # local bashrc

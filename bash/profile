@@ -1,0 +1,1 @@
+[ -n "$BASH_VERSION" -a -f ~/.bashrc -a -n "$PS1" ] && . ~/.bashrc
