@@ -45,6 +45,9 @@
 " mappings {{{
   " most very plugin-specific mappings appear where the plugin is declared
 
+  let mapleader = '\'
+  let maplocalleader = '\\'
+
   " - buffer/window mappings {{{
 
     nno <silent> `     :call altbuf#flip_if_listed()<cr>
