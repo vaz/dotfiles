@@ -1,7 +1,6 @@
 " V's init.nvim 2016+
 
 " settings {{{
-
   " - basic sanity {{{
   set hid ve=onemore,block bs=2 mouse=a cb& cb+=unnamed sb spr ar " edit sanity
   set ts=8 sts=2 sw=2 ai si et sta " indent sanity
@@ -92,6 +91,8 @@
 
   " }}}
   " - editing {{{
+
+    nore <silent> <f2> :set paste!<cr>
 
     " start new change for insert mode ^U
     ino <C-U> <C-G>u<C-U>
