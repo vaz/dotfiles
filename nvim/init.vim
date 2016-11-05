@@ -119,7 +119,7 @@
     vno R r R
 
     " ^L for nohl/diffup
-    nno <silent> <c-l> :nohl<bar>match<bar>2match<bar>diffup!<cr>
+    nno <silent> <c-l> :nohl<bar>match<bar>2match<bar>diffup!<cr>zx
   " }}}
   " - insert mode mappings {{{
     " better mapping for indent/dedent {{{
