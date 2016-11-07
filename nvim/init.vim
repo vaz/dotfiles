@@ -368,6 +368,7 @@
       let g:js_context_colors_jsx = 1
       au FileType javascript :noremap <buffer> <localleader>c :<c-u>JSContextColorToggle<cr>
   " }}}
+  " TODO: https://github.com/ap/vim-css-color
   Plug 'tpope/vim-markdown' " {{{
     " XXX doesn't work?
     let g:markdown_fenced_languages = ['html', 'rb=ruby', 'js=javascript', 'clj=clojure']
