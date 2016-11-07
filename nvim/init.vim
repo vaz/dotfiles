@@ -7,7 +7,7 @@
   " }}}
   " - UI {{{
   set shm& shm+=aI ls=2 sc so=6 siso=6 ru dy=lastline,uhex nu eb vb swb=useopen
-  set ttimeout ttimeoutlen=100
+  set ttimeout ttimeoutlen=100 updatetime=250
   set cpt& cpt+=i completeopt=menuone,longest,preview
   set wildmenu wildmode=longest,list
   set wig& wig+=*.orig,*.rej,*~,#*#,.*.s[a-w][a-z],.DS_Store,._*,.Trash
@@ -354,8 +354,7 @@
   Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " {{{
     nnoremap <cr> :<c-u>FZF<cr>
   " }}}
-  Plug 'mhinz/vim-signify' " {{{
-    let g:signify_vcs_list = ['git', 'hg']
+  Plug 'airblade/vim-gitgutter' " {{{
   " }}}
   Plug 'sheerun/vim-polyglot' " {{{
     " git filetypes (from tpope/vim-git) {{{
