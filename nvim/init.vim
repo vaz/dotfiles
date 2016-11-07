@@ -45,8 +45,8 @@
 " mappings {{{
   " most very plugin-specific mappings appear where the plugin is declared
 
-  let mapleader = '\'
-  let maplocalleader = '\\'
+  let mapleader = " "
+  let maplocalleader = "  "
 
   " - buffer/window mappings {{{
 
