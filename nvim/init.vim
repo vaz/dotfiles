@@ -212,6 +212,7 @@
   Plug 'tpope/vim-unimpaired' " {{{
   " }}}
   Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-sleuth' " heuristically set opts like et, sw
   Plug 'tpope/vim-git'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-obsession'
