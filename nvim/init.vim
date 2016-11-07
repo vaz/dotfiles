@@ -216,12 +216,12 @@
   Plug 'tpope/vim-git'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-obsession'
+  Plug 'tpope/vim-scriptease'
   Plug 'qpkorr/vim-bufkill'
   Plug 'chrisbra/Recover.vim'
   Plug 'editorconfig/editorconfig-vim' " {{{
     let g:EditorConfig_exclude_patterns = ['fugitive://.*']
   " }}}
-  Plug 'tpope/vim-scriptease', { 'for': 'vim' }
   Plug 'kergoth/vim-hilinks' " {{{
     nore <silent> <leader>hi :HLTX!<cr>
   " }}}
