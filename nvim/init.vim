@@ -205,6 +205,7 @@
 " plugins {{{
   syntax on
   filetype off
+  " TODO: just use pathogen
   call plug#begin('~/.config/nvim/plugged')
   Plug 'tpope/vim-surround'
   Plug 'tpope/vim-repeat'
@@ -219,6 +220,10 @@
   Plug 'tpope/vim-scriptease'
   Plug 'qpkorr/vim-bufkill'
   Plug 'chrisbra/Recover.vim'
+  Plug '~/.config/nvim/vaz/altbuf.vim'
+  Plug '~/.config/nvim/vaz/autosource.vim'
+  Plug '~/.config/nvim/vaz/addplug.vim'
+  Plug '~/.config/nvim/vaz/js-cdn.vim'
   Plug 'editorconfig/editorconfig-vim' " {{{
     let g:EditorConfig_exclude_patterns = ['fugitive://.*']
   " }}}
@@ -383,6 +388,8 @@
     Plug 'tpope/vim-sexp-mappings-for-regular-people'
   " }}}
   " colours {{{
+    Plug '~/.config/nvim/vaz/vcolours.vim'
+    Plug '~/.config/nvim/vaz/cyclr.vim'
     aug Colours
       au!
 
@@ -441,15 +448,17 @@
         endfun
         au Colours ColorScheme 1989 :call Patch1989()
       " }}}
-      let g:colours#definitions = {
+      " TODO: support funcrefs/numbered-function
+      let g:cyclr#defs = {
             \ 'lucius': 'set bg=dark | colors lucius | exe "LuciusDark"',
             \ 'lucius-hi': 'set bg=dark | colors lucius | exe "LuciusDarkHighContrast"',
             \ '1989':   'set bg=dark | colors 1989',
             \ 'galaxy': 'colors galaxy',
             \ }
 
-      nmap <leader>C <Plug>coloursCycle
-      au VimEnter,Colorscheme * :call colours#clearbg()
+      nmap <leader>C <Plug>cyclrNext
+      " TODO: option
+      au VimEnter,Colorscheme * :call cyclr#clearbg()
     " }}}
 
       Plug 'kien/rainbow_parentheses.vim' " {{{
@@ -506,9 +515,10 @@
 filetype plugin indent on
 " }}}
 " colours {{{
+  " TODO: try has('vim_starting')
   if !exists('s:coloured')
     let s:coloured = 1
-    call colours#activate('1989')
+    call cyclr#activate('1989')
   endif
 
 " }}}
