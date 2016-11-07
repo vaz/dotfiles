@@ -391,19 +391,55 @@
       Plug 'djjcast/mirodark'
       Plug 'jonathanfilip/vim-lucius'
       Plug 'sonjapeterson/1989.vim' " {{{
-        au Colours ColorScheme 1989 :hi Comment cterm=italic gui=italic
-        au Colours ColorScheme 1989 :hi Todo ctermfg=233 ctermbg=229 cterm=bold guifg=#121212 guibg=#ffffaf gui=bold
-        au Colours ColorScheme 1989 :hi Visual ctermfg=158 ctermbg=none cterm=reverse guifg=#afffd7 guibg=none gui=reverse
-        au Colours ColorScheme 1989 :hi Search guifg=#d7ff87 guibg=#1c1c1c gui=none
-        au Colours ColorScheme 1989 :hi IncSearch guifg=#d7ffaf guibg=#080808 gui=underline,bold
-        au Colours ColorScheme 1989 :hi EndOfBuffer ctermbg=NONE guibg=NONE guifg=#1c1c1c
-        au Colours ColorScheme 1989 :hi Folded guibg=#303030 guifg=#d7ffe0 gui=italic
-        au Colours ColorScheme 1989 :hi SignColumn guibg=#303030 guifg=cyan gui=italic
-        au Colours ColorScheme 1989 :hi EndOfBuffer ctermbg=NONE guibg=NONE guifg=#1c301c
-        au Colours ColorScheme 1989 :hi DiffAdd gui=NONE guifg=#e0e0e0 guibg=#00875f
-        au Colours ColorScheme 1989 :hi DiffChange guibg=#305787
-        au Colours ColorScheme 1989 :hi DiffDelete guibg=#a73057 guifg=#e0e0e0
-        au Colours ColorScheme 1989 :hi MatchParen guibg=#003057
+        " TODO: move this, or make it part of cyclr with funcref
+        fun! Patch1989() abort
+          " from 'highlight'
+          hi SpecialKey guibg=#303030 guifg=#b7d7ff
+          hi EndOfBuffer ctermbg=NONE guibg=NONE guifg=#1c1c1c
+          hi TermCursor guifg=#99ffa8 guibg=NONE gui=reverse
+          hi TermCursorNC guifg=#afafaf guibg=NONE gui=reverse
+          hi NonText guibg=#303030 guifg=#87afaf
+          hi Directory guifg=#afdfff
+          hi! link ErrorMsg Error
+          hi Search guifg=#d7ff87 guibg=#1c1c1c gui=none
+          hi IncSearch guifg=#d7ffaf guibg=#080808 gui=underline,bold
+          hi MoreMsg guifg=#afffd7 guibg=NONE gui=italic
+          hi ModeMsg guifg=#ffffff gui=bold
+          hi LineNr guibg=#303030 guifg=#878787
+          hi CursorLineNr guibg=#303030 guifg=#afcfcf gui=NONE
+          hi! link Question MoreMsg
+          hi StatusLine guibg=#1c1c1c guifg=#ffffff gui=NONE
+          hi StatusLineNC guibg=#272727 guifg=#afafaf gui=NONE
+          hi Title guifg=#afdfff guibg=NONE gui=NONE
+          hi VertSplit guibg=#242424 guifg=#001224 gui=italic
+          hi Visual guibg=black guifg=#afffdf gui=none
+          hi WarningMsg gui=italic guifg=#ffdfaf guibg=#271c27
+          hi! link WildMenu Visual
+          hi Folded guibg=#272727 gui=italic guifg=#dfffaf
+          hi FoldColumn guibg=#272727 gui=NONE guifg=#57665f
+
+          hi DiffAdd gui=NONE guifg=#e0e0e0 guibg=#00875f
+          hi DiffChange guibg=#305787
+          hi DiffText guibg=#0087af guifg=#ffffff gui=bold
+          hi DiffDelete guibg=#a73057 guifg=#e0e0e0
+
+          hi SignColumn guibg=#303030 guifg=#57665f
+
+          hi PMenu guibg=#4c57cc guifg=#ffffff
+          hi PMenuSel guibg=#5787ff guifg=#ffffff gui=bold
+          hi PMenuSbar guibg=grey
+          hi PMenuThumb guibg=white
+
+          " from elsewhere
+          hi CursorLine guibg=#303030
+          hi CursorColumn guibg=#303030
+          hi Error guifg=#ffafdf guibg=#271c27 gui=italic
+
+          hi Comment cterm=italic gui=italic
+          hi Todo guifg=#dfffaf guibg=none gui=underline,bold
+          hi MatchParen guifg=#dfffaf gui=bold,underline guibg=#001230
+        endfun
+        au Colours ColorScheme 1989 :call Patch1989()
       " }}}
       let g:colours#definitions = {
             \ 'lucius': 'set bg=dark | colors lucius | exe "LuciusDark"',
