@@ -12,7 +12,6 @@ bind -M insert \cn history-search-forward
 
 set -gx EDITOR nvim
 
-alias :e='eval $EDITOR'
 alias ipinfo='curl ipinfo'
 
 if whether hub
