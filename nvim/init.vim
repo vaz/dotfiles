@@ -16,7 +16,7 @@
   set incsearch ignorecase smartcase
   set foldenable foldlevelstart=999
   sil! set lcs=tab:⇥\ ,trail:␣,extends:…,precedes:…,nbsp:·, list "eol:¬
-  set termguicolors
+  set termguicolors cursorline
   let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1 " Change cursor shape in insert mode
   " }}}
   " - text formatting / wrapping {{{
