@@ -474,13 +474,13 @@
       let g:cyclr#defs = {
             \ 'lucius': 'set bg=dark | colors lucius | exe "LuciusDark"',
             \ 'lucius-hi': 'set bg=dark | colors lucius | exe "LuciusDarkHighContrast"',
-            \ '1989':   'set bg=dark | colors 1989',
+            \ '1989':   'set bg=dark | colors 1989 | call cyclr#clearbg()',
             \ 'galaxy': 'colors galaxy',
             \ }
 
       nmap <leader>C <Plug>cyclrNext
       " TODO: option
-      au VimEnter,Colorscheme * :call cyclr#clearbg()
+      " au VimEnter,Colorscheme * :call cyclr#clearbg()
     " }}}
 
       Plug 'kien/rainbow_parentheses.vim' " {{{
