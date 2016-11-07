@@ -241,7 +241,11 @@
   Plug 'chrisbra/Recover.vim'
   Plug '~/.config/nvim/vaz/altbuf.vim'
   Plug '~/.config/nvim/vaz/autosource.vim'
-  Plug '~/.config/nvim/vaz/addplug.vim'
+  Plug '~/.config/nvim/vaz/addplug.vim' " {{{
+    " hi AddPluginSign guifg=#d7ff87 guibg=#1c1c1c gui=bold
+    " hi AddPluginLine cterm=bold guifg=#d7ff87 guibg=#223036 gui=bold
+    nno <silent> <leader>ep :AddPlug<cr>
+  " }}}
   Plug '~/.config/nvim/vaz/js-cdn.vim'
   Plug 'editorconfig/editorconfig-vim' " {{{
     let g:EditorConfig_exclude_patterns = ['fugitive://.*']
