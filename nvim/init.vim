@@ -210,14 +210,6 @@
   Plug 'tpope/vim-repeat'
   Plug 'tpope/vim-abolish'
   Plug 'tpope/vim-unimpaired' " {{{
-    " - dragging lines (with meta-j/k) {{{
-
-      nmap <silent>        <m-j> <Plug>unimpairedMoveDown
-      nmap <silent>        <m-k> <Plug>unimpairedMoveUp
-      vmap <silent> <expr> <m-j> '<Plug>unimpairedMoveSelectionDown'.'gv'
-      vmap <silent> <expr> <m-k> '<Plug>unimpairedMoveSelectionUp'.'gv'
-
-    " }}}
   " }}}
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-git'
