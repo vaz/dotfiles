@@ -20,6 +20,7 @@
   let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1 " Change cursor shape in insert mode
   " }}}
   " - text formatting / wrapping {{{
+  set tildeop
   " textwidth is normally annoying, but with fo-=t it will only do comments.
   " default fo is tcqj
   sil! set tw=78 fo& fo-=t
