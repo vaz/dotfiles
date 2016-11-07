@@ -532,16 +532,11 @@
   call plug#end()
   filetype plugin indent on
 " }}}
-
-filetype plugin indent on
-" }}}
-" colours {{{
-  if has('vim_starting')
-    let s:coloured = 1
-    set bg=dark
-    call cyclr#activate('1989')
-  endif
-" }}}
+if has('vim_starting') " set initial colours {{{
+  let s:coloured = 1
+  set bg=dark
+  call cyclr#activate('1989')
+endif " }}}
 aug vimrc " autocommands {{{
   " when editing a file, always jump to the last known cursor position.
   au BufReadPost *
