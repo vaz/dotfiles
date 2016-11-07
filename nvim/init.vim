@@ -445,7 +445,7 @@
           hi Visual guibg=black guifg=#afffdf gui=none
           hi WarningMsg gui=italic guifg=#ffdfaf guibg=#271c27
           hi! link WildMenu Visual
-          hi Folded guibg=#272727 gui=italic guifg=#787887
+          hi Folded guibg=#1c1c1c guifg=#57575f gui=italic
           hi FoldColumn guibg=#272727 gui=NONE guifg=#57665f
 
           hi DiffAdd gui=NONE guifg=#e0e0e0 guibg=#00875f
