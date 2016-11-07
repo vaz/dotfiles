@@ -530,6 +530,7 @@
 
   " TODO: neomake instead of syntastic
   call plug#end()
+  filetype plugin indent on
 " }}}
 
 filetype plugin indent on
