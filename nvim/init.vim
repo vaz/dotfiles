@@ -232,9 +232,10 @@
   " }}}
   Plug 'tommcdo/vim-lion'
   Plug 'mattn/emmet-vim' " <c-y>, {{{
+    " TODO: no n/v mode C-y mappings plz
   " }}}
   Plug 'terryma/vim-multiple-cursors' " {{{
-    " default mapping: ^N
+    " default mapping: ^N XXX problematic
     let g:multi_cursor_exit_from_visual_mode = 0 " esc to Normal, then esc out
     let g:multi_cursor_exit_from_insert_mode = 0 " same
   " }}}
