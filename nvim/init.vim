@@ -318,7 +318,6 @@
       call unite#custom#profile('default', 'context', { 'start_insert': 1, 'smartcase': 1 })
     endfunction
    function! s:unite_settings()
-      nmap <buffer> Q <plug>(unite_exit)
       nmap <buffer> <esc> <plug>(unite_exit)
     endfunction
     if executable('ack')
@@ -333,7 +332,7 @@
       autocmd! VimEnter * call s:on_unite_source()
     aug end
     nnoremap [-unite] <nop>
-    nmap <space> [-unite]
+    nmap <leader>u [-unite]
     nnoremap <silent> [-unite]<space>  :Unite -buffer-name=files     -no-split -auto-preview -vertical-preview buffer file_rec<cr>
     nnoremap <silent> [-unite]F        :Unite -buffer-name=files     -no-split -auto-preview -auto-highlight -vertical-preview file_rec<cr>
     nnoremap <silent> [-unite]g        :Unite -buffer-name=files     -no-split -auto-preview -auto-highlight -vertical-preview file_rec/git<cr>
