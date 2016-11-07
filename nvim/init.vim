@@ -412,12 +412,11 @@
     Plug 'tpope/vim-sexp-mappings-for-regular-people'
   " }}}
   " colours {{{
-    Plug '~/.config/nvim/vaz/vcolours.vim'
     Plug '~/.config/nvim/vaz/cyclr.vim'
-    aug Colours
-      au!
+    exe 'aug Colours' | exe 'au!' | exe 'aug end'
 
     " colour schemes {{{
+      Plug '~/.config/nvim/vaz/vcolours.vim'
       Plug '29decibel/codeschool-vim-theme'
       Plug 'djjcast/mirodark'
       Plug 'jonathanfilip/vim-lucius'
@@ -473,12 +472,13 @@
         au Colours ColorScheme 1989 :call Patch1989()
       " }}}
       " TODO: support funcrefs/numbered-function
+      " colour defs {{{
       let g:cyclr#defs = {
             \ 'lucius': 'set bg=dark | colors lucius | exe "LuciusDark"',
             \ 'lucius-hi': 'set bg=dark | colors lucius | exe "LuciusDarkHighContrast"',
-            \ '1989':   'set bg=dark | colors 1989 | call cyclr#clearbg()',
+            \ '1989':   'set bg=dark | colors 1989',
             \ 'galaxy': 'colors galaxy',
-            \ }
+            \ } " }}}
 
       nmap <leader>C <Plug>cyclrNext
       " TODO: option
@@ -527,6 +527,10 @@
       au BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
     aug end
   " }}}
+  Plug 'junegunn/limelight.vim' " {{{
+    let g:limelight_conceal_ctermfg = '233'
+    let g:limelight_conceal_guifg = '#242424'
+  " }}}
   "__plugintail__
 
   " TODO: neomake instead of syntastic
@@ -563,4 +567,6 @@ aug vimrc " autocommands {{{
 
 augroup end " }}}
 
-" -*- vim -*- vim:set ft=vim et sw=2 sts=2 fdls=1 fdm=marker fdl=999:
+" TODO: lecture mode
+
+" -*- vim -*- vim:set ft=vim et sw=2 sts=2 fdl=1 fdm=marker:
