@@ -216,6 +216,7 @@
   Plug 'tpope/vim-git'
   Plug 'tpope/vim-fugitive'
   Plug 'tpope/vim-obsession'
+  Plug 'qpkorr/vim-bufkill'
   Plug 'chrisbra/Recover.vim'
   Plug 'editorconfig/editorconfig-vim' " {{{
     let g:EditorConfig_exclude_patterns = ['fugitive://.*']
@@ -224,7 +225,6 @@
   Plug 'kergoth/vim-hilinks' " {{{
     nore <silent> <leader>hi :HLTX!<cr>
   " }}}
-  Plug 'qpkorr/vim-bufkill'
   Plug 'justinmk/vim-sneak' " {{{
     let g:sneak#s_next = 1
     map gs <Plug>(SneakStreak)
