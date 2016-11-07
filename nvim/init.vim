@@ -37,9 +37,13 @@
   set history=1000 viminfo=!,'20,<50,s10,h
   set nobackup writebackup undofile sessionoptions& sessionoptions-=options
   " }}}
-  " - shell {{{
+  " - shell/terminal {{{
   " because WHAT WOULD HAPPEN??? (no really I'm not sure)
   if &shell =~# 'fish$' | set shell=/bin/bash | endif
+  let g:terminal_scrollback_buffer_size = 10000
+  let g:terminal_shell = 'fish'
+  call termhelpers#updateansi()
+  call termhelpers#autoinsertmode()
   " }}}
 " }}}
 " mappings {{{
@@ -71,6 +75,15 @@
     nno <silent> <tab> :bn<cr>
     nno <silent> <s-tab> :bp<cr>
 
+    " change windows with alt-hjkl (incl terminal)
+    tnore <a-h> <c-\><c-n><c-w>h
+    tnore <a-j> <c-\><c-n><c-w>j
+    tnore <a-k> <c-\><c-n><c-w>k
+    tnore <a-l> <c-\><c-n><c-w>l
+    nnore <a-j> <c-w>j
+    nnore <a-h> <c-w>h
+    nnore <a-k> <c-w>k
+    nnore <a-l> <c-w>l
   " }}}
   " - movement/viewport {{{
 
@@ -200,6 +213,12 @@
     nno <leader>sp :PlugInstall<cr>
     nno <leader>sf :so ~/.config/fish/config.fish<cr>
     nno <leader>eg :sg ~/.gitconfig<cr>
+  " }}}
+  " - terminal mappings {{{
+    nno <leader>to :<c-u>exe 'e term://' . g:terminal_shell<cr>i
+    nno <leader>ts :<c-u>exe 'sp term://' . g:terminal_shell<cr>i
+    nno <leader>tv :<c-u>exe 'vs term://' . g:terminal_shell<cr>i
+    nmap <leader>t<leader> <leader>tv
   " }}}
 " }}}
 " plugins {{{
