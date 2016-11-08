@@ -1,13 +1,13 @@
 " V's init.nvim 2016+
 
-                                                                                " ∴∵ settings {{{1
+                                                            " ∴∵ settings {{{1
 
-                                                                          " ∴∵∴∵ basic sanity {{{2
+                                                      " ∴∵∴∵ basic sanity {{{2
 
 set hid ve=onemore,block bs=2 mouse=a cb& cb+=unnamed sb spr ar   " edit sanity
 set ts=8 sts=2 sw=2 ai si et sta                                " indent sanity
 
-                                                                                    " ∴∵∴∵ UI {{{2
+                                                                " ∴∵∴∵ UI {{{2
 
 set shm& shm+=aI ls=2 sc so=6 siso=6 ru dy=lastline,uhex nonu eb vb swb=useopen
 set ttimeout ttimeoutlen=100 updatetime=250
@@ -20,14 +20,14 @@ set incsearch ignorecase smartcase
 set foldenable foldlevelstart=999
 sil! set lcs=tab:⇥\ ,trail:␣,extends:…,precedes:…,nbsp:·, list "eol:¬
 set termguicolors cursorline
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1                           " Change cursor shape in insert mode
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1   " Change cursor shape in insert mode
 
-                                                            " ∴∵∴∵ text formatting / wrapping {{{2
+                                        " ∴∵∴∵ text formatting / wrapping {{{2
 
 set tildeop
-sil! set tw=78 fo& fo-=t                                  " textwidth is normally annoying, but
-let &sbr='↪ '                                             " with fo-=t it will only do comments.
-set nolbr bri briopt=shift:0 cpo+=n                       " default 'fo' is tcqj
+sil! set tw=78 fo& fo-=t              " textwidth is normally annoying, but
+let &sbr='↪ '                         " with fo-=t it will only do comments.
+set nolbr bri briopt=shift:0 cpo+=n   " default 'fo' is tcqj
 aug vimrc_formatting
   " Don't auto-insert comment leaders when using o/O in normal mode.
   au!
@@ -36,30 +36,30 @@ aug vimrc_formatting
     \ sil! setl lbr fo-=c briopt=shift:0,sbr tw=0
 aug end
 
-                                                                         " ∴∵∴∵ shada/session {{{2
+                                                     " ∴∵∴∵ shada/session {{{2
 
 set history=1000 viminfo=!,'20,<50,s10,h
 set nobackup writebackup undofile sessionoptions& sessionoptions-=options
 
-                                                                        " ∴∵∴∵ shell/terminal {{{2
+                                                    " ∴∵∴∵ shell/terminal {{{2
 
 if &shell =~# 'fish$' | set shell=/bin/bash | endif
 let g:terminal_scrollback_buffer_size = 10000
 let g:terminal_shell = 'fish'
 call termhelpers#updateansi()
 call termhelpers#autoinsertmode()
-                                                                                            " }}}2
+                                                                        " }}}2
 
-                                                                                " ∴∵ mappings {{{1
+                                                            " ∴∵ mappings {{{1
 
-                        " most very-plugin-specific mappings are done where the plugin is declared
+" (most very-plugin-specific mappings are done where the plugin is declared)
 
-                                                                                " ∴∵∴∵ leader {{{2
+                                                            " ∴∵∴∵ leader {{{2
 
 let mapleader = " "
 let maplocalleader = "  "
 
-                                                                " ∴∵∴∵ buffer/window mappings {{{2
+                                            " ∴∵∴∵ buffer/window mappings {{{2
 
 nno <silent> `     :call altbuf#flip_if_listed()<cr>
 
@@ -92,7 +92,7 @@ nnore <a-h> <c-w>h
 nnore <a-k> <c-w>k
 nnore <a-l> <c-w>l
 
-                                                                     " ∴∵∴∵ movement/viewport {{{2
+                                                 " ∴∵∴∵ movement/viewport {{{2
 
 " H and L aren't as helpful as ^ and $
 no H ^
@@ -110,7 +110,7 @@ no   gk k
 ounm j
 ounm k
 
-                                                                               " ∴∵∴∵ editing {{{2
+                                                           " ∴∵∴∵ editing {{{2
 
 nore <silent> <f2> :set paste!<cr>
 
@@ -141,7 +141,7 @@ vno R r R
 " ^L for nohl/diffup
 nno <silent> <c-l> :nohl<bar>match<bar>2match<bar>diffup!<cr>zx
 
-                                                                  " ∴∵∴∵ insert mode mappings {{{2
+                                              " ∴∵∴∵ insert mode mappings {{{2
 
 " better mapping for indent/dedent (frees ^T, ^D) {{{3
 inoremap <c-t> <noop>
@@ -156,13 +156,14 @@ inoremap <C-X>^ <C-R>=substitute(&commentstring,' \=%s\>'," -*- ".&ft." -*- vim:
 iabbrev ...~ …
 " }}}
 
-                                                                          " ∴∵∴∵ text objects {{{2
+                                                      " ∴∵∴∵ text objects {{{2
+
 onoremap ir i[
 onoremap ar a[
 vnoremap ir i[
 vnoremap ar a[
 
-                                                      " ∴∵∴∵ marks, registers, changes, jumps {{{2
+                                  " ∴∵∴∵ marks, registers, changes, jumps {{{2
 
 nno Y y$
 
@@ -180,7 +181,7 @@ no =  <c-i>zx
 " select last put text
 nnoremap <expr> gV '`[' . strpart(getregtype(), 0, 1) . '`]'
 
-                                                             " ∴∵∴∵ Apple HIG style movements {{{2
+                                         " ∴∵∴∵ Apple HIG style movements {{{2
 
 " iTerm2: option/alt sends Esc+, cmd-arrow sends ctrl-arrow
 " Meta/Cmd arrows: send escape seq ^[[1;3X for meta, 1;5X for ctrl, X is ABCD for UDRL
@@ -202,7 +203,8 @@ no! <m-down>    <c-o>}
 ino <m-bs>      <c-w>
 ino <D-BS>      <esc>ld0i
 
-                                                                 " ∴∵∴∵ edit/source shortcuts {{{2
+                                             " ∴∵∴∵ edit/source shortcuts {{{2
+
 nno <leader>ev :e $MYVIMRC<cr>
 nno <leader>ef :ef ~/.config/fish/config.fish<cr>
 nno <leader>eg :eg ~/.gitconfig<cr>
@@ -212,65 +214,81 @@ nno <leader>sp :PlugInstall<cr>
 nno <leader>sf :so ~/.config/fish/config.fish<cr>
 nno <leader>eg :sg ~/.gitconfig<cr>
 
-                                                                     " ∴∵∴∵ terminal mappings {{{2
+                                                 " ∴∵∴∵ terminal mappings {{{2
+
 nno <leader>to :<c-u>exe 'e term://' . g:terminal_shell<cr>i
 nno <leader>ts :<c-u>exe 'sp term://' . g:terminal_shell<cr>i
 nno <leader>tv :<c-u>exe 'vs term://' . g:terminal_shell<cr>i
 nmap <leader>t<leader> <leader>tv
-                                                                                            " }}}2
 
-                                                                                 " ∴∵ plugins {{{1
+                                                                        " }}}2
+
+                                                             " ∴∵ plugins {{{1
 
 syntax on
 filetype plugin indent on
 " TODO: just use pathogen
 call plug#begin('~/.config/nvim/plugged')
 
+                           " ∴∵∴∵ plugins that should just be part of vim {{{2
+
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-git'
-Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-obsession'
-Plug 'tpope/vim-scriptease'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-abolish'
 Plug 'qpkorr/vim-bufkill'
 Plug 'chrisbra/Recover.vim'
+
+                                      " ∴∵∴∵ plugins about making plugins {{{2
+
+Plug 'tpope/vim-scriptease'
+Plug 'kergoth/vim-hilinks'
+  nore <silent> <leader>hi :HLTX!<cr>
+
+                                         " ∴∵∴∵ my plugins in development {{{2
+
 Plug '~/.config/nvim/vaz/altbuf.vim'
 Plug '~/.config/nvim/vaz/autosource.vim'
+Plug '~/.config/nvim/vaz/js-cdn.vim'
 Plug '~/.config/nvim/vaz/addplug.vim'
-                                                                                             " {{{
   " hi AddPluginSign guifg=#d7ff87 guibg=#1c1c1c gui=bold
   " hi AddPluginLine cterm=bold guifg=#d7ff87 guibg=#223036 gui=bold
   nno <silent> <leader>ep :AddPlug<cr>
-                                                                                             " }}}
-Plug '~/.config/nvim/vaz/js-cdn.vim'
-Plug 'editorconfig/editorconfig-vim' " {{{
-  let g:EditorConfig_exclude_patterns = ['fugitive://.*']
-" }}}
-Plug 'kergoth/vim-hilinks' " {{{
-  nore <silent> <leader>hi :HLTX!<cr>
-" }}}
-Plug 'justinmk/vim-sneak' " {{{
+
+                                                    " ∴∵∴∵ motion plugins {{{2
+
+Plug 'justinmk/vim-sneak'
+  " TODO: S?
+  " TODO: vs easymotion? seek?
   let g:sneak#s_next = 1
   map gs <Plug>(SneakStreak)
   map gS <Plug>(SneakStreakBackward)
-" }}}
+
+                           " ∴∵∴∵ plugins about editing text specifically {{{2
+
+Plug 'editorconfig/editorconfig-vim'
+  let g:EditorConfig_exclude_patterns = ['fugitive://.*']
+
 Plug 'tommcdo/vim-lion'
 Plug 'vim-scripts/AlignFromCursor'
-Plug 'mattn/emmet-vim' " <c-y>, {{{
+
+Plug 'mattn/emmet-vim'
+  " <c-y>, etc
   " TODO: no n/v mode C-y mappings plz
-" }}}
-Plug 'terryma/vim-multiple-cursors' " {{{
+
+Plug 'terryma/vim-multiple-cursors'
   " default mapping: ^N XXX problematic
   let g:multi_cursor_exit_from_visual_mode = 0 " esc to Normal, then esc out
   let g:multi_cursor_exit_from_insert_mode = 0 " same
-" }}}
-" airline {{{
-  Plug 'vim-airline/vim-airline'
-  Plug 'vim-airline/vim-airline-themes'
+
+                                           " ∴∵∴∵ statusline: vim-airline {{{2
+
+Plug 'vim-airline/vim-airline'
   set noshowmode
+
+                                                " ∴∵∴∵∴∵ airline_mode_map {{{3
   let g:airline_mode_map = {
       \ '__' : '-',
       \ 'n'  : '🄽 ',
@@ -285,10 +303,12 @@ Plug 'terryma/vim-multiple-cursors' " {{{
       \ '' : '🅢 ',
       \ 't'  : '🅃 '
       \ }
+
+                                                 " ∴∵∴∵∴∵ airline_symbols {{{3
+
   if !exists('g:airline_symbols')
     let g:airline_symbols = {}
   endif
-  " unicode symbols
   let g:airline_left_sep = ''
   let g:airline_left_alt_sep = ''
   let g:airline_right_sep = ''
@@ -303,6 +323,9 @@ Plug 'terryma/vim-multiple-cursors' " {{{
   let g:airline_symbols.paste = 'ᴾ'
   let g:airline_symbols.notexists = '∄'
   let g:airline_symbols.whitespace = '⎵'
+
+                                      " ∴∵∴∵∴∵ airline#extensions#tabline {{{3
+
   let g:airline#extensions#tabline#enabled = 1
   let g:airline#extensions#tabline#left_sep = ''
   let g:airline#extensions#tabline#left_alt_sep = ' '
@@ -310,27 +333,36 @@ Plug 'terryma/vim-multiple-cursors' " {{{
   let g:airline#extensions#tabline#tabs_label = 'tab'
   let g:airline#extensions#tabline#buffer_nr_show = 1
   let g:airline#extensions#tabline#buffer_nr_format = '%s› '
+
+                                                   " ∴∵∴∵∴∵ airline_theme {{{3
+
+Plug 'vim-airline/vim-airline-themes'
   let g:airline_theme = 'term'
-   " i wanna use ∴∵ ∴∵ ∴∵
-" }}}
-" node-host {{{
-  fun! BuildNodeHost(info)
-    if a:info.status != 'unchanged' || a:info.force
-      !npm install
-      UpdateRemotePlugins
-    endif
-  endfun
-  Plug 'neovim/node-host', { 'do': function('BuildNodeHost') }
-" }}}
+
+                                              " ∴∵∴∵ neovim rplugin hosts {{{2
+
+Plug 'neovim/node-host', { 'do': function('build#node_host') }
+
+                                                        " ∴∵∴∵ completion {{{2
+
 Plug 'Shougo/neco-vim', { 'do': 'UpdateRemotePlugins' }
-Plug 'Shougo/deoplete.nvim', { 'do': 'UpdateRemotePlugins' } " {{{
+Plug 'Shougo/deoplete.nvim', { 'do': 'UpdateRemotePlugins' }
   let g:deoplete#enable_at_startup = 1
+  " TODO more completion:
   " https://github.com/clojure-vim/async-clj-omni
   " https://github.com/carlitux/deoplete-ternjs
-" }}}
+
+                                                             " ∴∵∴∵ unite {{{2
+
+                                                   " ∴∵∴∵∴∵ unite sources {{{3
+
 Plug 'Shougo/neoyank.vim'
 Plug 'Shougo/neomru.vim'
-Plug 'Shougo/unite.vim' " {{{
+
+                                                       " ∴∵∴∵∴∵ unite.vim {{{3
+
+Plug 'Shougo/unite.vim'
+
   function! s:on_unite_source()
     call unite#filters#matcher_default#use(['matcher_fuzzy'])
     call unite#filters#sorter_default#use(['sorter_rank'])
@@ -350,6 +382,9 @@ Plug 'Shougo/unite.vim' " {{{
     autocmd! FileType unite call s:unite_settings()
     autocmd! VimEnter * call s:on_unite_source()
   aug end
+
+                                                  " ∴∵∴∵∴∵ unite mappings {{{3
+
   nnoremap [-unite] <nop>
   nmap <leader>u [-unite]
   nnoremap <silent> [-unite]<space>  :Unite -buffer-name=files     -no-split -auto-preview -vertical-preview buffer file_rec<cr>
@@ -368,153 +403,123 @@ Plug 'Shougo/unite.vim' " {{{
   nnoremap <silent> [-unite]G        :Unite -buffer-name=gotoline  -auto-resize line<cr>
   nnoremap <silent> [-unite]r        :Unite -buffer-name=recent    -no-split -auto-preview -vertical-preview file_mru directory_mru<cr>
   nnoremap <silent> [-unite]<tab>    :Unite -buffer-name=buffers   -quick-match -no-start-insert -winheight=10 buffer<cr>
-" }}}
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } " {{{
-  nnoremap <cr> :<c-u>FZF<cr>
-" }}}
-Plug 'airblade/vim-gitgutter' " {{{
-" }}}
-Plug 'sheerun/vim-polyglot' " {{{
-  " git filetypes (from tpope/vim-git) {{{
-    " see https://github.com/tpope/vim-git
 
-    " in git rebase -i, cycle through choices (pick, squash, etc)
-    nno <buffer> <silent> S :Cycle<cr>
-  " }}}
-" }}}
-" js_context_colors {{{
-  fun! BuildVimJSCC(info)
-    if a:info.status != 'unchanged' || a:info.force
-      !npm install --update && (cd rplugin/node; npm install --update)
-      UpdateRemotePlugins
-    endif
-  endfun
-  Plug 'bigfish/vim-js-context-coloring', { 'branch': 'neovim', 'do': function('BuildVimJSCC') }
+                                                      " ∴∵∴∵ fuzzy-finder {{{2
+
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+  nnoremap <cr> :<c-u>FZF<cr>
+
+                                                  " ∴∵∴∵ filetype plugins {{{2
+
+" TODO: https://github.com/ap/vim-css-color
+
+Plug 'sheerun/vim-polyglot'
+Plug 'slim-template/vim-slim'
+Plug 'vito-c/jq.vim'
+Plug 'tpope/vim-markdown'
+  " XXX doesn't work?
+  let g:markdown_fenced_languages = ['html', 'rb=ruby', 'js=javascript', 'clj=clojure']
+
+                                                              " ∴∵∴∵∴∵ JS {{{3
+
+Plug 'bigfish/vim-js-context-coloring', { 'branch': 'neovim', 'do': function('build#jscc') }
     let g:js_context_colors_enabled = 0
     let g:js_context_colors_usemaps = 0
     " let g:js_context_colors_highlight_function_names = 1
     let g:js_context_colors_jsx = 1
     au FileType javascript :noremap <buffer> <localleader>c :<c-u>JSContextColorToggle<cr>
-" }}}
-" TODO: https://github.com/ap/vim-css-color
-Plug 'tpope/vim-markdown' " {{{
-  " XXX doesn't work?
-  let g:markdown_fenced_languages = ['html', 'rb=ruby', 'js=javascript', 'clj=clojure']
-" }}}
-Plug 'vito-c/jq.vim'
-" clojure plugins {{{
-  Plug 'tpope/vim-fireplace'
-  Plug 'tpope/vim-salve' " {{{
-    let g:salve_auto_start_repl = 0
-  " }}}
-  Plug 'guns/vim-sexp'
-  Plug 'tpope/vim-sexp-mappings-for-regular-people'
-" }}}
-" colours {{{
-  Plug '~/.config/nvim/vaz/cyclr.vim'
-  exe 'aug Colours' | exe 'au!' | exe 'aug end'
 
-  " colour schemes {{{
-    Plug '~/.config/nvim/vaz/vcolours.vim'
-    Plug '29decibel/codeschool-vim-theme'
-    Plug 'djjcast/mirodark'
-    Plug 'jonathanfilip/vim-lucius'
-    Plug 'sonjapeterson/1989.vim' " {{{
-      " TODO: move this, or make it part of cyclr with funcref
-      fun! Patch1989() abort
-        " from 'highlight'
-        hi SpecialKey guibg=#303030 guifg=#b7d7ff
-        hi EndOfBuffer ctermbg=NONE guibg=NONE guifg=#1c1c1c
-        hi TermCursor guifg=#99ffa8 guibg=NONE gui=reverse
-        hi TermCursorNC guifg=#afafaf guibg=NONE gui=reverse
-        hi NonText guibg=#303030 guifg=#87afaf
-        hi Directory guifg=#afdfff
-        hi! link ErrorMsg Error
-        hi Search guifg=#d7ff87 guibg=#1c1c1c gui=none
-        hi IncSearch guifg=#d7ffaf guibg=#080808 gui=underline,bold
-        hi MoreMsg guifg=#afffd7 guibg=NONE gui=italic
-        hi ModeMsg guifg=#ffffff gui=bold
-        hi LineNr guibg=#303030 guifg=#878787
-        hi CursorLineNr guibg=#303030 guifg=#afcfcf gui=NONE
-        hi! link Question MoreMsg
-        hi StatusLine guibg=#1c1c1c guifg=#ffffff gui=NONE
-        hi StatusLineNC guibg=#272727 guifg=#afafaf gui=NONE
-        hi Title guifg=#afdfff guibg=NONE gui=NONE
-        hi VertSplit guibg=#242424 guifg=#001224 gui=italic
-        hi Visual guibg=black guifg=#afffdf gui=none
-        hi WarningMsg gui=italic guifg=#ffdfaf guibg=#271c27
-        hi! link WildMenu Visual
-        hi Folded guibg=#1c1c1c guifg=#57575f gui=italic
-        hi FoldColumn guibg=#272727 gui=NONE guifg=#57665f
+                                                    " ∴∵∴∵∴∵ clojure REPL {{{3
+Plug 'tpope/vim-fireplace'
+Plug 'tpope/vim-salve'
+  let g:salve_auto_start_repl = 0
 
-        hi DiffAdd gui=NONE guifg=#e0e0e0 guibg=#00875f
-        hi DiffChange guibg=#305787
-        hi DiffText guibg=#0087af guifg=#ffffff gui=bold
-        hi DiffDelete guibg=#a73057 guifg=#e0e0e0
+                                           " ∴∵∴∵∴∵ editing s-expressions {{{3
 
-        hi SignColumn guibg=#303030 guifg=#57665f
+Plug 'guns/vim-sexp'
+Plug 'tpope/vim-sexp-mappings-for-regular-people'
 
-        hi PMenu guibg=#4c57cc guifg=#ffffff
-        hi PMenuSel guibg=#5787ff guifg=#ffffff gui=bold
-        hi PMenuSbar guibg=grey
-        hi PMenuThumb guibg=white
+                                                               " ∴∵∴∵ git {{{2
 
-        " from elsewhere
-        hi CursorLine guibg=#303030
-        hi CursorColumn guibg=#303030
-        hi Error guifg=#ffafdf guibg=#271c27 gui=italic
 
-        hi Comment cterm=italic gui=italic
-        hi Todo guifg=#dfffaf guibg=none gui=underline,bold
-        hi MatchParen guifg=#dfffaf gui=bold,underline guibg=#001230
-      endfun
-      au Colours ColorScheme 1989 :call Patch1989()
-    " }}}
-    " TODO: support funcrefs/numbered-function
-    " colour defs {{{
-    let g:cyclr#defs = {
-          \ 'lucius': 'set bg=dark | colors lucius | exe "LuciusDark"',
-          \ 'lucius-hi': 'set bg=dark | colors lucius | exe "LuciusDarkHighContrast"',
-          \ '1989':   'set bg=dark | colors 1989',
-          \ 'galaxy': 'colors galaxy',
-          \ } " }}}
-
-    nmap <leader>C <Plug>cyclrNext
-    " TODO: option
-    " au VimEnter,Colorscheme * :call cyclr#clearbg()
-  " }}}
-
-    Plug 'kien/rainbow_parentheses.vim' " {{{
-      let g:rbpt_colorpairs = [
-          \ ['brown',       'RoyalBlue3'],
-          \ ['Darkblue',    'SeaGreen3'],
-          \ ['darkgray',    'DarkOrchid3'],
-          \ ['darkgreen',   'firebrick3'],
-          \ ['darkcyan',    'RoyalBlue3'],
-          \ ['darkred',     'SeaGreen3'],
-          \ ['darkmagenta', 'DarkOrchid3'],
-          \ ['brown',       'firebrick3'],
-          \ ['gray',        'RoyalBlue3'],
-          \ ['black',       'SeaGreen3'],
-          \ ['darkmagenta', 'DarkOrchid3'],
-          \ ['Darkblue',    'firebrick3'],
-          \ ['darkgreen',   'RoyalBlue3'],
-          \ ['darkcyan',    'SeaGreen3'],
-          \ ['darkred',     'DarkOrchid3'],
-          \ ['red',         'firebrick3'],
-          \ ]
-      let g:rbpt_max = 16
-      let g:rbpt_loadcmd_toggle = 1
-      au VimEnter * RainbowParenthesesToggle
-      au Syntax * RainbowParenthesesLoadRound
-      au Syntax * RainbowParenthesesLoadSquare
-      au Syntax * RainbowParenthesesLoadBraces
-    " }}}
+" polyglot provides vim-git (https://github.com/tpope/vim-git)
+  " in git rebase -i, cycle through choices (pick, squash, etc)
+  aug vimrc_git
+    au!
+    au FileType gitrebase nno <buffer> <silent> S :Cycle<cr>
   aug end
-" }}}
-Plug 'slim-template/vim-slim'
-Plug 'scrooloose/nerdtree' " {{{
- Plug 'Xuyuanp/nerdtree-git-plugin'
+
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+
+                                                           " ∴∵∴∵ colours {{{2
+
+exe 'aug Colours' | exe 'au!' | exe 'aug end'
+
+                                                  " ∴∵∴∵∴∵ colour schemes {{{3
+
+Plug '~/.config/nvim/vaz/vcolours.vim'
+Plug '29decibel/codeschool-vim-theme'
+Plug 'djjcast/mirodark'
+Plug 'jonathanfilip/vim-lucius'
+Plug 'sonjapeterson/1989.vim'
+  au Colours ColorScheme 1989 :call colours#patchUI()
+
+                                                     " ∴∵∴∵∴∵ cyclr setup {{{3
+
+Plug '~/.config/nvim/vaz/cyclr.vim'
+  " TODO: support funcrefs
+
+  " colour defs {{{
+  let g:cyclr#defs = {
+  \ 'lucius': 'set bg=dark | colors lucius | exe "LuciusDark"',
+  \ 'lucius-hi': 'set bg=dark | colors lucius | exe "LuciusDarkHighContrast"',
+  \ '1989':   'set bg=dark | colors 1989',
+  \ 'galaxy': 'colors galaxy',
+  \ }
+  " }}}
+
+  nmap <leader>C <Plug>cyclrNext
+
+  " TODO: option
+  " au VimEnter,Colorscheme * :call cyclr#clearbg()
+
+                                                  " ∴∵∴∵∴∵ rainbow parens {{{3
+
+Plug 'kien/rainbow_parentheses.vim'
+  let g:rbpt_max = 16
+  let g:rbpt_loadcmd_toggle = 1
+
+  " rbpg_colorpairs {{{
+  let g:rbpt_colorpairs = [
+  \ ['brown',       'RoyalBlue3'],
+  \ ['Darkblue',    'SeaGreen3'],
+  \ ['darkgray',    'DarkOrchid3'],
+  \ ['darkgreen',   'firebrick3'],
+  \ ['darkcyan',    'RoyalBlue3'],
+  \ ['darkred',     'SeaGreen3'],
+  \ ['darkmagenta', 'DarkOrchid3'],
+  \ ['brown',       'firebrick3'],
+  \ ['gray',        'RoyalBlue3'],
+  \ ['black',       'SeaGreen3'],
+  \ ['darkmagenta', 'DarkOrchid3'],
+  \ ['Darkblue',    'firebrick3'],
+  \ ['darkgreen',   'RoyalBlue3'],
+  \ ['darkcyan',    'SeaGreen3'],
+  \ ['darkred',     'DarkOrchid3'],
+  \ ['red',         'firebrick3'],
+  \ ]
+  " }}}
+
+  au VimEnter * RainbowParenthesesToggle
+  au Syntax * RainbowParenthesesLoadRound
+  au Syntax * RainbowParenthesesLoadSquare
+  au Syntax * RainbowParenthesesLoadBraces
+
+                                                          " ∴∵∴∵ NERDTree {{{2
+
+Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
   let g:NERDTreeMinimalUI = 1
   nno <silent> qt :NERDTreeToggle<cr>
   aug vimrc_nerdtree
@@ -525,25 +530,27 @@ Plug 'scrooloose/nerdtree' " {{{
     " How can I close vim if the only window left open is a NERDTree?
     au BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
   aug end
-" }}}
-Plug 'junegunn/limelight.vim' " {{{
+
+                                                        " ∴∵∴∵ trying out {{{2
+Plug 'junegunn/limelight.vim'
   let g:limelight_conceal_ctermfg = '233'
   let g:limelight_conceal_guifg = '#242424'
-" }}}
+
 "__plugintail__
 
-" TODO: neomake instead of syntastic
+                                                               " ∴∵∴∵ end {{{2
+
 call plug#end()
 
-                                                                                             " }}}
-                                                                      " ∴∵ initialize colours {{{1
+                                                  " ∴∵ initialize colours {{{1
+
 if has('vim_starting')
   let s:coloured = 1
   set bg=dark
   call cyclr#activate('1989')
 endif
 
-                                                                                " ∴∵ autocmds {{{1
+                                                            " ∴∵ autocmds {{{1
 
 aug vimrc
   " when editing a file, always jump to the last known cursor position.
@@ -570,5 +577,5 @@ aug vimrc
 
 augroup end
 
-                                                                                     " ∴∵ end {{{1
+                                                                 " ∴∵ end {{{1
 " -*- vim -*- vim:set ft=vim et sw=2 sts=2 fdl=1 fdm=marker tw=98 nonu:
