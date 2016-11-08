@@ -530,6 +530,9 @@ Plug 'junegunn/limelight.vim' " {{{
   let g:limelight_conceal_ctermfg = '233'
   let g:limelight_conceal_guifg = '#242424'
 " }}}
+Plug 'mmozuras/vim-github-comment'
+Plug 'mattn/webapi-vim'
+Plug 'mmozuras/vim-github-comment'
 "__plugintail__
 
 " TODO: neomake instead of syntastic
