@@ -553,6 +553,7 @@ endif
                                                             " ∴∵ autocmds {{{1
 
 aug vimrc
+  au!
   " when editing a file, always jump to the last known cursor position.
   au BufReadPost *
     \ if line("'\"") > 0 && line("'\"") <= line("$") |
