@@ -10,7 +10,7 @@ set ts=8 sts=2 sw=2 ai si et sta                                " indent sanity
                                                                 " ∴∵∴∵ UI {{{2
 
 set shm& shm+=aI ls=2 sc so=6 siso=6 ru dy=lastline,uhex nonu eb vb swb=useopen
-set ttimeout ttimeoutlen=100 updatetime=250
+set ttimeout ttimeoutlen=100 updatetime=500
 set cpt& cpt+=i completeopt=menuone,longest,preview
 set wildmenu wildmode=longest,list
 set wig& wig+=*.orig,*.rej,*~,#*#,.*.s[a-w][a-z],.DS_Store,._*,.Trash
