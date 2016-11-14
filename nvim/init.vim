@@ -368,7 +368,7 @@ Plug 'Shougo/unite.vim'
     call unite#filters#sorter_default#use(['sorter_rank'])
     call unite#custom#profile('default', 'context', { 'start_insert': 1, 'smartcase': 1 })
   endfunction
- function! s:unite_settings()
+  function! s:unite_settings()
     nmap <buffer> <esc> <plug>(unite_exit)
   endfunction
   if executable('ack')
