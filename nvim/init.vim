@@ -24,13 +24,12 @@ let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1   " Change cursor shape in insert mode
 
                                         " ∴∵∴∵ text formatting / wrapping {{{2
 
-set tildeop
 sil! set tw=78 fo& fo-=t              " textwidth is normally annoying, but
 let &sbr='↪ '                         " with fo-=t it will only do comments.
 set nolbr bri briopt=shift:0 cpo+=n   " default 'fo' is tcqj
 aug vimrc_formatting
-  " Don't auto-insert comment leaders when using o/O in normal mode.
   au!
+  " Don't auto-insert comment leaders when using o/O in normal mode.
   au FileType * sil! setl fo-=o briopt=shift:0
   au FileType text,markdown,textile
     \ sil! setl lbr fo-=c briopt=shift:0,sbr tw=0
