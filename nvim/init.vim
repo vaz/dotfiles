@@ -447,6 +447,7 @@ Plug 'tpope/vim-sexp-mappings-for-regular-people'
   aug vimrc_git
     au!
     au FileType gitrebase nno <buffer> <silent> S :Cycle<cr>
+    au FileType gitcommit nno <buffer> <silent> qq :<c-u>bd<cr>
   aug end
 
 Plug 'tpope/vim-fugitive'
