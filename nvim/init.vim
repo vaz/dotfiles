@@ -58,6 +58,13 @@ call termhelpers#autoinsertmode()
 let mapleader = " "
 let maplocalleader = "  "
 
+nore <nowait> <leader>          <nop>
+nore <nowait> <leader><leader>  <nop>
+nore <nowait> <leader><esc>     <nop>
+
+ounmap <leader>
+ono <nowait> <leader> t<leader>
+
                                             " ∴∵∴∵ buffer/window mappings {{{2
 
 nno <silent> `     :call altbuf#flip_if_listed()<cr>
