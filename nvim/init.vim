@@ -67,7 +67,7 @@ ono <nowait> <leader> t<leader>
 
                                             " ∴∵∴∵ buffer/window mappings {{{2
 
-nno <silent> `     :call altbuf#flip_if_listed()<cr>
+nno <silent> \     :call altbuf#flip_if_listed()<cr>
 
 nno <leader>q q
 nno <leader>Q Q
@@ -85,8 +85,8 @@ nno <silent> qQ <c-w>W
 nno <silent> q <c-w>
 nno <silent> Q <c-w>p
 
-nno <silent> <tab> :bn<cr>
-nno <silent> <s-tab> :bp<cr>
+nno <silent> ( :bn<cr>
+nno <silent> ) :bp<cr>
 
 " change windows with alt-hjkl (incl terminal)
 tnore <a-h> <c-\><c-n><c-w>h
@@ -169,20 +169,26 @@ onoremap ar a[
 vnoremap ir i[
 vnoremap ar a[
 
+                                                      " ∴∵∴∵ highlighting {{{2
+
+
+" hi! Match1 ctermfg=none ctermbg=lightblue cterm=bold gui=none guifg=none guibg=#4c57cc
+
+" vno <leader>m1 "my:match  Match1  /\V<c-r>=substitute(escape(@m, '/\'), '\n', '\\n', 'g')<cr>/<cr>
+" vno <leader>m2 "my:2match Match2  /\V<c-r>=substitute(escape(@m, '/\'), '\n', '\\_$', 'g')<cr>/<cr>
+" vno <leader>m3 "my:3match Match3  /\V<c-r>=substitute(escape(@m, '/\'), '\n', '\\_$', 'g')<cr>/<cr>
+
+" nmap <leader>m1 viW<leader>m1
+" nmap <leader>m2 viW<leader>m2
+" nmap <leader>m3 viW<leader>m3
+
                                   " ∴∵∴∵ marks, registers, changes, jumps {{{2
 
 nno Y y$
 
-" ` is always better than ', free up `
-nno  ' `
-nno g' '
-
-" navigate changelist with _ and +, jumplist with - and =
-no g= =
-no _  g;zx
-no +  g,zx
-no -  <c-o>zx
-no =  <c-i>zx
+" navigate jumplist
+no ( <c-o>zx
+no ) <c-i>zx
 
 " select last put text
 nnoremap <expr> gV '`[' . strpart(getregtype(), 0, 1) . '`]'
@@ -212,13 +218,13 @@ ino <D-BS>      <esc>ld0i
                                              " ∴∵∴∵ edit/source shortcuts {{{2
 
 nno <leader>ev :e $MYVIMRC<cr>
-nno <leader>ef :ef ~/.config/fish/config.fish<cr>
-nno <leader>eg :eg ~/.gitconfig<cr>
+nno <leader>ef :e ~/.config/fish/config.fish<cr>
+nno <leader>eg :e ~/.gitconfig<cr>
 nno <leader>ss :so %<cr>
 nno <leader>sv :so $MYVIMRC<cr>
 nno <leader>sp :PlugInstall<cr>
 nno <leader>sf :so ~/.config/fish/config.fish<cr>
-nno <leader>eg :sg ~/.gitconfig<cr>
+nno <leader>sg :so ~/.gitconfig<cr>
 
                                                  " ∴∵∴∵ terminal mappings {{{2
 
@@ -258,10 +264,18 @@ Plug 'kergoth/vim-hilinks'
 Plug '~/.config/nvim/vaz/altbuf.vim'
 Plug '~/.config/nvim/vaz/autosource.vim'
 Plug '~/.config/nvim/vaz/js-cdn.vim'
+
 Plug '~/.config/nvim/vaz/addplug.vim'
   " hi AddPluginSign guifg=#d7ff87 guibg=#1c1c1c gui=bold
   " hi AddPluginLine cterm=bold guifg=#d7ff87 guibg=#223036 gui=bold
   nno <silent> <leader>ep :AddPlug<cr>
+
+Plug '~/.config/nvim/vaz/filling.vim'
+  " filling (underlines, horizontal rules)
+  nmap <leader>FF <plug>fillingHR
+  nmap <leader>FU <plug>fillingUL
+
+Plug '~/.config/nvim/vaz/nerdtree-git-menu.vim'
 
                                                     " ∴∵∴∵ motion plugins {{{2
 
@@ -358,12 +372,15 @@ Plug 'Shougo/deoplete.nvim', { 'do': 'UpdateRemotePlugins' }
   " https://github.com/clojure-vim/async-clj-omni
   " https://github.com/carlitux/deoplete-ternjs
 
+Plug 'ervandew/supertab'
+
                                                              " ∴∵∴∵ unite {{{2
 
                                                    " ∴∵∴∵∴∵ unite sources {{{3
 
 Plug 'Shougo/neoyank.vim'
 Plug 'Shougo/neomru.vim'
+Plug 'ujihisa/unite-colorscheme'
 
                                                        " ∴∵∴∵∴∵ unite.vim {{{3
 
@@ -402,13 +419,14 @@ Plug 'Shougo/unite.vim'
   nnoremap <silent> [-unite]c        :Unite -buffer-name=changes   -no-split -auto-preview -auto-highlight -vertical-preview -no-start-insert change<cr>
   nnoremap <silent> [-unite]C        :Unite -buffer-name=command   command<cr>
   nnoremap <silent> [-unite]f        :Unite -buffer-name=files     -no-split -auto-preview -vertical-preview file<cr>
+  nnoremap <silent> [-unite]H        :Unite -buffer-name=colours   -auto-preview -vertical-preview colorscheme<cr>
   nnoremap <silent> [-unite]d        :Unite -buffer-name=dirs      directory<cr>
   nnoremap <silent> [-unite]p        :Unite -buffer-name=rtp       -no-split -auto-preview -vertical-preview runtimepath<cr>
   nnoremap <silent> [-unite]y        :Unite -buffer-name=yanks     -no-start-insert history/yank<cr>
   " nnoremap <silent> [-unite]/        :Unite -buffer-name=grep      -no-split -auto-preview -vertical-preview grep:.<cr>
   nnoremap <silent> [-unite]G        :Unite -buffer-name=gotoline  -auto-resize line<cr>
   nnoremap <silent> [-unite]r        :Unite -buffer-name=recent    -no-split -auto-preview -vertical-preview file_mru directory_mru<cr>
-  nnoremap <silent> [-unite]<tab>    :Unite -buffer-name=buffers   -quick-match -no-start-insert -winheight=10 buffer<cr>
+  nnoremap <silent> [-unite]b        :Unite -buffer-name=buffers   -quick-match -no-start-insert -winheight=10 buffer<cr>
 
                                                       " ∴∵∴∵ fuzzy-finder {{{2
 
@@ -428,6 +446,7 @@ Plug 'tpope/vim-markdown'
 
                                                               " ∴∵∴∵∴∵ JS {{{3
 
+Plug 'ternjs/tern_for_vim'
 Plug 'bigfish/vim-js-context-coloring', { 'branch': 'neovim', 'do': function('build#jscc') }
     let g:js_context_colors_enabled = 0
     let g:js_context_colors_usemaps = 0
@@ -457,7 +476,12 @@ Plug 'tpope/vim-sexp-mappings-for-regular-people'
   aug end
 
 Plug 'tpope/vim-fugitive'
+
 Plug 'airblade/vim-gitgutter'
+  nmap ]c <Plug>GitGutterNextHunkzx
+  nmap [c <Plug>GitGutterPrevHunkzx
+  " TODO: I wanna make an extension for this called gutter-hunks just because
+  " of the name. I mean come on.
 
                                                            " ∴∵∴∵ colours {{{2
 
@@ -471,6 +495,7 @@ Plug 'djjcast/mirodark'
 Plug 'jonathanfilip/vim-lucius'
 Plug 'sonjapeterson/1989.vim'
   au Colours ColorScheme 1989 :call colours#patchUI()
+  au Colours ColorScheme 1989 :hi Normal guibg=#242424
 
                                                      " ∴∵∴∵∴∵ cyclr setup {{{3
 
@@ -518,22 +543,26 @@ Plug 'kien/rainbow_parentheses.vim'
   \ ]
   " }}}
 
-  au VimEnter * RainbowParenthesesToggle
-  au Syntax * RainbowParenthesesLoadRound
-  au Syntax * RainbowParenthesesLoadSquare
-  au Syntax * RainbowParenthesesLoadBraces
+  aug vimrc_rbpt
+    au!
+    au VimEnter * RainbowParenthesesToggle
+    au Syntax * RainbowParenthesesLoadRound
+    au Syntax * RainbowParenthesesLoadSquare
+    au Syntax * RainbowParenthesesLoadBraces
+  aug end
 
                                                           " ∴∵∴∵ NERDTree {{{2
 
-Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
   let g:NERDTreeMinimalUI = 1
+  let g:NERDTreeShowHidden = 1
   nno <silent> qt :NERDTreeToggle<cr>
   aug vimrc_nerdtree
     au!
     " How can I open NERDTree automatically when vim starts up on opening a directory?
     au StdinReadPre * let s:std_in=1
-    au VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+    au VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | wincmd h | endif
     " How can I close vim if the only window left open is a NERDTree?
     au BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
   aug end
@@ -544,6 +573,15 @@ Plug 'junegunn/limelight.vim'
   let g:limelight_conceal_guifg = '#242424'
 
 "__plugintail__
+
+" ∴∵∴∵ to try {{{2
+
+" tpope/vim-pathogen - https://github.com/tpope/vim-pathogen
+"   - yup I bet it's better because I can understand it
+" xolox/easy-tags - https://github.com/xolox/vim-easytags
+"   - automatically generate ctags
+" tpope/vim-rsi - https://github.com/tpope/vim-rsi
+"   - readline-style (or emacs-style) key bindings (i/c mode)
 
                                                                " ∴∵∴∵ end {{{2
 
@@ -585,5 +623,22 @@ aug vimrc
 
 augroup end
 
+
+                                                             " ∴∵ testing {{{1
+
+nmap ]] :bnext
+nmap [[ :bprev
+
+" TODO: barely-started thought: automatic boilerplate/template for new files
+" with certain names
+
+" aug vimrc_testing
+"   au!
+"   au BufNewFile *.html5
+"   " for example, would insert an html5 template (like emmet html:5
+"   " expansion)
+" aug end
+
+" https://github.com/egalpin/apt-vim
                                                                  " ∴∵ end {{{1
-" -*- vim -*- vim:set ft=vim et sw=2 sts=2 fdl=1 fdm=marker tw=98 nonu:
+" -*- vim -*- vim:set ft=vim et sw=2 sts=2 fdl=1 fdm=marker tw=78:
