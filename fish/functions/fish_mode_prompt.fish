@@ -1,23 +1,13 @@
 function fish_mode_prompt --description 'Displays the current mode'
-	# disable for now
-  return
 	# Do nothing if not in vi mode
   if test "$fish_key_bindings" = "fish_vi_key_bindings"
-    switch $fish_bind_mode
-      case default
-        set_color --bold --background red white
-        echo '[N]'
-      case insert
-        set_color --bold --background green white
-        echo '[I]'
-      case replace-one
-        set_color --bold --background green white
-        echo '[R]'
-      case visual
-        set_color --bold --background magenta white
-        echo '[V]'
-    end
-    set_color normal
-    echo -n ' '
+    set -g __fish_prompt_mode (string replace -a - _ $fish_bind_mode)
+    eval set -g __fish_prompt_mode_color \$fish_color_mode_$__fish_prompt_mode
+    eval set -g __fish_prompt_mode_string \$__fish_mode_string__$__fish_prompt_mode
+    # set_color --bold 303030 --background $__fish_prompt_mode_color
+    # echo -n -s $__fish_prompt_mode_string ' '
+    # set_color normal
+    # set_color $__fish_prompt_mode_color --background 303030
+    # echo -n -s $__fish_prompt_left_sep ' '
   end
 end

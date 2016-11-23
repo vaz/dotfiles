@@ -14,22 +14,18 @@ set -gx EDITOR nvim
 
 alias ipinfo='curl ipinfo'
 
-if whether hub
-  alias git=hub
-end
+whether hub; and alias git=hub
 
 status --is-interactive; and . (rbenv init -|psub)
 
-function -e fish_prompt __cursor_status
-  set -l last_status $status
-  if test -x (which it2_palette)
-    if test $last_status = 0
-      it2_palette cc 99ffa8
-    else
-      it2_palette cc ff88aa
-    end
+# trigger autoloading:
+__cursor_status
+
+function -e fish_prompt __prompt_update_mode_info
+  if test "$fish_key_bindings" = "fish_vi_key_bindings"
+    set -g      __fish_prompt_mode (string replace -a - _ $fish_bind_mode)
+    eval set -g __fish_prompt_mode_color  \$fish_color_mode_$__fish_prompt_mode
+    eval set -g __fish_prompt_mode_string \$__fish_mode_string__$__fish_prompt_mode
   end
-  return $last_status
 end
 
-test -e {$HOME}/.iterm2_shell_integration.fish ; and source {$HOME}/.iterm2_shell_integration.fish
