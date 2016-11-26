@@ -1,0 +1,8 @@
+#!/usr/bin/env osascript
+
+on run argv
+  tell application "Marked" to open argv's first item
+end run
+
+                                                                    # end {{{1
+# vim: ft=applescript:fdm=marker:et:sw=2:sts=2:ts=2:
