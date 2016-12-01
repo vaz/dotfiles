@@ -144,6 +144,7 @@ init-prg grunt --completion bash
 init-prg fasd --init auto
 
 darwin && {
+  # make cursor turn red after failed command, green after success
   export PROMPT_COMMAND=' [ $? = 0 ] && it2_palette cc 99ffa8 || it2_palette cc ff88aa;'"$PROMPT_COMMAND"
 }
 
