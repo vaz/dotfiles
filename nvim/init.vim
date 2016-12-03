@@ -626,8 +626,8 @@ augroup end
 
                                                              " ∴∵ testing {{{1
 
-nmap ]] :bnext
-nmap [[ :bprev
+nmap ]] :bnext<cr>
+nmap [[ :bprev<cr>
 
 " TODO: barely-started thought: automatic boilerplate/template for new files
 " with certain names
