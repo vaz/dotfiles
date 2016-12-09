@@ -614,7 +614,7 @@ aug vimrc
 
   au BufNewFile,BufRead * if &syntax == '' | set foldmethod=indent | endif
 
-  au FileType make setl noeg
+  au FileType make setl noet
 
   au FileType help nnore <silent> <buffer> <cr> <c-]>
 
