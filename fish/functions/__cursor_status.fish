@@ -1,4 +1,4 @@
-function -e fish_prompt __cursor_status
+function __cursor_status
   set -l last_status $status
   if test -x (which it2_palette)
     if test $last_status = 0
