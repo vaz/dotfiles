@@ -62,9 +62,6 @@ nore <nowait> <leader>          <nop>
 nore <nowait> <leader><leader>  <nop>
 nore <nowait> <leader><esc>     <nop>
 
-ounmap <leader>
-ono <nowait> <leader> t<leader>
-
                                             " ∴∵∴∵ buffer/window mappings {{{2
 
 nno <silent> \     :call altbuf#flip_if_listed()<cr>
@@ -237,8 +234,6 @@ nmap <leader>t<leader> <leader>tv
 
                                                              " ∴∵ plugins {{{1
 
-syntax on
-filetype plugin indent on
 " TODO: just use pathogen
 call plug#begin('~/.config/nvim/plugged')
 
@@ -252,6 +247,9 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-abolish'
 Plug 'qpkorr/vim-bufkill'
 Plug 'chrisbra/Recover.vim'
+
+Plug 'tpope/vim-dispatch'
+Plug 'radenling/vim-dispatch-neovim'
 
                                       " ∴∵∴∵ plugins about making plugins {{{2
 
@@ -357,7 +355,7 @@ Plug 'vim-airline/vim-airline'
                                                    " ∴∵∴∵∴∵ airline_theme {{{3
 
 Plug 'vim-airline/vim-airline-themes'
-  let g:airline_theme = 'term'
+  let g:airline_theme = 'vterm'
 
                                               " ∴∵∴∵ neovim rplugin hosts {{{2
 
@@ -370,7 +368,13 @@ Plug 'Shougo/deoplete.nvim', { 'do': 'UpdateRemotePlugins' }
   let g:deoplete#enable_at_startup = 1
   " TODO more completion:
   " https://github.com/clojure-vim/async-clj-omni
-  " https://github.com/carlitux/deoplete-ternjs
+Plug 'carlitux/deoplete-ternjs', { 'do': 'npm install -g tern' }
+  " js completion
+  " requires neovim python-client
+  "     pip3 install neovim
+  " Add extra filetypes
+  let g:tern#filetypes = ['jsx', 'javascript.jsx']
+" Plug 'eaglemt/neco-ghc'
 
 Plug 'ervandew/supertab'
 
@@ -389,17 +393,36 @@ Plug 'Shougo/unite.vim'
   function! s:on_unite_source()
     call unite#filters#matcher_default#use(['matcher_fuzzy'])
     call unite#filters#sorter_default#use(['sorter_rank'])
-    call unite#custom#profile('default', 'context', { 'start_insert': 1, 'smartcase': 1 })
+    call unite#custom#profile('default', 'context', { 'split': 0, 'wipe': 1, 'smartcase': 1, 'vertical-preview': 1 })
   endfunction
   function! s:unite_settings()
     nmap <buffer> <esc> <plug>(unite_exit)
+    nmap <buffer> qb <plug>(unite_exit)
+    nmap <buffer> qd <plug>(unite_exit)
+    nmap <buffer> qc <plug>(unite_exit)
+    nnoremap <silent><buffer><expr> s unite#do_action('split')
+    nnoremap <silent><buffer><expr> v unite#do_action('vsplit')
   endfunction
-  if executable('ack')
-    let g:unite_source_grep_command = 'ack'
-    let g:unite_source_grep_default_opts = '-i --no-heading --no-color -k -H'
+  if executable('ag')
+    let g:unite_source_rec_async_command = ['ag', '--filename', '--numbers', '--noheading', '--follow', '--hidden', '--ignore=.git', '--nocolor', '--hidden', '-g']
+    let g:unite_source_rec_async_command = ['ag', '--nogroup', '--follow', '--hidden', '--ignore=.git', '--nocolor', '-g', '']
+    let g:unite_source_grep_command = 'ag'
+    let g:unite_source_grep_default_opts = '--filename --numbers --noheading --follow --hidden --ignore=.git --nocolor --hidden'
     let g:unite_source_grep_recursive_opt = ''
   endif
   let g:unite_source_history_yank_enable = 1
+  " can be myalias: { source: sourcename, args: whatever, description: ... }
+  let g:unite_source_alias_aliases = {
+    \ 'b': 'buffer',
+    \ 'fr': 'file_rec/neovim',
+    \ 'fp': 'file_rec/neovim:!',
+    \ 'fh': 'file_rec/neovim:?',
+    \ 'rtp': 'runtimepath',
+    \ 'y': 'history/yank',
+    \ 'reg': 'register',
+    \ 'mru': 'file_mru',
+    \ 'bm': 'bookmark'
+  \ }
   aug vimrc_unite
     au!
     autocmd! FileType unite call s:unite_settings()
@@ -410,28 +433,29 @@ Plug 'Shougo/unite.vim'
 
   nnoremap [-unite] <nop>
   nmap <leader>u [-unite]
-  nnoremap <silent> [-unite]<space>  :Unite -buffer-name=files     -no-split -auto-preview -vertical-preview buffer file_rec<cr>
-  nnoremap <silent> [-unite]F        :Unite -buffer-name=files     -no-split -auto-preview -auto-highlight -vertical-preview file_rec<cr>
-  nnoremap <silent> [-unite]g        :Unite -buffer-name=files     -no-split -auto-preview -auto-highlight -vertical-preview file_rec/git<cr>
-  nnoremap <silent> [-unite]'        :Unite -buffer-name=register  -no-start-insert -auto-resize register<cr>
-  nnoremap <silent> [-unite]m        :Unite -buffer-name=mapping   -no-start-insert mapping<cr>
-  nnoremap <silent> [-unite]j        :Unite -buffer-name=jumps     -no-split -auto-preview -auto-highlight -vertical-preview -no-start-insert jump<cr>
-  nnoremap <silent> [-unite]c        :Unite -buffer-name=changes   -no-split -auto-preview -auto-highlight -vertical-preview -no-start-insert change<cr>
-  nnoremap <silent> [-unite]C        :Unite -buffer-name=command   command<cr>
-  nnoremap <silent> [-unite]f        :Unite -buffer-name=files     -no-split -auto-preview -vertical-preview file<cr>
-  nnoremap <silent> [-unite]H        :Unite -buffer-name=colours   -auto-preview -vertical-preview colorscheme<cr>
-  nnoremap <silent> [-unite]d        :Unite -buffer-name=dirs      directory<cr>
-  nnoremap <silent> [-unite]p        :Unite -buffer-name=rtp       -no-split -auto-preview -vertical-preview runtimepath<cr>
-  nnoremap <silent> [-unite]y        :Unite -buffer-name=yanks     -no-start-insert history/yank<cr>
-  " nnoremap <silent> [-unite]/        :Unite -buffer-name=grep      -no-split -auto-preview -vertical-preview grep:.<cr>
-  nnoremap <silent> [-unite]G        :Unite -buffer-name=gotoline  -auto-resize line<cr>
-  nnoremap <silent> [-unite]r        :Unite -buffer-name=recent    -no-split -auto-preview -vertical-preview file_mru directory_mru<cr>
-  nnoremap <silent> [-unite]b        :Unite -buffer-name=buffers   -quick-match -no-start-insert -winheight=10 buffer<cr>
+
+  " Unite buffer
+  " -default-action=
+  nnoremap <silent> [-unite]u        :Unite -buffer-name=unite<cr>
+  nnoremap <silent> [-unite]o        :Unite -buffer-name=files     buffer bookmark file<cr>
+  nnoremap <silent> [-unite]b        :Unite -buffer-name=buffers   buffer<cr>
+  nnoremap <silent> [-unite]f        :Unite -buffer-name=files     -start-insert file_rec/neovim:!<cr>
+  nnoremap <silent> [-unite]F        :Unite -buffer-name=files     -start-insert file_rec/neovim:?<cr>
+  nnoremap <silent> [-unite]p        :Unite -buffer-name=rtp       -start-insert -default-action=narrow runtimepath<cr>
+  nnoremap <silent> [-unite]R        :Unite -buffer-name=recent    -start-insert file_mru<cr>
+
+  nnoremap <silent> [-unite]j        :Unite -buffer-name=jumps     jump<cr>
+  nnoremap <silent> [-unite]c        :Unite -buffer-name=changes   change<cr>
+  nnoremap <silent> [-unite]g        :Unite -buffer-name=goto      line<cr>
+
+  nnoremap <silent> [-unite]r        :Unite -buffer-name=register  register<cr>
+  nnoremap <silent> [-unite]y        :Unite -buffer-name=yanks     history/yank<cr>
+
 
                                                       " ∴∵∴∵ fuzzy-finder {{{2
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-  nnoremap <cr> :<c-u>FZF<cr>
+  nnoremap <leader>f :<c-u>FZF<cr>
 
                                                   " ∴∵∴∵ filetype plugins {{{2
 
@@ -457,7 +481,16 @@ Plug 'bigfish/vim-js-context-coloring', { 'branch': 'neovim', 'do': function('bu
                                                     " ∴∵∴∵∴∵ clojure REPL {{{3
 Plug 'tpope/vim-fireplace'
 Plug 'tpope/vim-salve'
-  let g:salve_auto_start_repl = 0
+
+" let g:salve_auto_start_repl = 1
+function! FixedPiggie() abort
+  echo "Connecting to REPL..."
+  sil! Eval 1
+  echo "Connected. Piggiebacking browser REPL..."
+  Piggieback (adzerk.boot-cljs-repl/repl-env)
+  echo "Connected to browser REPL."
+endfun
+command! Piggie call FixedPiggie()
 
                                            " ∴∵∴∵∴∵ editing s-expressions {{{3
 
@@ -582,7 +615,9 @@ Plug 'junegunn/limelight.vim'
 "   - automatically generate ctags
 " tpope/vim-rsi - https://github.com/tpope/vim-rsi
 "   - readline-style (or emacs-style) key bindings (i/c mode)
-
+" romainl/vim-cool
+"  - hlsearch stuff
+"
                                                                " ∴∵∴∵ end {{{2
 
 call plug#end()
@@ -606,11 +641,11 @@ aug vimrc
     \ endif
 
   " don't always center the cursor in screen when switching buffers
-  au BufLeave * let b:winview = winsaveview()
-  au BufEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
+  au BufWinLeave * let b:winview = winsaveview()
+  au BufWinEnter * if(exists('b:winview')) | call winrestview(b:winview) | endif
 
   " resize splits when window is resized
-  au VimResized * :wincmd =
+  " au VimResized * :wincmd =
 
   au BufNewFile,BufRead * if &syntax == '' | set foldmethod=indent | endif
 
@@ -621,6 +656,9 @@ aug vimrc
   " always show where we are, foldwise
   au BufWinEnter * normal! zx
 
+  au BufWinEnter,WinEnter * setl cursorline<
+  au WinLeave * setl nocursorline
+
 augroup end
 
 
@@ -629,16 +667,6 @@ augroup end
 nmap ]] :bnext<cr>
 nmap [[ :bprev<cr>
 
-" TODO: barely-started thought: automatic boilerplate/template for new files
-" with certain names
 
-" aug vimrc_testing
-"   au!
-"   au BufNewFile *.html5
-"   " for example, would insert an html5 template (like emmet html:5
-"   " expansion)
-" aug end
-
-" https://github.com/egalpin/apt-vim
                                                                  " ∴∵ end {{{1
-" -*- vim -*- vim:set ft=vim et sw=2 sts=2 fdl=1 fdm=marker tw=78:
+" -*- vim -*- vim:set ft=vim et sw=2 sts=2 fdl=999 fdm=marker tw=78:
