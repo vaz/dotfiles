@@ -55,3 +55,6 @@ bin/
 
 # rbenv, add it explicitly if you want
 .ruby-version
+
+# ternjs
+.tern-port
