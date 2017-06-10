@@ -611,6 +611,30 @@ Plug 'junegunn/limelight.vim'
   let g:limelight_conceal_ctermfg = '233'
   let g:limelight_conceal_guifg = '#242424'
 
+" integration for dasht docset search/viewer
+Plug 'sunaku/vim-dasht'
+  " search related docsets
+  nnoremap <leader>k :Dasht<space>
+  " search ALL the docsets
+  nnoremap <leader><leader>k :Dasht!<space>
+  " search related docsets
+  nnoremap <silent> <leader>K :call Dasht([expand('<cword>'), expand('<cWORD>')])<cr>
+  " search ALL the docsets
+  nnoremap <silent> <leader><leader>K :call Dasht([expand('<cword>'), expand('<cWORD>')], '!')<cr>
+  " search related docsets
+  vnoremap <silent> <leader>K y:<c-U>call Dasht(getreg(0))<cr>
+  " search ALL the docsets
+  vnoremap <silent> <leader><leader>K y:<c-U>call Dasht(getreg(0), '!')<cr>
+  let g:dasht_filetype_docsets = {}
+  let g:dasht_filetype_docsets['html'] = ['css', 'js']
+  let g:dasht_filetype_docsets['sass'] = ['css']
+  let g:dasht_filetype_docsets['less'] = ['css']
+  let g:dasht_filetype_docsets['js'] = ['jquery', 'jquery-ui']
+  let g:dasht_filetype_docsets['cpp'] = ['^c$']
+  let g:dasht_filetype_docsets['elixir'] = ['erlang']
+  let g:dasht_filetype_docsets['sql'] = ['postgresql', 'mysql', 'sqlite']
+  let g:dasht_filetype_docsets['rb'] = ['ruby_on_rails_5']
+
 "__plugintail__
 
 " ∴∵∴∵ to try {{{2
