@@ -472,11 +472,17 @@ Plug 'tpope/vim-markdown'
 
 Plug 'ternjs/tern_for_vim'
 Plug 'bigfish/vim-js-context-coloring', { 'branch': 'neovim', 'do': function('build#jscc') }
-    let g:js_context_colors_enabled = 0
-    let g:js_context_colors_usemaps = 0
-    " let g:js_context_colors_highlight_function_names = 1
-    let g:js_context_colors_jsx = 1
-    au FileType javascript :noremap <buffer> <localleader>c :<c-u>JSContextColorToggle<cr>
+  let g:js_context_colors_enabled = 0
+  let g:js_context_colors_usemaps = 0
+  " let g:js_context_colors_highlight_function_names = 1
+  let g:js_context_colors_jsx = 1
+  au FileType javascript :noremap <buffer> <localleader>c :<c-u>JSContextColorToggle<cr>
+
+Plug 'sbdchd/neoformat'
+  nno <silent> <leader>== <esc>:Neoformat<cr>
+  " au BufWritePre *.js Neoformat
+  au FileType javascript,javascript.jsx set formatprg=prettier\ --stdin\ --no-semi\ --single-quote\ --trailing-comma\ es5
+  let g:neoformat_try_formatprg = 1
 
                                                     " ∴∵∴∵∴∵ clojure REPL {{{3
 Plug 'tpope/vim-fireplace'
