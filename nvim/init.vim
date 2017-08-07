@@ -64,7 +64,8 @@ nore <nowait> <leader><esc>     <nop>
 
                                             " ∴∵∴∵ buffer/window mappings {{{2
 
-nno <silent> \     :call altbuf#flip_if_listed()<cr>
+nno <silent> \              :call altbuf#flip_if_listed()<cr>
+nno <silent> <leader><tab>  :call altbuf#flip_if_listed()<cr>
 
 nno <leader>q q
 nno <leader>Q Q
@@ -421,7 +422,8 @@ Plug 'Shougo/unite.vim'
     \ 'y': 'history/yank',
     \ 'reg': 'register',
     \ 'mru': 'file_mru',
-    \ 'bm': 'bookmark'
+    \ 'bm': 'bookmark',
+    \ 'cs': 'colorscheme'
   \ }
   aug vimrc_unite
     au!
@@ -436,7 +438,7 @@ Plug 'Shougo/unite.vim'
 
   " Unite buffer
   " -default-action=
-  nnoremap <silent> [-unite]u        :Unite -buffer-name=unite<cr>
+  nnoremap <silent> [-unite]u        :Unite -buffer-name=unite     -start-insert<cr>
   nnoremap <silent> [-unite]o        :Unite -buffer-name=files     buffer bookmark file<cr>
   nnoremap <silent> [-unite]b        :Unite -buffer-name=buffers   buffer<cr>
   nnoremap <silent> [-unite]f        :Unite -buffer-name=files     -start-insert file_rec/neovim:!<cr>
@@ -446,7 +448,8 @@ Plug 'Shougo/unite.vim'
 
   nnoremap <silent> [-unite]j        :Unite -buffer-name=jumps     jump<cr>
   nnoremap <silent> [-unite]c        :Unite -buffer-name=changes   change<cr>
-  nnoremap <silent> [-unite]g        :Unite -buffer-name=goto      line<cr>
+  nnoremap <silent> [-unite]s        :Unite -buffer-name=swiper    -start-insert line<cr>
+  nnoremap <silent> [-unite]S        :Unite -buffer-name=swiper-all -start-insert line:buffers<cr>
 
   nnoremap <silent> [-unite]r        :Unite -buffer-name=register  register<cr>
   nnoremap <silent> [-unite]y        :Unite -buffer-name=yanks     history/yank<cr>
