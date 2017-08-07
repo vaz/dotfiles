@@ -1,0 +1,42 @@
+REFERENCE
+
+(fish) history command
+  history --search 'search string'
+  history --search --prefix 'prefix string'
+(sh) fc:
+  fc -s [pat=rep] [cmd]
+bash history:
+  !n      => history number n
+  !-n     => n lines back
+  !!      === !-1
+  !^      => first arg (of !!) === !-n^
+  !$      => last arg of !!
+  !word   => last command starting with word === history --search --prefix word
+  !?w1 w2 => last command containing w1 w2 ... til <NL>
+  !?word? => last command containing word, can be followed by other stuff
+
+  !<event>:<designator>
+    :0    -> 0th arg (the command)
+    :n    -> nth arg
+    :^    -> arg 1    (!!:^ === !^)
+    :$    -> last arg (!!:$ === !$)
+    :%    -> word matched by most recent ?search?
+    :x-y  -> xth to yth word, defaults are x=0 y=$
+    :*    -> same as :1-$
+    :x*   -> same as :x-$
+  ...:modifiers
+    :h    -> (head) like dirname
+    :t    -> (tail) like basename
+    :r    -> remove trailing .ext
+    :e    -> remove all but trailing .ext
+    :p    -> print command but don't execute it
+    :q    -> quote substituted words as single word
+    :x    -> quote substituted words, breaking into words at whitespace
+    :s/old/new -> sub first occurrence, & stands for old, \& for literal &
+    :&    -> repeat last sub
+    :a/:g -> use with :s or :&, like /g flag in sed
+
+  ^old^new^ === !!:s/old/new/
+  $_        === !$
+
+

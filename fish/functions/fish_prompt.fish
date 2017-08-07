@@ -9,8 +9,12 @@ function fish_prompt --description 'Write out the prompt'
 	case root toor
 		set suffix '#'
 	case '*'
-		set suffix ''
+		set suffix '$'
 	end
 
-	echo -n -s (set_color 303030 -b $__fish_prompt_mode_color) "$USER" @ "$__fish_prompt_hostname" ' ' (set_color $__fish_prompt_mode_color -b 303030) $__fish_prompt_left_sep ' ' (prompt_pwd) ' ' (set_color 303030 -b normal) $__fish_prompt_left_sep ' ' (set_color normal)
+        if test -n "$INSIDE_EMACS"
+          echo -n -s (set_color --bold blue) "$USER" @ "$__fish_prompt_hostname" ' ' (prompt_pwd) ' ' $suffix ' ' (set_color normal)
+        else
+          echo -n -s (set_color 303030 -b $__fish_prompt_mode_color) "$USER" @ "$__fish_prompt_hostname" ' ' (set_color $__fish_prompt_mode_color -b 303030) $__fish_prompt_left_sep ' ' (prompt_pwd) ' ' (set_color 303030 -b normal) $__fish_prompt_left_sep ' ' (set_color normal)
+        end
 end
