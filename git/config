@@ -44,7 +44,7 @@
 	ff = merge --ff-only
 	unstage = reset HEAD --
 	l  =  log --pretty=onelineish --graph
-	g  =  log --pretty=twoline90 --graph --all
+	g  =  log --pretty=onelineish --graph --all
 	wc = whatchanged
 	in = "!f(){\
 case \"$1\" in -p|--patch) shift; p='-p' ;; esac;\
