@@ -486,7 +486,7 @@ Plug 'bigfish/vim-js-context-coloring', { 'branch': 'neovim', 'do': function('bu
 Plug 'sbdchd/neoformat'
   nno <silent> <leader>== <esc>:Neoformat<cr>
   " au BufWritePre *.js Neoformat
-  au FileType javascript,javascript.jsx set formatprg=prettier\ --stdin\ --no-semi\ --single-quote\ --trailing-comma\ es5
+  au FileType javascript,javascript.jsx set formatprg=prettier\ --stdin\ --no-semi\ --single-quote\ --trailing-comma\ all
   let g:neoformat_try_formatprg = 1
 
                                                     " ∴∵∴∵∴∵ clojure REPL {{{3
