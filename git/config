@@ -62,6 +62,8 @@ git whatchanged $p $r/$(git symbolic-ref HEAD 2>/dev/null |cut -d'/' -f 3-)..;\
 	up = merge --ff-only
 	todo = grep -n TODO
 	xxx = grep -n XXX
+	ignore = "!gi() { curl -L -s https://www.gitignore.io/api/$@ ;}; gi"
+	ranch = "!gr() { which open >/dev/null && open \"https://media2.giphy.com/media/xT5LMEWqPjfztfegYo/giphy.gif\" || echo >&2 \"ERR_RANCH_COMPAT: wrong OS :(\"; };gr"
 [log]
 	abbrevCommit = true
 	decorate = true
