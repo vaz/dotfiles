@@ -1,0 +1,1 @@
+/Users/vaz/.config/fisherman/shark/functions/shark.fish

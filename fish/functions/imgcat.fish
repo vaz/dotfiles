@@ -1,0 +1,1 @@
+/Users/vaz/.config/fisherman/imgcat/imgcat.fish

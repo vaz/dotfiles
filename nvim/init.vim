@@ -459,6 +459,8 @@ Plug 'Shougo/unite.vim'
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
   nnoremap <leader>f :<c-u>FZF<cr>
+Plug 'fszymanski/fzf-gitignore', {'do': ':UpdateRemotePlugins'}
+  let g:fzf_gitignore_map = '<leader>gi'
 
                                                   " ∴∵∴∵ filetype plugins {{{2
 
