@@ -394,7 +394,7 @@ Plug 'ervandew/supertab'
 
                                                    " ∴∵∴∵∴∵ unite sources {{{3
 
-Plug 'Shougo/neoyank.vim'
+" Plug 'Shougo/neoyank.vim'   " it's actin up or something
 Plug 'Shougo/neomru.vim'
 Plug 'ujihisa/unite-colorscheme'
 
