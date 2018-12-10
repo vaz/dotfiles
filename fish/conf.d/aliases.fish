@@ -1,0 +1,1 @@
+/Users/vaz/.config/fisherman/fasd/conf.d/aliases.fish

@@ -1,0 +1,1 @@
+/Users/vaz/.config/fisherman/fasd/functions/sd.fish

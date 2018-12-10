@@ -3,6 +3,9 @@ whether hub; and alias git=hub
 
 if status --is-interactive
   . (rbenv init -|psub)
+  if whether nvm
+    setenv PATH (dirname (nvm which (nvm current))) $PATH
+  end
 else
   exit
 end

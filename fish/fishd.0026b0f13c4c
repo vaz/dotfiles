@@ -10,11 +10,7 @@ SET_EXPORT LC_ALL:en_US\x2eUTF\x2d8
 SET MYVIMRC:/Users/vaz/\x2econfig/nvim/init\x2evim
 SET NODE_REPL_HISTORY:\x7e/\x2elocal/share/nodejs/repl_history
 SET PATH:/Users/vaz/local/bin\x1e/usr/local/bin\x1e/usr/bin\x1e/bin\x1e/usr/sbin\x1e/sbin
-SET ZO_CMD:zo
-SET Z_CMD:z
-SET Z_DATA:/Users/vaz/\x2elocal/share/z/data
 SET Z_DATA_DIR:/Users/vaz/\x2elocal/share/z
-SET Z_EXCLUDE:/Users/vaz
 SET ___fish_git_prompt_char_cleanstate:\u2713
 SET ___fish_git_prompt_char_dirtystate:\u00b1
 SET ___fish_git_prompt_char_invalidstate:\u2049\ufe0e
@@ -102,5 +98,5 @@ SET fish_prompt_left_sep:\ue0b0
 SET fish_prompt_right_alt_sep:\ue0b3
 SET fish_prompt_right_sep:\ue0b2
 SET fish_user_abbreviations:\x1d
-SET fish_user_paths:/Users/vaz/android\x2dsyvaz\x2djan18\x2d2017/platform\x2dtools\x1e/Users/vaz/\x2envm/versions/node/v8\x2e6\x2e0/bin\x1e/Users/vaz/\x2elocal/bin\x1e/Users/vaz/\x2erbenv/bin\x1e/Users/vaz/\x2efzf/bin
-SET fisher_dependency_count:imgcat\x1egetopts\x1ez\x1ehumanize_duration\x1edone\x1egetopts\x1eshark
+SET fish_user_paths:/Users/vaz/\x2envm/versions/node/v10\x2e12\x2e0/bin\x1e/Users/vaz/\x2elocal/bin\x1e/Users/vaz/\x2erbenv/bin\x1e/Users/vaz/\x2efzf/bin
+SET fisher_dependency_count:imgcat\x1ehumanize_duration\x1edone\x1egetopts\x1eshark\x1efasd
