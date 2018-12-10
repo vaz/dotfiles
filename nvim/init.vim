@@ -19,8 +19,19 @@ set diffopt& diffopt+=vertical
 set incsearch ignorecase smartcase
 set foldenable foldlevelstart=999
 sil! set lcs=tab:⇥\ ,trail:␣,extends:…,precedes:…,nbsp:·, list "eol:¬
+
+                                                          " ∴∵∴∵∴∵ cursor {{{3
 set termguicolors cursorline
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1   " Change cursor shape in insert mode
+set guicursor=a:blinkwait1000-blinkon1000-blinkoff200
+   " \n-v-c-sm:block
+  " \,o:hor50
+  " \,i-ci:ver25
+  " \,r-cr:hor20
+  " \,a:blinkwait500-blinkoff7500-blinkon175
+augroup vimrc_cursor
+  au!
+  au VimLeave * set guicursor=a:block-blinkon0
+augroup END
 
                                         " ∴∵∴∵ text formatting / wrapping {{{2
 
