@@ -7,31 +7,14 @@
 You should not put any user code in this function besides modifying the variable
 values."
   (setq-default
-   ;; Base distribution to use. This is a layer contained in the directory
-   ;; `+distribution'. For now available distributions are `spacemacs-base'
-   ;; or `spacemacs'. (default 'spacemacs)
-   dotspacemacs-distribution 'spacemacs-base
-   ;; Lazy installation of layers (i.e. layers are installed only when a file
-   ;; with a supported type is opened). Possible values are `all', `unused'
-   ;; and `nil'. `unused' will lazy install only unused layers (i.e. layers
-   ;; not listed in variable `dotspacemacs-configuration-layers'), `all' will
-   ;; lazy install any layer that support lazy installation even the layers
-   ;; listed in `dotspacemacs-configuration-layers'. `nil' disable the lazy
-   ;; installation feature and you have to explicitly list a layer in the
-   ;; variable `dotspacemacs-configuration-layers' to install it.
-   ;; (default 'unused)
-   dotspacemacs-enable-lazy-installation 'unused
-   ;; If non-nil then Spacemacs will ask for confirmation before installing
-   ;; a layer lazily. (default t)
-   dotspacemacs-ask-for-lazy-installation t
-   ;; If non-nil layers with lazy install support are lazy installed.
-   ;; List of additional paths where to look for configuration layers.
-   ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
-   dotspacemacs-configuration-layer-path '()
-   ;; List of configuration layers to load.
+   dotspacemacs-distribution 'spacemacs-base  ;; 'spacemacs | 'spacemacs-base
+   dotspacemacs-enable-lazy-installation 'unused ;; 'unused | 'all | nil
+   dotspacemacs-ask-for-lazy-installation t ;; t
+   ;; Additional layers search paths; paths must have trailing slash:
+   dotspacemacs-configuration-layer-path '() ;; '()
    dotspacemacs-configuration-layers
    '(
-     markdown
+     ;;; cherry-picking spacemacs layers beyond spacemacs-base
      (spacemacs-completion :packages ido ido-vertical-mode)
      spacemacs-editing
      spacemacs-editing-visual
@@ -39,88 +22,81 @@ values."
      spacemacs-misc
      (spacemacs-ui :packages (not desktop open-junk-file winum))
      spacemacs-ui-visual
+     (spacemacs-layouts :variables layouts-enable-autosave t)
      spacemacs-org
 
+     ;;; themes and colours
      themes-megapack
+     colors
 
-     (ivy :variables ivy-count-format "%d: ")
-
+     ;;; system
+     (osx :variables osx-use-option-as-meta t)
      (shell :variables
             shell-default-shell 'ansi-term
             shell-default-term-shell "/usr/local/bin/fish")
-     (osx :variables osx-use-option-as-meta t)
 
-     ;; mainly when in emacs-y mode, C-a and C-e
-     (better-defaults :variables
-                      better-defaults-move-to-beginning-of-code-first t
-                      better-defaults-move-to-end-of-code-first t)
-
-     colors
+     ;;; completion
+     (ivy :variables ivy-count-format "%d: ")
      (auto-completion :packages
+                      ;; in company dropdown:
+                      ;; C-j/k up/down; C-l complete; C-d doc; C-/ search
                       company company-quickhelp company-statistics
-                      fuzzy hippie-exp smartparens
-                      yasnippet auto-yasnippet
+                      hippie-exp ;; M-/ cycle various expansions
+                      fuzzy smartparens
+                      ; yasnippet auto-yasnippet ; not sure how to use these
                       :variables
-                      auto-completion-return-key-behavior nil
+                      auto-completion-return-key-behavior nil ; use C-l or jk
+                      auto-completion-tab-key-behavior 'cycle
                       auto-completion-complete-with-key-sequence "jk"
-                      auto-completion-enable-help-tooltip 'manual
+                      auto-completion-enable-help-tooltip nil ; buggy/ugly
                       auto-completion-enable-sort-by-usage t)
 
-     (evil-cleverparens)
-     (evil-snipe :variables
-                 evil-snipe-enable-alternate-f-and-t-behaviors t)
 
+     ;;; vcs
      version-control
      git
 
-     ;; languages:
-     haskell
+     ;;; editing and movement
+     ;; C-a/C-e in emacsish modes (C-e probably overridden for viewport scroll)
+     (better-defaults :variables
+                      better-defaults-move-to-beginning-of-code-first t
+                      better-defaults-move-to-end-of-code-first t)
+     evil-cleverparens
+     (evil-snipe :variables
+                 ;; regular snipe with s/S is better; this disables that
+                 ; evil-snipe-enable-alternate-f-and-t-behaviors t
+                 ;; I guess I could re-enable evil-snipe-mode after tho?
+                 )
+
+     ;;; languages
      emacs-lisp
-     (org ;; :packages
-          ;;(not evil-org)
-          :variables
-          org-projectile-file "TODO.org"
-          ;; org-enable-reveal-js-support t ;; - buggy?
-          org-enable-github-support t)
-     ;; something's not working here...
-     ;; org-evil
+     shell-scripts
+     markdown
+     html
+     (javascript :packages (not coffee-mode helm-gtags))
+     react
+     (ruby :variables
+           ruby-enable-enh-ruby-mode nil
+           ruby-version-manager 'rbenv)
      (clojure :variables
               clojure-enable-fancify-symbols t
               clojure-enable-sayid t
               clojure-enable-clj-refactor t)
-     (javascript :packages
-                 (not coffee-mode helm-gtags))
-     react
-     (ruby :variables
-           ruby-enable-enh-ruby-mode nil ; default nil
-           ruby-version-manager 'rbenv)
-     html
-     ;; markdown
-     shell-scripts
+     haskell
+     (org :variables
+          org-projectile-file "TODO.org"
+          ; org-enable-reveal-js-support t ; - buggy?
+          org-enable-github-support t)
 
+     ;;; apps
      deft
-
-     ;; private
-     rj-mode
    )
 
-   ;; List of additional packages that will be installed without being
-   ;; wrapped in a layer. If you need some configuration for these
-   ;; packages, then consider creating a layer. You can also put the
-   ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '()
-   ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
-   ;; A list of packages that will not be installed and loaded.
    dotspacemacs-excluded-packages '()
-   ;; Defines the behaviour of Spacemacs when installing packages.
-   ;; Possible values are `used-only', `used-but-keep-unused' and `all'.
-   ;; `used-only' installs only explicitly used packages and uninstall any
-   ;; unused packages as well as their unused dependencies.
-   ;; `used-but-keep-unused' installs only the used packages but won't uninstall
-   ;; them if they become unused. `all' installs *all* packages supported by
-   ;; Spacemacs and never uninstall them. (default is `used-only')
    dotspacemacs-install-packages 'used-only))
+
 
 (defun dotspacemacs/init ()
   "Initialization function.
@@ -196,10 +172,10 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font '("Monoid"
-                              :size 11
-                              :weight normal
-                              :width semi-condensed
-                              :powerline-scale 1.4)
+                               :size 11
+                               :weight normal
+                               :width semi-condensed
+                               :powerline-scale 1.4)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The key used for Emacs commands (M-x) (after pressing on the leader key).
@@ -355,19 +331,6 @@ values."
    ;; (default nil)
    dotspacemacs-whitespace-cleanup nil
    ))
-
-(defun dotspacemacs/user-init ()
-  "Initialization function for user code.
-It is called immediately after `dotspacemacs/init', before layer configuration
-executes.
- This function is mostly useful for variables that need to be set
-before packages are loaded. If you are unsure, you should try in setting them in
-`dotspacemacs/user-config' first."
-  (setq-default
-   ;; can use right option key to enter symbols like usual, left is Meta
-   mac-right-option-modifier t
-   ))
-
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
@@ -375,31 +338,52 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-  (setq standard-indent 2)
-
-  ;; fringe size
   (fringe-mode 4)
 
-  ;; powerline
-  ;; not ideal but fixes wrong colour separators in powerline
-  (setq ns-use-srgb-colorspace nil)
-  (setq powerline-default-separator 'alternate)
+  ;; indent levels:
+  (setq standard-indent 2
+        css-indent-offset 2
+        js-indent-level 2)
+  (add-hook 'web-mode-hook
+            (lambda ()
+              (setq web-mode-markup-indent-offset 2
+                    web-mode-code-indent-offset 2
+                    web-mode-css-indent-offset 2)))
+
+  ;; which-key config:
+  ;; esc out of which-key
+  (which-key-define-key-recursively global-map [escape] 'ignore t)
+  ;; del (backspace) to undo a key
+  (which-key-define-key-recursively global-map (kbd "DEL") 'which-key-undo)
+  (which-key-define-key-recursively global-map [right] 'which-key-show-next-page-cycle)
+  (spacemacs/set-leader-keys (kbd "DEL") 'ignore)
+  (setq which-key-special-keys '("SPC" "TAB" "RET" "ESC" "DEL"))
+  (setq which-key-sort-order 'which-key-key-order-alpha)
+
+  (setq which-key-allow-multiple-replacements t)
+  (push '((nil . "which-key-show-next-page-cycle") . (nil . "(next...)"))
+        which-key-replacement-alist)
 
   ;; ivy extra config because I'm omitting spacemacs-completion
   (setq ivy-height 15
         ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
   (spacemacs|hide-lighter ivy-mode)
 
-  ;; esc out of which-key
-  (which-key-define-key-recursively global-map [escape] 'ignore)
+  ;; powerline
+  (setq ns-use-srgb-colorspace nil ;; not ideal but fix separator colours
+        powerline-default-separator 'bar)
 
-  ;; some leader key bindings that don't belong anywhere else right now
+  ;; leader bindings that don't belong anywhere else right now
   (spacemacs/set-leader-keys
     "`"  'ivy-switch-buffer
     "bo" 'ivy-switch-buffer-other-window
     "bq" 'kill-buffer-and-window
     "bh" 'bury-buffer
     "bH" 'spacemacs/home
+    "w C-f" 'follow-mode                ; this is a remap to clear up SPC w f
+    "w f" 'make-frame
+    "w F" 'delete-other-frames
+    "w q" 'delete-frame
     "t_" 'hl-line-mode
     "t C-_" 'global-hl-line-mode)
 
@@ -408,24 +392,14 @@ you should place your code here."
   (define-key evil-normal-state-map "g=" 'evil-jump-forward)
 
   ;; activate some modes by default
-  (spacemacs/toggle-highlight-indentation-on)
-  (spacemacs/toggle-golden-ratio-on)
-  (spacemacs/toggle-mode-line-battery-on)
-  (global-evil-mc-mode 1)
-  ; (spacemacs/toggle-rj-mode-on)
-
-  ;; fill column indicator
-  (setq fci-rule-color "#141416")
-  (spacemacs/toggle-fill-column-indicator-on)
-
-  ;; web-mode indentation
-  ;; (setq web-mode-markup-indent-offset 2
-  ;;       web-mode-code-indent-offset 2)
-  (add-hook 'web-mode-hook (lambda ()
-                             (setq web-mode-markup-indent-offset 2)
-                             (setq web-mode-code-indent-offset 2)
-                             (setq web-mode-css-indent-offset 2)))
-  (setq css-indent-offset 2)
+  (add-hook 'spacemacs-post-user-config-hook
+            (lambda ()
+              (spacemacs/toggle-mode-line-battery-on)
+              (golden-ratio-mode 1)
+              (global-evil-mc-mode 1)
+              (setq fci-rule-color "#141416")
+              ; (fci-mode 1) - this is buggy on blank lines, see avy-goto-W
+              (highlight-indentation-mode 1)))
 
   ;; cursor colours for states
   (setq evil-normal-state-cursor  '("#d7ffaf" box)
@@ -435,32 +409,68 @@ you should place your code here."
         evil-replace-state-cursor '("#ffd7af" (hbar . 2))
         evil-motion-state-cursor  '("#afffd7" box))
 
-  ;; avy. TODO make some better key bindings
-  ;; avy-goto-char: get 1 char and seek (whole page)
-  ;; avy-kill-whole-line: SPC u 3 M-x avy-kill-whole-line (seek line and kill 3)
+  ;; avy
+  (evil-define-key '(normal visual) 'global "gl" 'evil-avy-goto-line)
+  (evil-define-key '(normal visual) 'global "gW" 'evil-avy-goto-word-0)
+  (evil-define-key '(normal visual) 'global "gK" 'avy-kill-whole-line)
   (spacemacs/set-leader-keys "jW" 'evil-avy-goto-word-0)
+  (spacemacs/set-leader-keys "jK" 'avy-kill-whole-line)
 
-  ;; colors rainbow identifiers
-  ;; (spacemacs/toggle-rainbow-identifier-on)
-  ;; (push '(spacemacs-dark . (12 75)) colors-theme-identifiers-sat&light)
+  (evil-define-command v|evil-delete-backward-WORD ()
+    "Based on evil-delete-backward-word"
+    (if (and (bolp) (not (bobp)))
+        (progn
+          (unless evil-backspace-join-lines (user-error "Beginning of line"))
+          (delete-char -1))
+      (delete-region (max
+                      (save-excursion (evil-backward-WORD-begin) (point))
+                      (line-beginning-position))
+                     (point))))
+
+  (evil-define-key nil 'global
+    (kbd "<M-left>") 'evil-backward-word-begin
+    (kbd "<M-right>") 'evil-forward-word-end
+    (kbd "<s-left>") 'evil-backward-WORD-begin
+    (kbd "<s-right>") 'evil-forward-WORD-end)
+  (evil-define-key '(insert replace) 'global
+    (kbd "<M-backspace>") 'evil-delete-backward-word
+    (kbd "<s-backspace>") 'v|evil-delete-backward-WORD)
+  (evil-define-key nil 'evil-cleverparens-mode
+    (kbd "<M-left>") 'evil-cp-backward-symbol-begin
+    (kbd "<M-right>") 'evil-cp-forward-symbol-end)
+  (evil-define-key '(insert replace) 'evil-cleverparens-mode
+    (kbd "<M-backspace>") 'evil-cp-delete-backward-word)
 
   ;; evil-cleverparens
   (spacemacs/toggle-evil-cleverparens-on)
   (add-hook 'clojure-mode-hook #'evil-cleverparens-mode)
   (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode)
 
-  ;; add smartparens for org mode because it does weird things to headlines
-  ;; only when smart-closing-parens is on
-  ;; (add-hook 'org-mode-hook #'smartparens-mode)
+  ;; TODO: use sp-sexp-up or the evil version to get out and then eval
+  (add-hook 'clojure-mode-hook
+            (lambda ()
+              (spacemacs/set-leader-keys-for-major-mode 'clojure-mode
+                "ev" 'cider-eval-sexp-at-point)))
 
-  ;; org-mode config
+  (setq now--home-file "~/now/todo.org"
+        now--nav-file "~/now/_nav.org")
+  (defun now|open-home ()
+    "Open org home file (now--home-file)"
+    (interactive)
+    (find-file now--home-file))
+  (defun now|open-nav ()
+    "Open nav file (now--nav-file) in other window"
+    (interactive)
+    (find-file-other-window now--nav-file))
+
+  (spacemacs/set-leader-keys
+    "ao SPC" 'now|open-home)
+
+;;; org-mode config
   (with-eval-after-load 'org
     (setq org-hide-emphasis-markers t)
     (setq org-pretty-entities t)
     (setq org-use-sub-superscripts '{})
-    ;; colours wrong
-    ;; ★☆☪✦✪✴ 
-    ;; (setq org-todo-keywords '((sequence "☐" "ø" "|" "☑" "✗")))
     (setq org-todo-keywords '((sequence "☐(t)" "|" "☑(d)")
                               (type "!(b@)" "?(q@)" "|" "✗(x)")
                               (sequence "|" "☑⋆(c@)")))
@@ -478,8 +488,10 @@ you should place your code here."
              (file+headline org-default-notes-file "inbox")
              "** TODO %?\n   %u\n   %a")))
     (setq org-refile-targets '((org-agenda-files . (:level . 1)))))
-  (spacemacs/set-leader-keys-for-major-mode 'org-mode
-    "x\\" 'org-toggle-pretty-entities)
+  (spacemacs/set-leader-keys-for-major-mode
+    'org-mode
+    "x\\" 'org-toggle-pretty-entities
+    "\\" 'now|open-nav)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((js . t)
@@ -487,21 +499,29 @@ you should place your code here."
      (ruby . t)
      (python . t)))
 
-  ;; deft config
+;;; deft config
   (setq deft-directory "~/notes")
   (setq deft-extensions '("org" "md" "txt"))
-
-  ;; (defgroup pkmn-faces nil
-  ;;   "Faces related to pokemon"
-  ;;   :group 'faces)
-  ;; (defface pkmn-type-ice
-  ;;   '()
-  ;;   "Pokemon type ICE"
-  ;;   :group 'pkmn-faces)
   )
 
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
+(defun dotspacemacs/user-init ()
+  "Initialization function for user code.
+It is called immediately after `dotspacemacs/init', before layer configuration
+executes.
+ This function is mostly useful for variables that need to be set
+before packages are loaded. If you are unsure, you should try in setting them in
+`dotspacemacs/user-config' first."
+  (setq-default
+   ;; can use right option key to enter symbols like usual, left is Meta
+   mac-right-option-modifier t
+   which-key-enable-extended-define-key t
+   ))
+
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -560,7 +580,7 @@ you should place your code here."
  '(org-agenda-files (quote ("~/now/work.org" "~/now/todo.org")))
  '(package-selected-packages
    (quote
-    (zenburn-theme zen-and-art-theme xterm-color ws-butler which-key wgrep web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package unfill underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme toc-org tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spaceline powerline spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smex smeargle slim-mode shell-pop seti-theme scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe reverse-theme reveal-in-osx-finder restart-emacs request rbenv rake rainbow-mode rainbow-identifiers rainbow-delimiters railscasts-theme purple-haze-theme pug-mode professional-theme popwin planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme pcre2el pbcopy paradox osx-trash osx-dictionary orgit organic-green-theme org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-plus-contrib org-download org-bullets omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme neotree naquadah-theme mwim mustang-theme multi-term move-text monokai-theme monochrome-theme molokai-theme moe-theme minitest minimal-theme material-theme majapahit-theme magit-gitflow madhat2r-theme macrostep lush-theme lorem-ipsum livid-mode skewer-mode simple-httpd linum-relative link-hint light-soap-theme launchctl json-mode json-snatcher json-reformat js2-refactor js2-mode js-doc jbeans-theme jazz-theme ivy-hydra ir-black-theme intero flycheck insert-shebang inkpot-theme indent-guide hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers parent-mode highlight-indentation heroku-theme hemisu-theme helm-make helm helm-core hc-zenburn-theme haskell-snippets haml-mode gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gandalf-theme fuzzy flx-ido flx flatui-theme flatland-theme fish-mode fill-column-indicator farmhouse-theme fancy-battery expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-snipe evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit magit-popup git-commit ghub treepy graphql with-editor evil-lisp-state evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-cleverparens smartparens evil-args evil-anzu anzu evil goto-chg espresso-theme eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav dumb-jump popup dracula-theme django-theme diminish diff-hl deft darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme counsel-projectile projectile counsel swiper ivy company-web web-completion-data company-tern dash-functional tern company-statistics company-shell company-quickhelp pos-tip company-ghci company-ghc ghc haskell-mode company-cabal company column-enforce-mode color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-identifiers-mode cmm-mode clues-theme clojure-snippets clj-refactor hydra inflections edn multiple-cursors paredit peg clean-aindent-mode cider-eval-sexp-fu eval-sexp-fu highlight cider sesman queue pkg-info clojure-mode epl chruby cherry-blossom-theme busybee-theme bundler inf-ruby bubbleberry-theme birds-of-paradise-plus-theme bind-map bind-key badwolf-theme auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed async apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes aggressive-indent afternoon-theme adaptive-wrap ace-window ace-link avy white-sand-theme undo-tree spinner seq rebecca-theme ox-gfm org-mime noctilux-theme mmm-mode markdown-toc let-alist gh-md exotica-theme evil-unimpaired coffee-mode)))
+    (writeroom-mode visual-fill-column string-inflection seeing-is-believing sayid ruby-refactor ruby-hash-syntax rjsx-mode prettier-js password-generator overseer org-brain nameless markdown-mode magit-svn kaolin-themes json-navigator hierarchy ivy-xref impatient-mode gitignore-templates flycheck-bashate eziam-theme evil-org evil-lion evil-goggles editorconfig doom-themes all-the-icons memoize counsel-css browse-at-remote f dash s dotenv-mode persp-mode eyebrowse zenburn-theme zen-and-art-theme xterm-color ws-butler which-key wgrep web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package unfill underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme toc-org tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spaceline powerline spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smex smeargle slim-mode shell-pop seti-theme scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe reverse-theme reveal-in-osx-finder restart-emacs request rbenv rake rainbow-mode rainbow-identifiers rainbow-delimiters railscasts-theme purple-haze-theme pug-mode professional-theme popwin planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme pcre2el pbcopy paradox osx-trash osx-dictionary orgit organic-green-theme org-projectile org-category-capture org-present org-pomodoro alert log4e gntp org-plus-contrib org-download org-bullets omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme neotree naquadah-theme mwim mustang-theme multi-term move-text monokai-theme monochrome-theme molokai-theme moe-theme minitest minimal-theme material-theme majapahit-theme magit-gitflow madhat2r-theme macrostep lush-theme lorem-ipsum livid-mode skewer-mode simple-httpd linum-relative link-hint light-soap-theme launchctl json-mode json-snatcher json-reformat js2-refactor js2-mode js-doc jbeans-theme jazz-theme ivy-hydra ir-black-theme intero flycheck insert-shebang inkpot-theme indent-guide hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers parent-mode highlight-indentation heroku-theme hemisu-theme helm-make helm helm-core hc-zenburn-theme haskell-snippets haml-mode gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe+ git-gutter-fringe fringe-helper git-gutter+ git-gutter gandalf-theme fuzzy flx-ido flx flatui-theme flatland-theme fish-mode fill-column-indicator farmhouse-theme fancy-battery expand-region exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-snipe evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit magit magit-popup git-commit ghub treepy graphql with-editor evil-lisp-state evil-indent-plus evil-iedit-state iedit evil-exchange evil-escape evil-ediff evil-cleverparens smartparens evil-args evil-anzu anzu evil goto-chg espresso-theme eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav dumb-jump popup dracula-theme django-theme diminish diff-hl deft darktooth-theme autothemer darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme counsel-projectile projectile counsel swiper ivy company-web web-completion-data company-tern dash-functional tern company-statistics company-shell company-quickhelp pos-tip company-ghci company-ghc ghc haskell-mode company-cabal company column-enforce-mode color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-identifiers-mode cmm-mode clues-theme clojure-snippets clj-refactor hydra inflections edn multiple-cursors paredit peg clean-aindent-mode cider-eval-sexp-fu eval-sexp-fu highlight cider sesman queue pkg-info clojure-mode epl chruby cherry-blossom-theme busybee-theme bundler inf-ruby bubbleberry-theme birds-of-paradise-plus-theme bind-map bind-key badwolf-theme auto-yasnippet yasnippet auto-highlight-symbol auto-compile packed async apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes aggressive-indent afternoon-theme adaptive-wrap ace-window ace-link avy white-sand-theme undo-tree spinner seq rebecca-theme ox-gfm org-mime noctilux-theme mmm-mode markdown-toc let-alist gh-md exotica-theme evil-unimpaired coffee-mode)))
  '(paradox-github-token t)
  '(pdf-view-midnight-colors (quote ("#DCDCCC" . "#383838")))
  '(pos-tip-background-color "#A6E22E")
@@ -573,7 +593,7 @@ you should place your code here."
      (cider-default-cljs-repl . figwheel-main)
      (cider-preferred-build-tool . "clojure-cli"))))
  '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#073642" 0.2))
- '(spacemacs-theme-comment-bg nil t)
+ '(spacemacs-theme-comment-bg nil)
  '(spacemacs-theme-org-highlight t)
  '(term-default-bg-color "#002b36")
  '(term-default-fg-color "#839496")
@@ -611,7 +631,11 @@ you should place your code here."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:foreground "#cccccc" :background "#202020"))))
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
  '(highlight-indentation-face ((t (:inherit fringe))))
+ '(org-todo ((t (:background "grey13" :foreground "#cd2066" :inverse-video nil :underline "#442323" :slant normal :weight bold :height 0.9))))
+ '(org-tag ((t (:background "grey13" :foreground "#fa6acc" :box (:line-width 1 :color "#333044") :slant italic :height 0.95))))
  '(org-tag-group ((t (:inherit org-tag :foreground "#afdfff" :slant italic :weight extra-light))))
  '(show-paren-mismatch ((t (:background "black" :foreground "#ff3333" :underline (:color foreground-color :style wave) :weight bold))))
  '(spaceline-evil-emacs ((t (:background "#ffafd7" :foreground "#202020" :inherit (quote mode-line)))))
@@ -626,3 +650,20 @@ you should place your code here."
  '(spacemacs-normal-face ((t (:background "#d7ffaf" :foreground "#202020" :inherit (quote mode-line)))))
  '(spacemacs-replace-face ((t (:background "#ffd7af" :foreground "#202020" :inherit (quote mode-line)))))
  '(spacemacs-visual-face ((t (:background "#d7afff" :foreground "#202020" :inherit (quote mode-line))))))
+)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:foreground "#cccccc" :background "#202020"))))
+ '(org-date ((t (:background "grey14" :foreground "skyblue" :underline "sky" :weight thin :height 0.7))))
+ '(org-special-keyword ((t (:inherit font-lock-keyword-face :foreground "grey66" :slant italic :height 0.66))))
+ '(org-tag ((t (:background "grey12" :slant italic :weight bold))))
+ '(org-todo ((t (:background "#242427" :foreground "#6f3254" :inverse-video nil :box (:line-width 1 :color "#2c2224") :underline nil :slant normal :weight normal)))))
