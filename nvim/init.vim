@@ -535,6 +535,9 @@ Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
   nmap ]c <Plug>GitGutterNextHunkzx
   nmap [c <Plug>GitGutterPrevHunkzx
+  nmap <leader>hp <Plug>GitGutterPreviewHunk
+  nmap <leader>hs <Plug>GitGutterStageHunk
+  nmap <leader>hu <Plug>GitGutterUndoHunk
   " TODO: I wanna make an extension for this called gutter-hunks just because
   " of the name. I mean come on.
 

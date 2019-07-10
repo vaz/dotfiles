@@ -1,16 +1,11 @@
 set -gx EDITOR nvim
-whether hub; and alias git=hub
 
-if status --is-interactive
-  . (rbenv init -|psub)
-  if whether nvm
-    setenv PATH (dirname (nvm which (nvm current))) $PATH
-  end
-else
-  exit
-end
+status --is-interactive; or exit
 
-if test -z "$INSIDE_EMACS" -o "$TERM" = dumb
+have rbenv; and source (rbenv init -|psub)
+have nvm; and setenv PATH (dirname (nvm which current)) $PATH
+
+if test -z "$INSIDE_EMACS"; or test "$TERM" = dumb
   fish_vi_key_bindings
   set fish_cursor_default block
   set fish_cursor_insert line
@@ -31,5 +26,4 @@ if test -z "$INSIDE_EMACS" -o "$TERM" = dumb
     end
   end
 end
-
 
