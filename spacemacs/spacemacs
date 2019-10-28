@@ -1,20 +1,16 @@
 ;; -*- mode: emacs-lisp -*-
-;; This file is loaded by Spacemacs at startup.
-;; It must be stored in your home directory.
 
 (defun dotspacemacs/layers ()
-  "Configuration Layers declaration.
-You should not put any user code in this function besides modifying the variable
-values."
   (setq-default
-   dotspacemacs-distribution 'spacemacs-base  ;; 'spacemacs | 'spacemacs-base
+;;; #spacemacs #distribution #layers
+
+   dotspacemacs-distribution 'spacemacs-base     ;; 'spacemacs | 'spacemacs-base
    dotspacemacs-enable-lazy-installation 'unused ;; 'unused | 'all | nil
-   dotspacemacs-ask-for-lazy-installation t ;; t
+   dotspacemacs-ask-for-lazy-installation t      ;; t
    ;; Additional layers search paths; paths must have trailing slash:
    dotspacemacs-configuration-layer-path '() ;; '()
    dotspacemacs-configuration-layers
    '(
-     ;;; cherry-picking spacemacs layers beyond spacemacs-base
      (spacemacs-completion :packages ido ido-vertical-mode)
      spacemacs-editing
      spacemacs-editing-visual
@@ -25,25 +21,25 @@ values."
      (spacemacs-layouts :variables layouts-enable-autosave t)
      spacemacs-org
 
-     ;;; themes and colours
+;;; #themes #colours
      themes-megapack
      colors
 
-     ;;; system
+;;; #system #osx #shell
      (osx :variables osx-use-option-as-meta t)
      (shell :variables
             shell-default-shell 'ansi-term
             shell-default-term-shell "/usr/local/bin/fish")
 
-     ;;; completion
-     (ivy :variables ivy-count-format "%d: ")
+;;; #completion #ivy
+     (ivy :variables ivy-count-format "(%d/%d) ")
      (auto-completion :packages
                       ;; in company dropdown:
                       ;; C-j/k up/down; C-l complete; C-d doc; C-/ search
                       company company-quickhelp company-statistics
                       hippie-exp ;; M-/ cycle various expansions
                       fuzzy smartparens
-                      ; yasnippet auto-yasnippet ; not sure how to use these
+                                        ; yasnippet auto-yasnippet ; not sure how to use these
                       :variables
                       auto-completion-return-key-behavior nil ; use C-l or jk
                       auto-completion-tab-key-behavior 'cycle
@@ -52,11 +48,11 @@ values."
                       auto-completion-enable-sort-by-usage t)
 
 
-     ;;; vcs
+;;; #vcs #git
      version-control
      git
 
-     ;;; editing and movement
+;;; #editing #movement
      ;; C-a/C-e in emacsish modes (C-e probably overridden for viewport scroll)
      (better-defaults :variables
                       better-defaults-move-to-beginning-of-code-first t
@@ -64,11 +60,11 @@ values."
      evil-cleverparens
      (evil-snipe :variables
                  ;; regular snipe with s/S is better; this disables that
-                 ; evil-snipe-enable-alternate-f-and-t-behaviors t
+                                        ; evil-snipe-enable-alternate-f-and-t-behaviors t
                  ;; I guess I could re-enable evil-snipe-mode after tho?
                  )
 
-     ;;; languages
+;;; #languages
      emacs-lisp
      shell-scripts
      markdown
@@ -85,12 +81,11 @@ values."
      haskell
      (org :variables
           org-projectile-file "TODO.org"
-          ; org-enable-reveal-js-support t ; - buggy?
+                                        ; org-enable-reveal-js-support t ; - buggy?
           org-enable-github-support t)
 
-     ;;; apps
-     deft
-   )
+;;; #apps
+     deft)
 
    dotspacemacs-additional-packages '()
    dotspacemacs-frozen-packages '()
@@ -331,6 +326,8 @@ values."
    ;; (default nil)
    dotspacemacs-whitespace-cleanup nil
    ))
+
+
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
 This function is called at the very end of Spacemacs initialization after
@@ -340,7 +337,7 @@ explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
   (fringe-mode 4)
 
-  ;; indent levels:
+;;; #indent levels:
   (setq standard-indent 2
         css-indent-offset 2
         js-indent-level 2)
@@ -350,7 +347,7 @@ you should place your code here."
                     web-mode-code-indent-offset 2
                     web-mode-css-indent-offset 2)))
 
-  ;; which-key config:
+;;; #which-key config:
   ;; esc out of which-key
   (which-key-define-key-recursively global-map [escape] 'ignore t)
   ;; del (backspace) to undo a key
@@ -364,16 +361,16 @@ you should place your code here."
   (push '((nil . "which-key-show-next-page-cycle") . (nil . "(next...)"))
         which-key-replacement-alist)
 
-  ;; ivy extra config because I'm omitting spacemacs-completion
+;;; #ivy extra config because I'm omitting spacemacs-completion
   (setq ivy-height 15
         ivy-re-builders-alist '((t . ivy--regex-ignore-order)))
   (spacemacs|hide-lighter ivy-mode)
 
-  ;; powerline
+;;; #powerline
   (setq ns-use-srgb-colorspace nil ;; not ideal but fix separator colours
         powerline-default-separator 'bar)
 
-  ;; leader bindings that don't belong anywhere else right now
+;;; #leader #keys bindings that don't belong anywhere else right now
   (spacemacs/set-leader-keys
     "`"  'ivy-switch-buffer
     "bo" 'ivy-switch-buffer-other-window
@@ -387,11 +384,11 @@ you should place your code here."
     "t_" 'hl-line-mode
     "t C-_" 'global-hl-line-mode)
 
-  ;; g- and g= better than C-o, C-z/i
+;;; #evil-jump g- and g= better than C-o, C-z/i
   (define-key evil-normal-state-map "g-" 'evil-jump-backward)
   (define-key evil-normal-state-map "g=" 'evil-jump-forward)
 
-  ;; activate some modes by default
+;;; #modes activate some modes by default
   (add-hook 'spacemacs-post-user-config-hook
             (lambda ()
               (spacemacs/toggle-mode-line-battery-on)
@@ -401,7 +398,7 @@ you should place your code here."
               ; (fci-mode 1) - this is buggy on blank lines, see avy-goto-W
               (highlight-indentation-mode 1)))
 
-  ;; cursor colours for states
+;;; #cursor #colours #states
   (setq evil-normal-state-cursor  '("#d7ffaf" box)
         evil-insert-state-cursor  '("#afd7ff" (bar . 2))
         evil-visual-state-cursor  '("#d7afff" (hbar . 2))
@@ -409,7 +406,7 @@ you should place your code here."
         evil-replace-state-cursor '("#ffd7af" (hbar . 2))
         evil-motion-state-cursor  '("#afffd7" box))
 
-  ;; avy
+;;; #avy #keys
   (evil-define-key '(normal visual) 'global "gl" 'evil-avy-goto-line)
   (evil-define-key '(normal visual) 'global "gW" 'evil-avy-goto-word-0)
   (evil-define-key '(normal visual) 'global "gK" 'avy-kill-whole-line)
@@ -427,6 +424,7 @@ you should place your code here."
                       (line-beginning-position))
                      (point))))
 
+;;; #movement #keys #meta #arrows
   (evil-define-key nil 'global
     (kbd "<M-left>") 'evil-backward-word-begin
     (kbd "<M-right>") 'evil-forward-word-end
@@ -441,17 +439,19 @@ you should place your code here."
   (evil-define-key '(insert replace) 'evil-cleverparens-mode
     (kbd "<M-backspace>") 'evil-cp-delete-backward-word)
 
-  ;; evil-cleverparens
+;;; #cleverparens #parens #lisp
   (spacemacs/toggle-evil-cleverparens-on)
   (add-hook 'clojure-mode-hook #'evil-cleverparens-mode)
   (add-hook 'emacs-lisp-mode-hook #'evil-cleverparens-mode)
 
+;;; #clojure-mode #cider #eval #sexp
   ;; TODO: use sp-sexp-up or the evil version to get out and then eval
   (add-hook 'clojure-mode-hook
             (lambda ()
               (spacemacs/set-leader-keys-for-major-mode 'clojure-mode
                 "ev" 'cider-eval-sexp-at-point)))
 
+;;; #now #todo #org
   (setq now--home-file "~/now/todo.org"
         now--nav-file "~/now/_nav.org")
   (defun now|open-home ()
@@ -466,7 +466,7 @@ you should place your code here."
   (spacemacs/set-leader-keys
     "ao SPC" 'now|open-home)
 
-;;; org-mode config
+;;; #org-mode config
   (with-eval-after-load 'org
     (setq org-hide-emphasis-markers t)
     (setq org-pretty-entities t)
@@ -499,10 +499,10 @@ you should place your code here."
      (ruby . t)
      (python . t)))
 
-;;; deft config
+;;; #deft config
   (setq deft-directory "~/notes")
-  (setq deft-extensions '("org" "md" "txt"))
-  )
+  (setq deft-extensions '("org" "md" "txt")))
+
 
 (defun dotspacemacs/user-init ()
   "Initialization function for user code.
@@ -514,8 +514,8 @@ before packages are loaded. If you are unsure, you should try in setting them in
   (setq-default
    ;; can use right option key to enter symbols like usual, left is Meta
    mac-right-option-modifier t
-   which-key-enable-extended-define-key t
-   ))
+   which-key-enable-extended-define-key t))
+
 
 (defun dotspacemacs/emacs-custom-settings ()
   "Emacs custom settings.
