@@ -295,6 +295,7 @@ Plug 'justinmk/vim-sneak'
   let g:sneak#s_next = 1
   map gs <Plug>(SneakStreak)
   map gS <Plug>(SneakStreakBackward)
+  noremap <leader>s s
 
                            " ∴∵∴∵ plugins about editing text specifically {{{2
 
@@ -302,14 +303,14 @@ Plug 'editorconfig/editorconfig-vim'
   let g:EditorConfig_exclude_patterns = ['fugitive://.*']
 
 Plug 'tommcdo/vim-lion'
-Plug 'vim-scripts/AlignFromCursor'
+" Plug 'vim-scripts/AlignFromCursor' seems broken
 
 Plug 'mattn/emmet-vim'
   " <c-y>, etc
   " TODO: no n/v mode C-y mappings plz
 
 Plug 'terryma/vim-multiple-cursors'
-  " default mapping: ^N XXX problematic
+  " default mapping: ^N XXX problematic?
   let g:multi_cursor_exit_from_visual_mode = 0 " esc to Normal, then esc out
   let g:multi_cursor_exit_from_insert_mode = 0 " same
 
@@ -519,6 +520,25 @@ command! Piggie call FixedPiggie()
 Plug 'guns/vim-sexp'
 Plug 'tpope/vim-sexp-mappings-for-regular-people'
 
+                                          " ∴∵∴∵∴∵  LSP (ReasonML, OCaml) {{{3
+
+Plug 'autozimu/LanguageClient-neovim', {
+  \ 'branch': 'next',
+  \ 'do': 'bash install.sh',
+  \ }
+let g:LanguageClient_serverCommands = {
+    \ 'reason': ['/Users/vaz/.local/bin/reason-language-server.exe']
+    \ }
+nnoremap <leader>LL :call LanguageClient_contextMenu()<cr>
+aug vimrc_lsp
+  au!
+  au FileType reason nno <buffer> gd :call LanguageClient#textDocument_definition()<cr>
+  au FileType reason nno <buffer> gf :call LanguageClient#textDocument_formatting()<cr>
+  au FileType reason nno <buffer> K :call LanguageClient#textDocument_hover()<cr>
+aug end
+
+Plug 'reasonml-editor/vim-reason-plus'
+
                                                                " ∴∵∴∵ git {{{2
 
 
@@ -626,6 +646,7 @@ Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
   aug end
 
                                                         " ∴∵∴∵ trying out {{{2
+
 Plug 'junegunn/limelight.vim'
   let g:limelight_conceal_ctermfg = '233'
   let g:limelight_conceal_guifg = '#242424'
@@ -653,6 +674,7 @@ Plug 'sunaku/vim-dasht'
   let g:dasht_filetype_docsets['elixir'] = ['erlang']
   let g:dasht_filetype_docsets['sql'] = ['postgresql', 'mysql', 'sqlite']
   let g:dasht_filetype_docsets['rb'] = ['ruby_on_rails_5']
+
 
 "__plugintail__
 
@@ -708,7 +730,7 @@ aug vimrc
   au BufWinEnter,WinEnter * setl cursorline<
   au WinLeave * setl nocursorline
 
-augroup end
+aug end
 
 
                                                              " ∴∵ testing {{{1
