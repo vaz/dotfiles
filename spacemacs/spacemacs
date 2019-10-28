@@ -471,9 +471,11 @@ you should place your code here."
     (setq org-hide-emphasis-markers t)
     (setq org-pretty-entities t)
     (setq org-use-sub-superscripts '{})
+    (setq org-tags-column 0)
     (setq org-todo-keywords '((sequence "☐(t)" "|" "☑(d)")
                               (type "!(b@)" "?(q@)" "|" "✗(x)")
                               (sequence "|" "☑⋆(c@)")))
+    (setq org-bullets-bullet-list '("◉" "○" "✸"))
     ;; set STARTUP: logdone per file to override
     (setq org-log-done nil)
     (setq org-use-fast-todo-selection 'prefix)
@@ -656,14 +658,25 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(package-selected-packages
+   (quote
+    (zenburn-theme zen-and-art-theme xterm-color ws-butler white-sand-theme which-key wgrep web-mode web-beautify volatile-highlights vi-tilde-fringe uuidgen use-package unfill underwater-theme ujelly-theme twilight-theme twilight-bright-theme twilight-anti-bright-theme toxi-theme toc-org tao-theme tangotango-theme tango-plus-theme tango-2-theme tagedit sunny-day-theme sublime-themes subatomic256-theme subatomic-theme spaceline spacegray-theme soothe-theme solarized-theme soft-stone-theme soft-morning-theme soft-charcoal-theme smyx-theme smex smeargle slim-mode shell-pop seti-theme scss-mode sass-mode rvm ruby-tools ruby-test-mode rubocop rspec-mode robe reverse-theme reveal-in-osx-finder restart-emacs request rebecca-theme rbenv rake rainbow-mode rainbow-identifiers rainbow-delimiters railscasts-theme purple-haze-theme pug-mode professional-theme popwin planet-theme phoenix-dark-pink-theme phoenix-dark-mono-theme persp-mode pbcopy paradox ox-gfm osx-trash osx-dictionary orgit organic-green-theme org-projectile org-present org-pomodoro org-mime org-download org-bullets omtose-phellack-theme oldlace-theme occidental-theme obsidian-theme noctilux-theme neotree naquadah-theme mwim mustang-theme multi-term move-text monokai-theme monochrome-theme molokai-theme moe-theme mmm-mode minitest minimal-theme material-theme markdown-toc majapahit-theme magit-gitflow madhat2r-theme macrostep lush-theme lorem-ipsum livid-mode linum-relative link-hint light-soap-theme less-css-mode launchctl json-mode js2-refactor js-doc jbeans-theme jazz-theme ivy-hydra ir-black-theme intero insert-shebang inkpot-theme indent-guide hungry-delete htmlize hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation heroku-theme hemisu-theme helm-make hc-zenburn-theme haskell-snippets gruvbox-theme gruber-darker-theme grandshell-theme gotham-theme golden-ratio gnuplot gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link git-gutter-fringe git-gutter-fringe+ gh-md gandalf-theme fuzzy flx-ido flatui-theme flatland-theme fish-mode fill-column-indicator farmhouse-theme fancy-battery eyebrowse expand-region exotica-theme exec-path-from-shell evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-snipe evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-ediff evil-cleverparens evil-args evil-anzu espresso-theme eshell-z eshell-prompt-extras esh-help emmet-mode elisp-slime-nav dumb-jump dracula-theme django-theme diminish diff-hl deft darktooth-theme darkokai-theme darkmine-theme darkburn-theme dakrone-theme cyberpunk-theme counsel-projectile company-web company-tern company-statistics company-shell company-ghci company-ghc company-cabal column-enforce-mode color-theme-sanityinc-tomorrow color-theme-sanityinc-solarized color-identifiers-mode coffee-mode cmm-mode clues-theme clojure-snippets clj-refactor clean-aindent-mode cider-eval-sexp-fu chruby cherry-blossom-theme busybee-theme bundler bubbleberry-theme birds-of-paradise-plus-theme badwolf-theme auto-highlight-symbol auto-compile apropospriate-theme anti-zenburn-theme ample-zen-theme ample-theme alect-themes aggressive-indent afternoon-theme adaptive-wrap ace-window ace-link))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:foreground "#cccccc" :background "#202020"))))
+ '(org-code ((t (:inherit shadow :background "#303660" :foreground "#cceecc" :box (:line-width 1 :color "#171a2c" :style pressed-button) :weight light))))
  '(org-date ((t (:background "grey14" :foreground "skyblue" :underline "sky" :weight thin :height 0.7))))
  '(org-special-keyword ((t (:inherit font-lock-keyword-face :foreground "grey66" :slant italic :height 0.66))))
  '(org-tag ((t (:background "grey12" :slant italic :weight bold))))
- '(org-todo ((t (:background "#242427" :foreground "#6f3254" :inverse-video nil :box (:line-width 1 :color "#2c2224") :underline nil :slant normal :weight normal)))))
+ '(org-todo ((t (:background "#242427" :foreground "#6f3254" :inverse-video nil :box (:line-width 1 :color "#2c2224") :underline nil :slant normal :weight normal))))
+ '(outline-1 ((t (:foreground "#aaaaff" :inverse-video nil :underline nil :slant normal :weight normal))))
+ '(outline-2 ((t (:foreground "#aaccff" :inverse-video nil :underline nil :slant normal :weight normal))))
+ '(outline-3 ((t (:foreground "#aaeeff" :inverse-video nil :underline nil :slant normal :weight normal))))
+ '(outline-4 ((t (:foreground "#bbeeff" :inverse-video nil :underline nil :slant normal :weight normal))))
+ '(outline-5 ((t (:foreground "#ddffdd" :inverse-video nil :underline nil :slant normal :weight normal))))
+ '(outline-6 ((t (:foreground "#ffeebb" :inverse-video nil :underline nil :slant normal :weight normal))))
+ '(outline-7 ((t (:foreground "#ffddaa" :inverse-video nil :underline nil :slant normal :weight normal))))
+ '(outline-8 ((t (:foreground "#ffbbaa" :inverse-video nil :underline nil :slant normal :weight normal)))))
