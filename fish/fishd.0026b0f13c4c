@@ -87,6 +87,7 @@ SET fish_color_selection:\x2d\x2dbackground\x3d573c6f
 SET fish_color_status:red
 SET fish_color_userhost:\x2dbgreen
 SET fish_color_valid_path:\x2d\x2dunderline
+SET fish_git_status_cmd:git\x20st
 SET fish_greeting:
 SET fish_key_bindings:fish_vi_key_bindings
 SET fish_pager_color_completion:normal
@@ -98,5 +99,5 @@ SET fish_prompt_left_sep:\ue0b0
 SET fish_prompt_right_alt_sep:\ue0b3
 SET fish_prompt_right_sep:\ue0b2
 SET fish_user_abbreviations:\x1d
-SET fish_user_paths:/Users/vaz/\x2envm/versions/node/v10\x2e12\x2e0/bin\x1e/Users/vaz/\x2elocal/bin\x1e/Users/vaz/\x2erbenv/bin\x1e/Users/vaz/\x2efzf/bin
+SET fish_user_paths:/Applications/Racket\x20v7\x2e4/bin\x1e/Users/vaz/\x2elocal/bin\x1e/Users/vaz/\x2erbenv/bin\x1e/Users/vaz/\x2efzf/bin\x1e/Users/vaz/\x2ecargo/bin
 SET fisher_dependency_count:imgcat\x1ehumanize_duration\x1edone\x1egetopts\x1eshark\x1efasd
